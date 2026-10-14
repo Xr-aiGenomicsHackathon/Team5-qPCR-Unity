@@ -101,6 +101,10 @@ namespace Team5.qPCR.PlayModeTests
             var lesson = Object.FindFirstObjectByType<QpcrLessonController>();
             var grab = Object.FindFirstObjectByType<PlateInspectionController>().GetComponent<XRGrabInteractable>();
             var manager = Object.FindFirstObjectByType<XRInteractionManager>();
+            var floor = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            floor.name = "Epoxy_Floor";
+            floor.transform.position = new Vector3(100f,-.05f,100f);
+            floor.transform.localScale = new Vector3(2f,.1f,2f);
             var handObject = new GameObject("Regression test hand", typeof(SphereCollider), typeof(XRDirectInteractor));
             handObject.GetComponent<SphereCollider>().isTrigger = true;
             var hand = handObject.GetComponent<XRDirectInteractor>();
@@ -117,18 +121,24 @@ namespace Team5.qPCR.PlayModeTests
             // simulated controller's pose provider or a grab transformer.
             grab.trackPosition = false;
             grab.trackRotation = false;
-            grab.transform.position = new Vector3(0f,1.2f,0f);
+            // Keep the free-fall volume clear of the merged laboratory's furniture.
+            grab.transform.position = new Vector3(100f,1.2f,100f);
             grab.GetComponent<Rigidbody>().position = grab.transform.position;
             hand.selectInput.manualPerformed = false;
             hand.selectInput.manualValue = 0f;
             manager.SelectExit((IXRSelectInteractor)hand, (IXRSelectInteractable)grab);
+            // XRI detach and our release resolver run after the select event.
+            yield return null;
+            yield return new WaitForFixedUpdate();
             var height = grab.transform.position.y;
-            yield return new WaitForSeconds(.3f);
             Assert.IsFalse(grab.GetComponent<Rigidbody>().isKinematic, "Release must restore a dynamic Rigidbody.");
+            Assert.IsTrue(grab.GetComponent<Rigidbody>().useGravity);
+            for(var tick=0;tick<15;tick++)yield return new WaitForFixedUpdate();
             Assert.Less(grab.transform.position.y, height - .1f, "A released plate must fall, not float.");
-            yield return new WaitForSeconds(.8f);
+            for(var tick=0;tick<50;tick++)yield return new WaitForFixedUpdate();
             Assert.IsTrue(grab.GetComponent<QpcrPlateHandling>().IsCompromised, "A floor drop must block reuse of the plate.");
             Object.Destroy(handObject);
+            Object.Destroy(floor);
         }
 
         [UnityTest]

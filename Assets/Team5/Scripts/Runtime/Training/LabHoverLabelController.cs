@@ -69,6 +69,10 @@ namespace Team5.qPCR
                 var direction = view.Panel.transform.position - Camera.main.transform.position;
                 if (direction.sqrMagnitude > .001f) view.Panel.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
                 view.Panel.transform.localScale = Vector3.one * (.0007f * Mathf.Clamp(direction.magnitude, 1f, 2f));
+                // Put each hand's card beside its target, keeping two nearby cards apart.
+                var rect = view.Panel.GetComponent<RectTransform>();
+                var width = rect != null ? rect.rect.width * view.Panel.transform.lossyScale.x : .34f;
+                view.Panel.transform.position += Camera.main.transform.right * ((hand == 0 ? -1f : 1f) * (width * .55f + .02f));
             }
         }
         public LabLabelTarget FindTarget(Ray ray, out Vector3 hitPoint)

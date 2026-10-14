@@ -9,6 +9,8 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Simulation;
 
 namespace Team5.qPCR.PlayModeTests
 {
@@ -16,8 +18,23 @@ namespace Team5.qPCR.PlayModeTests
     {
         private static void Set(object obj,string field,object value)=>obj.GetType().GetField(field,BindingFlags.Instance|BindingFlags.NonPublic).SetValue(obj,value);
         private static T Get<T>(object obj,string field)=>(T)obj.GetType().GetField(field,BindingFlags.Instance|BindingFlags.NonPublic).GetValue(obj);
+        private XRSimulatedController leftDevice;
+        private XRSimulatedController rightDevice;
         [UnitySetUp] public IEnumerator Load()
-        {yield return SceneManager.LoadSceneAsync("DemoScene");yield return null;yield return null;}
+        {
+            // These tests exercise controller-driven PPE. Supply tracked input explicitly;
+            // the simulator auto-loader intentionally does not run inside Unity Test Runner.
+            leftDevice=InputSystem.AddDevice<XRSimulatedController>();rightDevice=InputSystem.AddDevice<XRSimulatedController>();
+            InputSystem.SetDeviceUsage(leftDevice,CommonUsages.LeftHand);InputSystem.SetDeviceUsage(rightDevice,CommonUsages.RightHand);
+            var state=new XRSimulatedControllerState{isTracked=true,trackingState=3,deviceRotation=Quaternion.identity};
+            InputSystem.QueueStateEvent(leftDevice,state);InputSystem.QueueStateEvent(rightDevice,state);InputSystem.Update();
+            yield return SceneManager.LoadSceneAsync("DemoScene");yield return null;yield return null;
+        }
+        [TearDown] public void RemoveDevices()
+        {
+            if(leftDevice!=null&&leftDevice.added)InputSystem.RemoveDevice(leftDevice);
+            if(rightDevice!=null&&rightDevice.added)InputSystem.RemoveDevice(rightDevice);
+        }
         [Test] public void SceneGatesPcrAndHasOneRigAndInputSystem()
         {
             var lesson=Object.FindFirstObjectByType<QpcrLessonController>();lesson.BeginLesson();
