@@ -23,24 +23,30 @@ namespace Team5.qPCR.PlayModeTests
             Assert.AreEqual(36,keyboard.GetComponentsInChildren<UnityEngine.UI.Button>(true).Count(b=>b.name.StartsWith("Key_")));
             var canvas=GameObject.Find("Lobby_Welcome_Canvas").GetComponent<Canvas>();Assert.AreEqual(RenderMode.WorldSpace,canvas.renderMode);Assert.NotNull(canvas.worldCamera);
         }
-        [Test] public void BlankNameAndIncompletePracticeCannotEnter()
+        [Test] public void NicknameEnablesEntryWithoutPractice()
+        {
+            var lobby=Object.FindFirstObjectByType<LobbyController>();
+            lobby.AppendCharacter("Joshua");lobby.ConfirmNickname();
+            var button=(UnityEngine.UI.Button)typeof(LobbyController).GetField("enterButton",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(lobby);
+            Assert.IsTrue(button.gameObject.activeInHierarchy);
+            Assert.IsTrue(button.interactable,"A valid nickname must enable Enter Laboratory without a hidden practice prerequisite.");
+        }
+        [Test] public void BlankNameCannotEnterAndNicknameIsLimited()
         {
             var lobby=Object.FindFirstObjectByType<LobbyController>();lobby.ConfirmNickname();lobby.EnterLaboratory();
-            Assert.IsFalse(lobby.PracticeComplete);Assert.AreEqual("LobbyScene",SceneManager.GetActiveScene().name);
+            Assert.IsFalse(lobby.CanEnterLaboratory);Assert.AreEqual("LobbyScene",SceneManager.GetActiveScene().name);
             for(var i=0;i<28;i++)lobby.AppendCharacter("J");
             var text=(TMPro.TMP_Text)typeof(LobbyController).GetField("nicknameText",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(lobby);
             Assert.AreEqual(24,text.text.Length);
-            lobby.ClearName();lobby.AppendCharacter("Joshua");lobby.ConfirmNickname();lobby.EnterLaboratory();Assert.AreEqual("LobbyScene",SceneManager.GetActiveScene().name);
+            lobby.ClearName();Assert.IsFalse(lobby.CanEnterLaboratory);
         }
-        [UnityTest] public IEnumerator PracticeRequiresSelectGrabReleaseAndLoadsPpeWithoutDuplicateRig()
+        [UnityTest] public IEnumerator EnterButtonLoadsPpeWithoutPracticeOrDuplicateRig()
         {
-            var lobby=Object.FindFirstObjectByType<LobbyController>();lobby.AppendCharacter("Joshua");lobby.ConfirmNickname();lobby.PracticeSelect();
-            var grab=Object.FindFirstObjectByType<XRGrabInteractable>();
-            var dummy=new GameObject("Practice test controller");var interactor=dummy.AddComponent<XRDirectInteractor>();
-            grab.selectEntered.Invoke(new SelectEnterEventArgs{interactorObject=interactor,interactableObject=grab});
-            Assert.IsFalse(lobby.PracticeComplete);
-            grab.selectExited.Invoke(new SelectExitEventArgs{interactorObject=interactor,interactableObject=grab});Assert.IsTrue(lobby.PracticeComplete);
-            lobby.EnterLaboratory();lobby.EnterLaboratory();
+            var lobby=Object.FindFirstObjectByType<LobbyController>();lobby.AppendCharacter("Joshua");lobby.ConfirmNickname();
+            var button=(UnityEngine.UI.Button)typeof(LobbyController).GetField("enterButton",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(lobby);
+            var click=new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current){button=UnityEngine.EventSystems.PointerEventData.InputButton.Left};
+            UnityEngine.EventSystems.ExecuteEvents.Execute(button.gameObject,click,UnityEngine.EventSystems.ExecuteEvents.pointerClickHandler);
+            lobby.EnterLaboratory();
             var deadline=Time.realtimeSinceStartup+10;
             while(SceneManager.GetActiveScene().name!="DemoScene"&&Time.realtimeSinceStartup<deadline)yield return null;
             yield return null;yield return null;
@@ -48,7 +54,21 @@ namespace Team5.qPCR.PlayModeTests
             Assert.IsTrue(Object.FindFirstObjectByType<PPELessonController>().IsLessonActive);
             Assert.AreEqual(1,Object.FindObjectsByType<AudioListener>(FindObjectsSortMode.None).Length);
             Assert.AreEqual(1,Object.FindObjectsByType<Unity.XR.CoreUtils.XROrigin>(FindObjectsSortMode.None).Length);
-            Object.Destroy(dummy);
+        }
+        [Test] public void InvalidSceneReportsFailureAndAllowsRetry()
+        {
+            var lobby=Object.FindFirstObjectByType<LobbyController>();lobby.AppendCharacter("Joshua");lobby.ConfirmNickname();
+            var fade=Object.FindFirstObjectByType<TrainingSceneFade>();string error=null;fade.LoadFailed+=message=>error=message;
+            Assert.IsFalse(fade.TryLoad("MissingTeachingScene"));Assert.IsNotEmpty(error);Assert.IsFalse(fade.IsLoading);Assert.IsTrue(lobby.CanEnterLaboratory);
+            Assert.AreEqual(0f,fade.GetComponent<CanvasGroup>().alpha);
+        }
+        [Test] public void SimulatorUiIsHiddenButSimulationRemainsAvailable()
+        {
+            var settings=Object.FindFirstObjectByType<TrainingAudioSettings>();
+            var simulator=(UnityEngine.UI.Toggle)typeof(TrainingAudioSettings).GetField("simulator",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(settings);
+            Assert.IsFalse(simulator.gameObject.activeSelf);
+            Assert.IsTrue((bool)typeof(TrainingAudioSettings).GetField("useSimulatorInEditor",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(settings));
+            Assert.IsFalse(Resources.FindObjectsOfTypeAll<GameObject>().Any(go=>go.scene.IsValid()&&go.name=="Practice_Select"&&go.activeInHierarchy));
         }
     }
 }

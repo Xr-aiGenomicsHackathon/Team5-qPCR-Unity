@@ -24344,8 +24344,7 @@ MonoBehaviour:
   nicknameText: {fileID: 1021607585}
   feedbackText: {fileID: 1594118268}
   entryPanel: {fileID: 376216774}
-  practicePanel: {fileID: 507502786}
-  practiceObject: {fileID: 1212508234}
+  welcomePanel: {fileID: 507502786}
   enterButton: {fileID: 548537005}
   narration: {fileID: 1875145368}
   transition: {fileID: 1516441398}
@@ -25397,7 +25396,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &981376166
 Transform:
   m_ObjectHideFlags: 0
@@ -30979,7 +30978,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1174636130
 Transform:
   m_ObjectHideFlags: 0
@@ -33017,7 +33016,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 70}
+  m_AnchoredPosition: {x: 0, y: 65}
   m_SizeDelta: {x: 850, y: 255}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1220021369
@@ -33040,15 +33039,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '1. Aim at Practice Select and press the trigger.
+  m_text: 'Explore real-time PCR, one clear step at a time.
 
 
-    2. Move close to
-    the teal object and hold grip to lift it.
-
-
-    3. Release grip to let go. Then
-    enter the laboratory.'
+    First, prepare
+    safely with your coat, handwashing and gloves. Then inspect, load and run your
+    prepared plate.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -51510,9 +51506,9 @@ MonoBehaviour:
     Caption: Welcome to the T5 XR Genomics Laboratory. Enter a nickname, then select
       Continue.
     Clip: {fileID: 0}
-  - Key: Instruction_Lobby_Practice
-    Caption: Press Practice Select. Then grip the teal practice object, lift it,
-      and release your grip.
+  - Key: Instruction_Lobby_Ready
+    Caption: Your laboratory is ready. Select Enter Laboratory. First, prepare safely.
+      Then you will load and run Q P C R.
     Clip: {fileID: 0}
 --- !u!82 &1875145369
 AudioSource:
@@ -56510,7 +56506,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2084916543
 RectTransform:
   m_ObjectHideFlags: 0
@@ -57003,7 +56999,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2121784054
 RectTransform:
   m_ObjectHideFlags: 0

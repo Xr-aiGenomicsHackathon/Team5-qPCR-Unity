@@ -147,28 +147,29 @@ namespace Team5.qPCR.Editor
             Text(canvas.transform,"Volume_Label",new Vector2(-400,0),new Vector2(150,45),22,"Voice volume");
             var volume=Volume(canvas.transform,new Vector2(-200,0));var mute=Toggle(canvas.transform,"Mute",new Vector2(100,0),"Mute voice");
             var simulator=Toggle(canvas.transform,"Simulator",new Vector2(365,0),"PC simulator");
+            simulator.gameObject.SetActive(false);
             var settings=Ensure<TrainingAudioSettings>(canvas);Set(settings,"narration",narration);Set(settings,"volume",volume);Set(settings,"mute",mute);Set(settings,"simulator",simulator);
             Objects(settings,"simulatorObjects",UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsInactive.Include,FindObjectsSortMode.None).Where(t=>t.gameObject.scene==SceneManager.GetActiveScene()&&t.name=="XR Interaction Simulator").Select(t=>(UnityEngine.Object)t.gameObject).ToArray());
         }
         private static NarrationCue[] BuildCues()
         {
-            Folder("Assets/Team5/Audio/Tayo");var cues=new List<NarrationCue>();
+            Folder("Assets/Team5/Audio/Narration/Adeola");var cues=new List<NarrationCue>();
             foreach(QpcrLessonState state in Enum.GetValues(typeof(QpcrLessonState)))
             {cues.Add(Cue("Instruction_Qpcr_"+state,QpcrLessonController.GetPresentation(state).Instruction));cues.Add(Cue("Why_Qpcr_"+state,QpcrTeachingContent.Explain(state)));}
             foreach(PPELessonStep state in Enum.GetValues(typeof(PPELessonStep)))
             {cues.Add(Cue("Instruction_Ppe_"+state,PPELessonController.InstructionFor(state)));cues.Add(Cue("Why_Ppe_"+state,PPELessonUI.Explanation(state)));}
             foreach(QpcrProtocolParameter p in Enum.GetValues(typeof(QpcrProtocolParameter)))cues.Add(Cue("Parameter_"+p,QpcrProtocolValidator.LabelFor(p)+"\n\n"+QpcrTeachingContent.Explain(p)));
             cues.Add(Cue("Instruction_Lobby_Welcome","Welcome to the T5 XR Genomics Laboratory. Enter a nickname, then select Continue."));
-            cues.Add(Cue("Instruction_Lobby_Practice","Press Practice Select. Then grip the teal practice object, lift it, and release your grip."));
+            cues.Add(Cue("Instruction_Lobby_Ready","Your laboratory is ready. Select Enter Laboratory. First, prepare safely. Then you will load and run Q P C R."));
             return cues.ToArray();
         }
         private static NarrationCue Cue(string key,string caption)
         {
-            var clip=AssetDatabase.FindAssets(key+" t:AudioClip",new[]{"Assets/Team5/Audio/Tayo"}).Select(AssetDatabase.GUIDToAssetPath)
+            var clip=AssetDatabase.FindAssets(key+" t:AudioClip",new[]{"Assets/Team5/Audio/Narration/Adeola"}).Select(AssetDatabase.GUIDToAssetPath)
                 .Where(p=>System.IO.Path.GetFileNameWithoutExtension(p)==key).Select(AssetDatabase.LoadAssetAtPath<AudioClip>).FirstOrDefault();
             return new NarrationCue {Key=key,Caption=caption,Clip=clip};
         }
-        [MenuItem("Team 5/Training Flow/Refresh Tayo Clip Assignments")]
+        [MenuItem("Team 5/Training Flow/Refresh Narration Clip Assignments")]
         public static void RefreshTayo()
         {
             var narration=UnityEngine.Object.FindFirstObjectByType<NarrationController>(FindObjectsInactive.Include);
@@ -176,12 +177,12 @@ namespace Team5.qPCR.Editor
             narration.Configure(source,Array.Empty<TMP_Text>(),Array.Empty<TMP_Text>(),Array.Empty<Slider>(),Array.Empty<UnityEngine.UI.Toggle>(),Array.Empty<UnityEngine.UI.Button>(),BuildCues());
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
         }
-        [MenuItem("Team 5/Training Flow/Export Tayo Recording Script")]
+        [MenuItem("Team 5/Training Flow/Export Narration Recording Script")]
         public static void ExportSpeech()
         {
             var lines=BuildCues().Select(c=>new {key=c.Key,caption=c.Caption,spokenText=c.Caption.Replace("qPCR","Q P C R").Replace("A1","A one").Replace("µL","microlitres").Replace("°C","degrees Celsius")});
             System.IO.Directory.CreateDirectory("Temp/TrainingFlow");
-            System.IO.File.WriteAllText("Temp/TrainingFlow/TayoRecordingScript.json",Newtonsoft.Json.JsonConvert.SerializeObject(lines,Newtonsoft.Json.Formatting.Indented));
+            System.IO.File.WriteAllText("Temp/TrainingFlow/AdeolaRecordingScript.json",Newtonsoft.Json.JsonConvert.SerializeObject(lines,Newtonsoft.Json.Formatting.Indented));
         }
         private static void BuildVideo(QpcrLessonController lesson,NarrationController narration,Transform card)
         {

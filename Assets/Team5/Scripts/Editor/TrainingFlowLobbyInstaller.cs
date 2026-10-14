@@ -34,8 +34,8 @@ namespace Team5.qPCR.Editor
             var root=Named("LOBBY_ENVIRONMENT")?.gameObject??new GameObject("LOBBY_ENVIRONMENT");
             var floorMaterial=TrainingMaterial("M_LobbyFloor",new Color(.83f,.9f,.89f),0,.35f);
             Primitive(root.transform,"Reference_Floor",PrimitiveType.Cylinder,new Vector3(0,-.1f,0),new Vector3(7,.1f,7),floorMaterial,true);
-            Primitive(root.transform,"Practice_Table",PrimitiveType.Cube,new Vector3(.35f,.84f,.55f),new Vector3(.45f,.08f,.4f),TrainingMaterial("M_LobbyBench",Navy),true);
-            Primitive(root.transform,"Practice_Table_Leg",PrimitiveType.Cylinder,new Vector3(.35f,.4f,.55f),new Vector3(.09f,.4f,.09f),TrainingMaterial("M_LobbySteel",new Color(.63f,.7f,.73f),.8f,.4f),true);
+            foreach(var old in new[]{"Practice_Table","Practice_Table_Leg","Practice_Grab_Object"})
+                if(root.transform.Find(old)!=null)root.transform.Find(old).gameObject.SetActive(false);
             var teal=TrainingMaterial("M_LobbyTeal",Teal);
             var dna=Child(root.transform,"Slow_DNA_Decoration");dna.transform.position=new Vector3(1.7f,1.65f,2.65f);Ensure<SlowDnaRotation>(dna);
             for(var strand=0;strand<2;strand++)
@@ -72,20 +72,15 @@ namespace Team5.qPCR.Editor
             Click(Button(entry,"Clear",new Vector2(375,-195),new Vector2(130,64),"Clear"),controller.ClearName);
             Click(Button(entry,"Continue",new Vector2(0,-276),new Vector2(880,64),"Continue"),controller.ConfirmNickname);
             var practice=Rect(canvas.transform,"Controls_Practice",Vector2.zero,new Vector2(1000,680));
-            Text(practice,"Instructions",new Vector2(0,70),new Vector2(850,255),32,"1. Aim at Practice Select and press the trigger.\n\n2. Move close to the teal object and hold grip to lift it.\n\n3. Release grip to let go. Then enter the laboratory.");
-            Click(Button(practice,"Practice_Select",new Vector2(0,-110),new Vector2(850,64),"Practice Select"),controller.PracticeSelect);
+            Text(practice,"Instructions",new Vector2(0,65),new Vector2(850,255),32,"Explore real-time PCR, one clear step at a time.\n\nFirst, prepare safely with your coat, handwashing and gloves. Then inspect, load and run your prepared plate.");
+            if(practice.Find("Practice_Select")!=null)practice.Find("Practice_Select").gameObject.SetActive(false);
             var enter=Button(practice,"Enter_Laboratory",new Vector2(0,-230),new Vector2(850,64),"Enter Laboratory");enter.interactable=false;Click(enter,controller.EnterLaboratory);
             var feedback=Text(canvas.transform,"Feedback",new Vector2(0,-370),new Vector2(880,75),26,"Your nickname is used only for this session.");feedback.richText=false;
-            var cube=Primitive(root.transform,"Practice_Grab_Object",PrimitiveType.Cube,new Vector3(.35f,.94f,.55f),Vector3.one*.08f,teal,true);
-            var body=Ensure<Rigidbody>(cube);body.mass=.12f;body.useGravity=true;body.interpolation=RigidbodyInterpolation.Interpolate;body.collisionDetectionMode=CollisionDetectionMode.ContinuousSpeculative;
-            var grab=Ensure<XRGrabInteractable>(cube);grab.movementType=XRBaseInteractable.MovementType.Kinematic;grab.useDynamicAttach=true;grab.trackScale=false;grab.throwOnDetach=false;grab.forceGravityOnDetach=true;
-            var reach=Ensure<NearbySelectionFilter>(cube);Set(reach,"leftController",Named("Left Controller"));Set(reach,"rightController",Named("Right Controller"));
-            Set(controller,"nicknameText",name);Set(controller,"feedbackText",feedback);Set(controller,"entryPanel",entry.gameObject);Set(controller,"practicePanel",practice.gameObject);Set(controller,"practiceObject",grab);Set(controller,"enterButton",enter);Set(controller,"narration",narration);Set(controller,"transition",BuildFade(Named("Main Camera")));
-            practice.gameObject.SetActive(false);cube.SetActive(false);
+            Set(controller,"nicknameText",name);Set(controller,"feedbackText",feedback);Set(controller,"entryPanel",entry.gameObject);Set(controller,"welcomePanel",practice.gameObject);Set(controller,"enterButton",enter);Set(controller,"narration",narration);Set(controller,"transition",BuildFade(Named("Main Camera")));
+            practice.gameObject.SetActive(false);
             BuildSettings(root.transform,narration,new Vector3(0,.94f,1.65f));
             EditorSceneManager.SaveScene(lobby,LobbyPath);SceneManager.SetActiveScene(demo);EditorSceneManager.CloseScene(lobby,true);
-            var other=EditorBuildSettings.scenes.Where(s=>s.path!=LobbyPath&&s.path!=DemoPath).Select(s=>new EditorBuildSettingsScene(s.path,false));
-            EditorBuildSettings.scenes=new[]{new EditorBuildSettingsScene(LobbyPath,true),new EditorBuildSettingsScene(DemoPath,true)}.Concat(other).ToArray();
+            EditorBuildSettings.scenes=new[]{new EditorBuildSettingsScene(LobbyPath,true),new EditorBuildSettingsScene(DemoPath,true)};
             AssetDatabase.SaveAssets();
         }
     }

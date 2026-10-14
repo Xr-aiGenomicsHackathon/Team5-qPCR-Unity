@@ -94,5 +94,47 @@ namespace Team5.qPCR.PlayModeTests
             Assert.AreEqual(QpcrLessonState.InspectPlateId,Object.FindFirstObjectByType<QpcrLessonController>().CurrentState);
             Object.Destroy(left);Object.Destroy(right);
         }
+        [Test] public void GlovePickupsRejectWrongHandAndChangeEachHandIndependently()
+        {
+            var ppe=Object.FindFirstObjectByType<PPELessonController>();
+            typeof(PPELessonController).GetMethod("SetStep",BindingFlags.NonPublic|BindingFlags.Instance).Invoke(ppe,new object[]{PPELessonStep.WearLeftGlove,true});
+            var leftRoot=GameObject.Find("Left Controller").transform;var rightRoot=GameObject.Find("Right Controller").transform;
+            var left=new GameObject("Synthetic left select");left.transform.SetParent(leftRoot);var leftHand=left.AddComponent<XRDirectInteractor>();
+            var right=new GameObject("Synthetic right select");right.transform.SetParent(rightRoot);var rightHand=right.AddComponent<XRDirectInteractor>();
+            try
+            {
+                var appearance=Object.FindFirstObjectByType<HandAppearanceController>();var leftRenderer=Get<Renderer[]>(appearance,"leftHandRenderers").First();var rightRenderer=Get<Renderer[]>(appearance,"rightHandRenderers").First();
+                var bareRight=rightRenderer.sharedMaterial;var glove=Get<Material>(appearance,"blueGloveMaterial");
+                var pickups=Object.FindObjectsByType<GlovePickupController>(FindObjectsSortMode.None);var leftPickup=pickups.Single(p=>Get<PPEHandSide>(p,"gloveSide")==PPEHandSide.Left);
+                var rightPickup=pickups.Single(p=>Get<PPEHandSide>(p,"gloveSide")==PPEHandSide.Right);
+                var interactable=leftPickup.GetComponent<XRSimpleInteractable>();
+                interactable.selectEntered.Invoke(new UnityEngine.XR.Interaction.Toolkit.SelectEnterEventArgs{interactorObject=rightHand,interactableObject=interactable});
+                Assert.AreEqual(PPELessonStep.WearLeftGlove,ppe.CurrentStep);
+                interactable.selectEntered.Invoke(new UnityEngine.XR.Interaction.Toolkit.SelectEnterEventArgs{interactorObject=leftHand,interactableObject=interactable});
+                Assert.AreEqual(PPELessonStep.WearRightGlove,ppe.CurrentStep);Assert.AreEqual(glove,leftRenderer.sharedMaterial);Assert.AreEqual(bareRight,rightRenderer.sharedMaterial);
+                var rightInteractable=rightPickup.GetComponent<XRSimpleInteractable>();
+                rightInteractable.selectEntered.Invoke(new UnityEngine.XR.Interaction.Toolkit.SelectEnterEventArgs{interactorObject=rightHand,interactableObject=rightInteractable});
+                Assert.IsTrue(ppe.IsComplete);Assert.AreEqual(glove,rightRenderer.sharedMaterial);
+                ppe.BeginLesson();Assert.AreEqual(bareRight,rightRenderer.sharedMaterial);Assert.IsFalse(ppe.IsComplete);
+            }
+            finally{Object.DestroyImmediate(left);Object.DestroyImmediate(right);}
+        }
+        [UnityTest] public IEnumerator ReturningToLobbyAndReenteringStartsFreshPpe()
+        {
+            TrainingSession.TryBegin("First learner");
+            Object.FindFirstObjectByType<LabSessionCoordinator>().ReturnToLobby();
+            var deadline=Time.realtimeSinceStartup+10;
+            while(SceneManager.GetActiveScene().name!="LobbyScene"&&Time.realtimeSinceStartup<deadline)yield return null;
+            yield return null;yield return null;
+            Assert.AreEqual("LobbyScene",SceneManager.GetActiveScene().name);
+            var lobby=Object.FindFirstObjectByType<LobbyController>();lobby.AppendCharacter("Second learner");lobby.ConfirmNickname();lobby.EnterLaboratory();
+            deadline=Time.realtimeSinceStartup+10;
+            while(SceneManager.GetActiveScene().name!="DemoScene"&&Time.realtimeSinceStartup<deadline)yield return null;
+            yield return null;yield return null;
+            Assert.AreEqual("Second learner",TrainingSession.Nickname);Assert.IsFalse(TrainingSession.PpeComplete);
+            Assert.AreEqual(PPELessonStep.WearLabCoat,Object.FindFirstObjectByType<PPELessonController>().CurrentStep);
+            Assert.AreEqual(1,Object.FindObjectsByType<Unity.XR.CoreUtils.XROrigin>(FindObjectsSortMode.None).Length);
+            Assert.AreEqual(1,Object.FindObjectsByType<AudioListener>(FindObjectsSortMode.None).Length);
+        }
     }
 }

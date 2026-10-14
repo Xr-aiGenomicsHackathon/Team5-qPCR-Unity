@@ -1,32 +1,85 @@
-# Testing and build guide
+# Presentation setup, testing and builds
 
-Unity version: 6000.3.25f1. Use the saved realistic-lab scene. The project uses URP 17.3.0 and retains the resolved package lock.
+## Supported route and editor
+
+Use **Unity 6000.3.26f1** and the saved **LobbyScene → DemoScene** route. The old realistic-lab scene is outside this presentation route. Legacy tests for that old scene are not evidence for the current lesson and should not be counted as presentation tests.
+
+Open `Assets/Team5/Scenes/LobbyScene.unity`, enter a nickname and press Continue, then Enter Laboratory. There is no practice gate and no learner-facing PC Simulator checkbox. For PC testing, leave **TrainingAudioSettings → Use Simulator In Editor** checked in both scenes. For headset testing, uncheck before Play; builds disable simulation automatically.
+
+## Inspector wiring and values
+
+### Entry and audio
+
+The lobby's Enter button calls `LobbyController.EnterLaboratory`. The controller references its nickname field, feedback field, nickname-entry panel, welcome panel, narration and `TrainingSceneFade`. A valid nickname enables entry; a loading failure restores the button and reports the problem. Both scenes must be enabled in the build list, lobby first.
+
+Voice volume defaults to `0.8`. Why opens silently; Read Aloud speaks its current content; Replay Instruction repeats the task. Missing audio is allowed. Approved files belong in `Assets/Team5/Audio/Narration/Adeola/`, named with their exact cue keys. Use **Export Narration Recording Script** for `Temp/TrainingFlow/AdeolaRecordingScript.json`, then **Refresh Narration Clip Assignments** in each saved scene. Existing recordings are preserved. ElevenLabs generation is currently blocked by an account restriction; no successful Adeola take is being claimed.
+
+### Hover labels
+
+`50_LESSON_AND_UI/LAB_HOVER_LABELS` has one `LabHoverLabelController` referencing each controller's existing Near-Far Interactor, the rig and two shared popup views.
+
+- Dwell: `0.2 s`; maximum reading distance: `3 m`.
+- Each `LabLabelTarget` contains Display Name, Purpose and an optional Label Anchor. Edit these on the logical object root to change wording.
+- Label-only trigger proxies use `LabLabelsOnly`. This layer is ignored by physics collisions and excluded from XRI's interaction casters. Do not move ordinary physical colliders onto this layer.
+- Popups have no raycast targets and do not advance lesson steps or play speech. UI pointing has priority.
+- **Install Or Refresh Hover Labels** refreshes identification coverage in DemoScene. Group models logically; do not label each mesh triangle, screw, tile or individual plate well.
+- Unknown artist props use neutral fixture/container wording rather than asserting unverified contents or functions.
+
+### PPE and qPCR
+
+PPE requires coat, wet hands, soap, moving scrub, rinse, tap off, dry and matching-hand gloves. Timers: wet `2 s`, scrub `20 s`, rinse `3 s`, dry `2 s`. Scrub requires hands within `0.28 m` and relative speed at least `0.025 m/s`; stopped gestures pause progress. This cannot verify real washing technique.
+
+Physical controls use the actual controller position and a `0.22 m` reach limit. Identification labels do not relax it. Plate home position is approximately `(2.49, 0.98, 3.28)`; its root collider is `(0.13, 0.02, 0.09)`, mass `0.04`. Release away from valid seating restores gravity. Floor contact compromises the teaching plate until Reset.
+
+Protocol editing uses four pages of four fields, a numeric keypad and final review. Wrong values block Start. All run graphs and interpretations use synthetic, assay-specific teaching data.
+
+### Optional video
+
+Import your MP4/H.264/AAC file into `Assets/Team5/Videos/Teaching/`. Select `50_LESSON_AND_UI/QPCR_VIDEO_SYSTEM`, expand **LessonVideoController → Cues → Element 0**, and assign its **Clip**. Start with a 16:9, `1280 × 720` file. Leave State = ObserveAmplification and Auto Open checked.
+
+The popup starts muted beside the graph and uses a 1280 × 720 RenderTexture, depth 0, antialiasing 1 and bilinear filtering. Close/pause/replay never pauses qPCR. Narration temporarily suppresses video sound. Reset/scene exit cancels playback. No clip means no empty popup; headset decoding remains a separate device test.
+
+### Lighting
+
+**Refine Laboratory Lighting Only** adjusts lighting without resetting materials or furniture. **Bake Laboratory Lighting** starts the bake. Save after completion.
+
+Room lights start at 5000 K with soft shadows; static room lights are baked. Training settings use 20 texels/metre, a 2048 atlas, baked reflections at 256 resolution and 60 light-probe positions. Preserve the generated lighting data and lightmap/reflection assets when sharing.
 
 ## Automated checks
 
-On 7 October 2026 the artist-model revision passed **30 EditMode and 25 PlayMode tests**. The latter includes left/right virtual-controller input selecting the tour plate and gripping the movable plate, plus socket insertion and retention through drawer closing. Raw reports are in the local deliverable `TestResults/Artist-EditMode-Final.json` and `Artist-PlayMode-Final.json`. This is not a full manual Quest or optical-hand validation.
+In Unity Test Runner, run all Team5 EditMode tests and these current-route PlayMode fixtures:
 
-In Unity: **Window → General → Test Runner**, run Team5 EditMode and PlayMode tests. Tests cover scientific configuration, all 96 well identities, complete reaction composition, NTC exclusion of DNA, workflow gates, 35 cycles, interpretation, reset, camera modes, roof visibility, character wall collision and input focus. See the delivery folder's current validation report for actual results and known gaps.
+- `LobbySceneTests`
+- `LabHoverLabelTests`
+- `TrainingFlowSceneTests`
+- `DemoSceneQpcrLessonTests`
 
-With the Editor closed and Unity CLI installed:
+The lobby fixture exercises its wired Button pointer-click path. Hover tests cover dwell, both hands, walls, range, UI priority and disabled targets. PPE tests include matching-hand glove appearances, relative-motion scrubbing and repeated scene transitions. Station tests include the real XRI plate-release lifecycle, gravity, snapping, graph meshes, protocol validation and result gating. Method-level tests do not substitute for a complete human controller/headset rehearsal.
 
-```powershell
-unity test . --mode EditMode --filter Team5 --output TestResults/editmode.xml
-unity test . --mode PlayMode --filter Team5 --output TestResults/playmode.xml
-unity build . --target StandaloneWindows64 --execute-method Team5.qPCR.Editor.Team5Build.BuildWindows --output-path ../deliverables/Team5-qPCR/Builds/Windows/Team5-qPCR.exe --allow-dirty-build
-unity build . --target Android --execute-method Team5.qPCR.Editor.Team5Build.BuildAndroid --output-path ../deliverables/Team5-qPCR/Builds/Android/Team5-qPCR.apk --allow-dirty-build
-```
-
-The build helpers constrain cleanup to the delivery Builds folder. Back up an older build before replacing it. Android requires Unity's Android Build Support, SDK/NDK and OpenJDK modules. The final hand-tracking upgrade is checked by **30 EditMode tests** and an expanded PlayMode suite. It covers both lesson modes, non-blocking mode panels, exact target text, rejected-action feedback, idempotent HUD/socket/control counts, the early plate-grab gate, narration, physical controls, four inspection targets, controllers, tracked-hand groups, modality references, XR Origin camera exclusivity, A1-sensitive loading, reset and all 35 cycles. Record the final pass count in the delivery validation report after the last full run. The APK is an OpenXR/Quest target; physical-headset validation is pending. No store upload or device installation is performed automatically.
-
-## Built Windows walkthrough
-
-The opt-in smoke runner operates the normal workflow, checks errors and saves eight screenshots plus a JSON report. It never runs during ordinary use. Run with graphics enabled (not `-nographics`):
+With a connected Editor and Unity CLI:
 
 ```powershell
-& ../deliverables/Team5-qPCR/Builds/Windows/Team5-qPCR.exe -screen-fullscreen 0 -screen-width 1920 -screen-height 1080 --team5-smoke-output C:/TEAM-5/deliverables/Team5-qPCR/TestResults/Windows-1080
+unity command run_tests --mode editor --filter Team5 --async_tests true --project-path . --caller plugin --skill unity-cli --format json
+unity command test_status --project-path . --caller plugin --skill unity-cli --format json
+unity command run_tests --mode playmode --filter LobbySceneTests --async_tests true --project-path . --caller plugin --skill unity-cli --format json
 ```
 
-Those 1920 × 1080 and 1280 × 720 smoke passes belong to the earlier desktop workflow. The runner predates the physical narrated lesson and is not evidence that the current controller lesson passes end-to-end. Use the current delivery validation report and manual checklist for this revision. Its mean frame time includes screenshot work and is not a representative GPU benchmark.
+Run one fixture at a time and wait for completion before starting another. Record actual results and the editor version; never reuse an earlier pass count as proof for a changed scene.
 
-For XR, enter Play mode and select **XR Simulator Preview** from the visible launcher. F8 remains an optional developer shortcut only. Use the in-app guide to move the simulated headset, controllers and hands. `G` selects/grips 3D interactables; `T` is the UI/activation trigger. Confirm controller rays and hand rays operate the same UI, poke presses controls, pinch/grab reaches the plate, early grabbing and wrong A1 rotation are rejected, and modality can change without resetting. Re-test reach, comfort, offsets, tracking, text size and performance on a physical Quest. OpenXR hand tracking is configured; scene-structure tests alone do not verify full pinch/poke interaction or physical tracking reliability.
+## Manual acceptance checklist
+
+1. Reject blank input; trim nickname; enforce 24 characters. Confirm Enter is immediately available without practice.
+2. Click Enter twice, return to lobby and enter again. Check exactly one rig, EventSystem and AudioListener; check fresh PPE.
+3. Point with either controller at objects and room surfaces. Check meaningful labels, dwell, wall occlusion, no stale popups and no UI obstruction.
+4. Complete every PPE interaction; reject wrong-hand gloves and distant controls. Pause scrub movement; progress must pause. Reset restores coat/gloves.
+5. Release the plate over the floor, clean home and open drawer. Check gravity, floor compromise, both snaps and wrong-A1 rejection. Close the drawer with the correctly seated plate.
+6. Enter a wrong/missing protocol field. Correct it, review all sixteen values, then run. Verify live axes, legends, threshold labels, amplification, melt curve and all result questions.
+7. Check silent Why/parameter selection, Replay Instruction, Read Aloud, mute/unmute, missing clips and interruption.
+8. With a supplied video, test muted opening, pause, replay, close/reopen, invalid media and reset during preparation while the graph keeps updating.
+9. Inspect lighting, plate/A1 readability, moving hands, metal/glass and frame rate in the actual headset. Record headset model and verified controller/tracking mode.
+
+## Builds and clean checkout
+
+The build helper includes LobbyScene first and DemoScene second and requires 6000.3.26f1. Use `Team5.qPCR.Editor.Team5Build.BuildWindows` or `BuildAndroid` with a new `-buildOutput` subfolder under the project's sibling `deliverables/Team5-qPCR/Builds`. Existing output is not deleted automatically. OpenXR settings are preserved/restored, not stripped for a desktop MVP.
+
+Verify a separate checkout with Git LFS assets materialised, all metadata and the resolved package lock, no pre-existing Library, and no machine-specific runtime paths. Package downloads and licensing are initial setup requirements, not runtime dependencies. Mac/headset verification and video playback must be reported separately when those environments/media are unavailable. Do not reset or overwrite unsynced Mac work or push automatically.

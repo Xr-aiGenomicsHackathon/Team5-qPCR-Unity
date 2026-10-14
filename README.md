@@ -1,99 +1,63 @@
-# Team 5 Realistic qPCR Laboratory
+# Team 5 XR Genomics Laboratory
 
-Unity `6000.3.25f1` URP project for a realistic, single-room educational qPCR workflow. Team 5 receives Team 4's already prepared plate, configures the run, loads the instrument, watches 35 simulated cycles, and interprets representative controls and amplification curves.
+VR-first educational qPCR simulation. The presentation route is **LobbyScene → DemoScene**: nickname, PPE, plate inspection, loading, protocol configuration, accelerated run, results and recap. The scene layout and supplied artist models are retained.
 
-## Play on a Windows desktop or laptop (no Unity needed)
+## Clone and open
 
-1. Get the current Windows build from `C:\TEAM-5\deliverables\Team5-qPCR\Builds\Windows`. If your teammate provides a ZIP, use the extraction steps below. No GitHub Release is implied by a source-code push.
-2. Right-click the ZIP file and choose **Extract All**. Do not run the game while it is still inside the ZIP file.
-3. Open the extracted `Team5-qPCR-Windows-x64` folder and double-click `Team5-qPCR.exe`.
-4. If Windows SmartScreen appears, choose **More info** then **Run anyway** only if you got the file from the Team 5 project or another trusted teammate.
-
-You do not need Unity to play. Keep the EXE beside its `Team5-qPCR_Data` folder; both are required.
-
-- Choose **Desktop Preview** or **XR Simulator Preview**, then choose **Guided Training** or **Assessment Mode**.
-- Progress now comes from the laboratory itself: select the labelled equipment, press the machine controls, validate the protocol, grip and seat the plate, press Start, and interpret the controls.
-- Guided Training supplies narration, captions, labels, target pulses, and timed hints. Assessment Mode records mistakes and requested hints.
-- Use **Reset Lesson** to restore the complete experience. In the simulator, `R` resets the device pose, not the lesson.
-
-## Open and edit in Unity (developers)
-
-1. Install **Unity Hub** and Unity Editor **`6000.3.25f1`** with **Windows Build Support**. Install Android Build Support (SDK, NDK, OpenJDK, and IL2CPP) too if you need to make the Android/Quest build.
-2. Install [Git LFS](https://git-lfs.com/), then clone the repository and retrieve its large models and textures:
+1. Install Unity Hub and **Unity 6000.3.26f1**. Add Android Build Support (SDK, NDK, OpenJDK and IL2CPP) for Quest builds.
+2. Install Git LFS, then clone and retrieve the binary assets:
 
    ```powershell
    git lfs install
    git clone https://github.com/JoshuaWX/Team5-qPCR-Unity.git
    cd Team5-qPCR-Unity
    git lfs pull
+   git lfs fsck
    ```
 
-3. In Unity Hub, choose **Add** / **Open**, select the cloned `Team5-qPCR-Unity` folder, and wait for package installation and asset importing to finish.
-4. In the Project window, open `Assets/Team5/Scenes/Team5_qPCR_RealisticLab.unity`, then press the Unity **Play** button.
+3. Add the cloned folder to Unity Hub. Keep `Assets`, all `.meta` files, `Packages` and `ProjectSettings`. Allow package resolution and importing to finish.
+4. Open `Assets/Team5/Scenes/LobbyScene.unity`, then press Play. No scene-generation menu is required after cloning.
+5. Enter a nickname, press Continue, then Enter Laboratory. No practice-object task is required.
 
-Do not delete `.meta` files, `Packages`, or `ProjectSettings`. Edit the scene, scripts, data, and Blender sources in the locations listed below. Read the [testing and build notes](Documentation/TESTING.md) and [GitHub update instructions](Documentation/GITHUB.md) before making a release.
+The project is pinned to 6000.3.26f1. Results obtained with another patch version must be reported separately. Initial package installation may require Unity Hub sign-in and internet access; imported lesson audio and video do not require a runtime service connection.
 
-## Android / Quest installation
+## PC simulation and headset use
 
-The included `Team5-qPCR.apk` is an **Android/Quest OpenXR build**, intended for a Quest-class headset; it is not a tested touchscreen-phone app. It is simulator-tested, but still needs physical-headset validation and production signing.
+The PC simulator switch is deliberately hidden from learner UI. Select `Training_Audio_Settings` in each scene and use **TrainingAudioSettings → Use Simulator In Editor**:
 
-1. Copy `C:\TEAM-5\deliverables\Team5-qPCR\Builds\Android\Team5-qPCR.apk` to the headset using a trusted sideloading method such as Meta Quest Developer Hub or SideQuest.
-2. Enable Developer Mode on the headset, install the APK, then launch it from **Unknown Sources**.
-3. Use Quest Touch controllers or tracked hands. Controllers remain the reliable fallback; hands use poke for buttons, pinch/grab for the plate, and a hand ray for the protocol screen.
+- Checked: test VR input on the PC in Unity.
+- Unchecked before Play: test with a connected headset.
+- Player builds disable the simulator automatically and require the configured XR input/runtime.
 
-An ordinary Android phone is not a supported release target yet because the current APK expects OpenXR input rather than touchscreen controls. A separate phone build and device test would be needed before giving this to phone users.
+Use the simulator's own controls overlay for its current bindings. Aim at UI and use the UI/trigger action; grab physical objects using grip. Object interactions require the actual controller within 22 cm. A pointing label can be read from farther away without enabling remote grabbing.
 
-## Open and play
+There is no new desktop-camera lesson route. Windows builds target the configured VR runtime; a Mac editor clone can use simulation, but native Mac headset support is not implied.
 
-Open `Assets/Team5/Scenes/Team5_qPCR_RealisticLab.unity` and enter Play mode.
+## Learning and identification
 
-- Use the visible launcher; F8 is only an optional developer shortcut.
-- Desktop Preview keeps the mouse/keyboard camera and compact desktop UI.
-- XR Simulator Preview activates the XR Origin camera, controller and tracked-hand interaction paths, blue-gloved hand meshes, automatic modality switching, and the world-space UI.
-- Select the highlighted lab objects in order. Scientific steps have no generic Next button.
-- After selecting a lesson mode, its chooser becomes inactive and cannot block raycasts. The instruction card remains visible with an exact `Current target:` line and a separate red rejected-action line.
-- Use **Replay**, **Mute**, the volume slider, **Help**, and **Show Simulator Controls** when needed.
-- Simulator: `H` manipulates the head; `[` / `]` selects a controller; `G` selects/grips 3D objects; `T` operates UI/activation; `Tab` cycles controllers/hands; `K/M/N/O/P` selects grab, pinch, poke, open-hand, and fist poses; `R` resets pose. Use WASD/QE and right mouse to move/rotate the selected device.
-- In desktop Guided camera mode, right-drag orbits and the wheel zooms about 12% per notch. First- and third-person remain desktop presentation options only; the headset always controls the VR camera.
+- Complete coat → wet hands → soap → 20-second moving scrub → rinse → tap off → dry → gloves before qPCR.
+- Point at a labelled object for 0.2 seconds, within 3 metres, to see its name and purpose. Walls occlude labels and touchscreen/UI input takes priority.
+- Plate checks are visual observations confirmed on the lesson card, not artificial label-touch tasks.
+- Release the plate near its clean home or correctly aligned drawer holder to snap it into place. A floor drop compromises the teaching plate and requires Reset.
+- Configure all 16 training values across four pages, validate, review, then Start Run.
+- Observe live amplification/melt graphs and answer the results questions. Curves are **synthetic teaching data**, not patient results.
+- Why opens silently; Read Aloud speaks the displayed explanation; Replay Instruction repeats the current task. Mute and volume remain available.
+- Restart qPCR preserves completed PPE. Return to Lobby starts another session.
 
-## Implemented workflow
+The protocol and result interpretation are assay-specific teaching examples. The simulation does not replace an approved experimental protocol, local safety procedures or real handwashing training.
 
-`Introduction → Handoff Review → Power On → Protocol Setup → Plate Inspection → Instrument Loading → Run Validation → Amplification → Results Interpretation → Complete`
+## Narration and optional videos
 
-The protocol is 20 µL, 105°C lid, SYBR Green, 95°C for 2 minutes, 35 cycles of 95°C/15 s, 60°C/30 s and 72°C/30 s, fluorescence acquisition at 60°C, and a 65–95°C melt curve.
+Approved Adeola recordings belong in `Assets/Team5/Audio/Narration/Adeola/`, with their exact cue key as filename. Use **Team 5 → Training Flow → Export Narration Recording Script**, then **Refresh Narration Clip Assignments** in each saved scene after importing clips. Existing recordings remain intact. New Adeola generation is pending resolution of the ElevenLabs account restriction; missing clips never block the written lesson.
 
-## Important folders
+Put your own MP4/H.264/AAC teaching clip in `Assets/Team5/Videos/Teaching/`. In DemoScene select `50_LESSON_AND_UI/QPCR_VIDEO_SYSTEM`, expand LessonVideoController → Cues → Element 0, and drag the imported VideoClip into **Clip**. Leave ObserveAmplification and Auto Open selected. The popup starts muted beside the graph; playback controls never pause qPCR. No empty popup is shown before a clip is assigned.
 
-- `Assets/Team5/Scripts/Runtime/Data` — scientific configuration, handoff, protocol validation, and generated results.
-- `Assets/Team5/Scripts/Runtime/Controllers` — workflow, plate, instrument, run, UI, roof, and interaction-mode behavior.
-- `Assets/Team5/Scripts/Runtime/Lesson` — Guided/Assessment modes, narration, cues, physical controls, plate socket, recovery, and reporting.
-- `Assets/Team5/Scripts/Runtime/UI` — compact mentor card and progressive curve renderer.
-- `Assets/Editor/ProjectBootstrap` — reproducible scene and player builders.
-- `Assets/Team5/Tests/EditMode` and `PlayMode` — scientific, workflow, reset, scene, and XR simulator checks.
-- `Assets/Samples/XR Interaction Toolkit/3.3.2` — imported Starter Assets and XR Interaction Simulator.
-- `Assets/Samples/XR Hands/1.9.0` and XRI Hands Interaction Demo — tracked-hand visuals and interactors.
-- `Assets/Team5/Models/Our-design` — supplied Team 5 artist models, including the Q-PCR machine and its own moving tray, cabinets, sink, coats, centrifuge, racks, tubes and static scientist.
+## Development and release
 
-## Maintain the scene
+See [testing, wiring and builds](Documentation/TESTING.md), [Git/LFS updates](Documentation/GITHUB.md), [science notes](Documentation/SCIENCE.md) and [asset provenance](Documentation/ASSET_PROVENANCE.md).
 
-Run this editor method through Unity:
+Builders use LobbyScene first and DemoScene second. Use a new build-output subfolder: existing builds are not deleted automatically. Build helpers require the pinned editor and preserve existing XR settings rather than stripping features for the old desktop MVP.
 
-```powershell
-unity run C:\TEAM-5\Team5-qPCR-Unity --editor-version 6000.3.25f1 -- -executeMethod Team5.qPCR.Editor.Team5RealisticLabBuilder.Build
-```
+Baked lighting, probes, fonts, textures, audio and their metadata must accompany the scenes. Generated Library/Temp/Logs folders, credentials and signing keys must not be committed. No automatic push or publication is performed.
 
-For the existing scene this performs an in-place upgrade, not a destructive regeneration. In the Editor use **Team 5 → Apply blue-white visual upgrade (preserve scene)** and then **Team 5 → Apply complete interactive VR upgrade**. Save your own edits first. The interactive builder recreates only the generated `INTERACTIVE_VR_LESSON` subtree; the laboratory and scientific systems remain intact. Backups are saved outside the project. Existing scene GUIDs and scientific bindings are retained. Original PCR resources are never edited.
-
-Earlier editable generated art is in `ArtSource/Team5_Clinical_Assets.blend`; its generator is `ArtSource/build_lab_assets.py`. Retained generated plate and pipette assets are in `Assets/Team5/Models/Redesign`. The visible scientist now uses the supplied static FBX; it has no verified walk/reach animation. See provenance for the exact sources and replacements.
-
-## Science and publishing
-
-Each active well is a complete 20 µL reaction. There are 26 samples, one positive control and one no-template control; the other 68 wells are unused. The NTC contains water instead of DNA. Team 5 does not mix or seal the handoff plate again.
-
-Read the [interactive VR recreation guide](Documentation/INTERACTIVE_VR_RECREATION_GUIDE.md), [science notes](Documentation/SCIENCE.md), [asset provenance](Documentation/ASSET_PROVENANCE.md), [testing and builds](Documentation/TESTING.md), and [GitHub updates](Documentation/GITHUB.md).
-
-Android is an OpenXR/Quest build target. Touch controllers and OpenXR tracked hands are configured together. **Physical-headset validation pending.** Automated simulator checks are not a substitute for testing controller/hand reach, comfort, tracking reliability, and performance on a Quest.
-
-## Full handoff
-
-See `C:\TEAM-5\deliverables\Team5-qPCR\README.md` for executable builds, the demo script, validation evidence, provenance, and the scientific disclaimer.
+Physical-headset verification and independent Mac verification must be recorded separately from simulator tests. Hardware performance cannot be assumed identical. Confirm asset permissions before wider distribution.

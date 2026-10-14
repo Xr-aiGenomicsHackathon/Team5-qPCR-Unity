@@ -16,7 +16,11 @@ git lfs pull
 git lfs fsck
 ```
 
-Add this folder to Unity Hub using Unity 6000.3.25f1. Open `Assets/Team5/Scenes/Team5_qPCR_RealisticLab.unity`, not SampleScene. Allow packages/imports to finish before Play.
+Add this folder to Unity Hub using Unity **6000.3.26f1**. Open `Assets/Team5/Scenes/LobbyScene.unity`, not SampleScene or the old laboratory. Allow packages/imports to finish before Play. LobbyScene and DemoScene are already wired; do not regenerate the lab after cloning.
+
+The first checkout requires package downloads and a valid Unity installation/license. Keep the resolved package lock, all asset metadata and the baked lighting files. Audio, video, textures, models and fonts may be LFS objects: a small text pointer is not a usable binary asset. If objects are missing, fix LFS retrieval before opening Unity.
+
+Use a separate clean checkout to verify candidate changes. Uncommitted local work is not included in a teammate's remote clone until you deliberately commit and push it. Do not stage unrelated Mac changes, local scene deletions or XR settings blindly. The agent does not push automatically.
 
 ## Future updates
 

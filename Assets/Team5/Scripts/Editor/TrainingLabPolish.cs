@@ -49,7 +49,7 @@ namespace Team5.qPCR.Editor
             }
             foreach(var light in UnityEngine.Object.FindObjectsByType<Light>(FindObjectsSortMode.None))
             {
-                if(light.type==LightType.Point){light.lightmapBakeType=LightmapBakeType.Baked;light.intensity=1.6f;light.bounceIntensity=1;light.shadows=LightShadows.Soft;light.color=new Color(1,.98f,.94f);}
+                if(light.type==LightType.Point){light.lightmapBakeType=LightmapBakeType.Baked;light.intensity=1.6f;light.bounceIntensity=1;light.shadows=LightShadows.Soft;light.color=Color.white;light.useColorTemperature=true;light.colorTemperature=5000;}
                 else if(light.type==LightType.Directional){light.lightmapBakeType=LightmapBakeType.Mixed;light.intensity=.45f;light.shadows=LightShadows.Soft;}
             }
             var lighting=Named("60_LIGHTING");var probes=Ensure<LightProbeGroup>(Child(lighting,"Training_Light_Probes"));var positions=new List<Vector3>();
@@ -62,7 +62,7 @@ namespace Team5.qPCR.Editor
             var settings=AssetDatabase.LoadAssetAtPath<LightingSettings>(lightingPath);
             if(settings==null){settings=new LightingSettings(){name="TrainingLighting"};AssetDatabase.CreateAsset(settings,lightingPath);}
             Lightmapping.lightingSettings=settings;
-            settings.bakedGI=true;settings.realtimeGI=false;settings.lightmapResolution=10;settings.lightmapMaxSize=1024;
+            settings.bakedGI=true;settings.realtimeGI=false;settings.lightmapResolution=20;settings.lightmapMaxSize=2048;
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());EditorSceneManager.SaveScene(SceneManager.GetActiveScene());AssetDatabase.SaveAssets();
         }
         [MenuItem("Team 5/Training Flow/Bake Laboratory Lighting")]
@@ -70,6 +70,27 @@ namespace Team5.qPCR.Editor
         {
             if(EditorApplication.isPlaying||SceneManager.GetActiveScene().path!=DemoPath)throw new System.InvalidOperationException("Bake requires DemoScene in Edit Mode.");
             if(!Lightmapping.isRunning)Lightmapping.BakeAsync();
+        }
+        [MenuItem("Team 5/Training Flow/Refine Laboratory Lighting Only")]
+        public static void RefineTrainingLighting()
+        {
+            if(EditorApplication.isPlaying||SceneManager.GetActiveScene().path!=DemoPath)throw new System.InvalidOperationException("Open DemoScene in Edit Mode.");
+            foreach(var light in UnityEngine.Object.FindObjectsByType<Light>(FindObjectsSortMode.None))
+            {
+                if(light.gameObject.scene!=SceneManager.GetActiveScene())continue;
+                if(light.type==LightType.Point)
+                {light.lightmapBakeType=LightmapBakeType.Baked;light.intensity=1.6f;light.color=Color.white;light.useColorTemperature=true;light.colorTemperature=5000;light.shadows=LightShadows.Soft;}
+                if(light.type==LightType.Directional){light.lightmapBakeType=LightmapBakeType.Mixed;light.intensity=.45f;light.shadows=LightShadows.Soft;}
+            }
+            foreach(var root in new[]{Named("10_LAB_STRUCTURE"),Named("20_LAB_FURNITURE")})
+                foreach(var renderer in root.GetComponentsInChildren<Renderer>())
+                    if(!(renderer is LineRenderer)&&!(renderer is ParticleSystemRenderer))GameObjectUtility.SetStaticEditorFlags(renderer.gameObject,GameObjectUtility.GetStaticEditorFlags(renderer.gameObject)|StaticEditorFlags.ContributeGI);
+            var settings=AssetDatabase.LoadAssetAtPath<LightingSettings>("Assets/Team5/UI/TrainingLighting.lighting");
+            if(settings==null)throw new System.InvalidOperationException("The training lighting settings are missing.");
+            settings.bakedGI=true;settings.realtimeGI=false;settings.lightmapResolution=20;settings.lightmapMaxSize=2048;Lightmapping.lightingSettings=settings;
+            foreach(var reflection in UnityEngine.Object.FindObjectsByType<ReflectionProbe>(FindObjectsSortMode.None))
+            {reflection.mode=ReflectionProbeMode.Baked;reflection.resolution=256;reflection.boxProjection=true;}
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());EditorSceneManager.SaveScene(SceneManager.GetActiveScene());AssetDatabase.SaveAssets();
         }
     }
 }
