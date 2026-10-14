@@ -14,6 +14,7 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs.Simulation;
 
 namespace Team5.qPCR.PlayModeTests
 {
+    [Category("CurrentTrainingRoute")]
     public sealed class LobbySceneTests
     {
         [UnitySetUp]public IEnumerator Load(){yield return SceneManager.LoadSceneAsync("LobbyScene");yield return null;}

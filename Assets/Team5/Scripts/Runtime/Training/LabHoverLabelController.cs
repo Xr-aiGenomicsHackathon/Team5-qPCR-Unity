@@ -19,6 +19,8 @@ namespace Team5.qPCR
         [SerializeField] private Transform[] fallbackAim;
         [SerializeField] private Transform rig;
         [SerializeField] private LabLabelView[] views;
+        [SerializeField] private Transform[] identificationDots;
+        [SerializeField] private PPELessonController preparation;
         [SerializeField] private LayerMask labelMask = ~0;
         [SerializeField, Min(0)] private float dwellSeconds = .2f;
         [SerializeField, Min(.1f)] private float maximumDistance = 3f;
@@ -34,6 +36,10 @@ namespace Team5.qPCR
         }
         private void LateUpdate()
         {
+            if (preparation != null && preparation.IsLessonActive &&
+                (preparation.CurrentStep == PPELessonStep.WetHands || preparation.CurrentStep == PPELessonStep.RinseHands ||
+                 preparation.CurrentStep == PPELessonStep.RubHands || preparation.CurrentStep == PPELessonStep.DryHands))
+            { Hide(0); Hide(1); return; }
             for (var hand = 0; hand < 2; hand++)
             {
                 var pointer = pointers != null && hand < pointers.Length ? pointers[hand] : null;
@@ -58,6 +64,11 @@ namespace Team5.qPCR
             dwell[hand] += Mathf.Max(0, delta);
             if (dwell[hand] < dwellSeconds) return;
             visible[hand] = target;
+            if (identificationDots != null && hand < identificationDots.Length && identificationDots[hand] != null)
+            {
+                var dot = identificationDots[hand]; dot.gameObject.SetActive(true);
+                dot.position = hitPoint - ray.direction.normalized * .006f;
+            }
             if (views == null || hand >= views.Length || views[hand] == null || views[hand].Panel == null) return;
             var view = views[hand];
             view.Panel.SetActive(true);
@@ -68,7 +79,7 @@ namespace Team5.qPCR
             {
                 var direction = view.Panel.transform.position - Camera.main.transform.position;
                 if (direction.sqrMagnitude > .001f) view.Panel.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
-                view.Panel.transform.localScale = Vector3.one * (.0007f * Mathf.Clamp(direction.magnitude, 1f, 2f));
+                view.Panel.transform.localScale = Vector3.one * (.00055f * Mathf.Clamp(direction.magnitude, 1f, 1.6f));
                 // Put each hand's card beside its target, keeping two nearby cards apart.
                 var rect = view.Panel.GetComponent<RectTransform>();
                 var width = rect != null ? rect.rect.width * view.Panel.transform.lossyScale.x : .34f;
@@ -98,6 +109,8 @@ namespace Team5.qPCR
         {
             candidates[hand] = null; visible[hand] = null; dwell[hand] = 0;
             if (views != null && hand < views.Length && views[hand]?.Panel != null) views[hand].Panel.SetActive(false);
+            if (identificationDots != null && hand < identificationDots.Length && identificationDots[hand] != null)
+                identificationDots[hand].gameObject.SetActive(false);
         }
         private void OnDisable() { Hide(0); Hide(1); }
     }

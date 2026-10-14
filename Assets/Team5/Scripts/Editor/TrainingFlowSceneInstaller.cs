@@ -58,6 +58,7 @@ namespace Team5.qPCR.Editor
             BuildVideo(lesson,narration,card);
             BuildSettings(Named("50_LESSON_AND_UI"),narration,new Vector3(4.9f,1.1f,-2.75f));
             AddReachFilters(ppe,lesson);
+            RepairNavigation(); RepairPpeGeometry();
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
             AssetDatabase.SaveAssets();
         }
@@ -158,6 +159,10 @@ namespace Team5.qPCR.Editor
             {cues.Add(Cue("Instruction_Qpcr_"+state,QpcrLessonController.GetPresentation(state).Instruction));cues.Add(Cue("Why_Qpcr_"+state,QpcrTeachingContent.Explain(state)));}
             foreach(PPELessonStep state in Enum.GetValues(typeof(PPELessonStep)))
             {cues.Add(Cue("Instruction_Ppe_"+state,PPELessonController.InstructionFor(state)));cues.Add(Cue("Why_Ppe_"+state,PPELessonUI.Explanation(state)));}
+            foreach(var state in new[]{PPELessonStep.WearLabCoat,PPELessonStep.TurnOnTap,PPELessonStep.WetHands,PPELessonStep.TurnOffTap,
+                PPELessonStep.DryHands,PPELessonStep.WearLeftGlove,PPELessonStep.WearRightGlove,PPELessonStep.Complete})
+            {cues.Add(Cue("Instruction_Ppe_Presentation_"+state,PPELessonController.InstructionFor(state,PPELessonMode.Presentation)));
+             cues.Add(Cue("Why_Ppe_Presentation_"+state,PPELessonUI.Explanation(state,PPELessonMode.Presentation)));}
             foreach(QpcrProtocolParameter p in Enum.GetValues(typeof(QpcrProtocolParameter)))cues.Add(Cue("Parameter_"+p,QpcrProtocolValidator.LabelFor(p)+"\n\n"+QpcrTeachingContent.Explain(p)));
             cues.Add(Cue("Instruction_Lobby_Welcome","Welcome to the T5 XR Genomics Laboratory. Enter a nickname, then select Continue."));
             cues.Add(Cue("Instruction_Lobby_Ready","Your laboratory is ready. Select Enter Laboratory. First, prepare safely. Then you will load and run Q P C R."));

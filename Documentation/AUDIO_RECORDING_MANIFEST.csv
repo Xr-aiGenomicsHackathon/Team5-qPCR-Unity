@@ -1,0 +1,138 @@
+filename,category,playback,spoken_text
+"Instruction_Lobby_Welcome.mp3","1. Lobby — automatic instructions","Automatic instruction","Welcome to the T five X R Genomics Laboratory. Enter a nickname, then select Continue."
+"Instruction_Lobby_Ready.mp3","1. Lobby — automatic instructions","Automatic instruction","Your laboratory is ready. Select Enter Laboratory. First, prepare safely. Then you will load and run Q P C R."
+"Instruction_Ppe_WearLabCoat.mp3","2. PPE — automatic instructions","Automatic instruction","Pick up the lab coat and bring it to the wear zone in front of your chest."
+"Instruction_Ppe_TurnOnTap.mp3","2. PPE — automatic instructions","Automatic instruction","Press the tap handle to turn on the water."
+"Instruction_Ppe_WetHands.mp3","2. PPE — automatic instructions","Automatic instruction","Place both hands under the running water."
+"Instruction_Ppe_UseSoap.mp3","2. PPE — automatic instructions","Automatic instruction","Press the soap dispenser once."
+"Instruction_Ppe_RubHands.mp3","2. PPE — automatic instructions","Automatic instruction","Rub your hands together for 20 seconds. Clean palms, backs, between fingers and under nails. Keep moving both hands close together."
+"Instruction_Ppe_RinseHands.mp3","2. PPE — automatic instructions","Automatic instruction","Place both hands under the water again to rinse them."
+"Instruction_Ppe_TurnOffTap.mp3","2. PPE — automatic instructions","Automatic instruction","Press the tap handle to turn off the water."
+"Instruction_Ppe_DryHands.mp3","2. PPE — automatic instructions","Automatic instruction","Place both hands beneath the hand dryer."
+"Instruction_Ppe_WearLeftGlove.mp3","2. PPE — automatic instructions","Automatic instruction","Pick up the left glove with your left hand."
+"Instruction_Ppe_WearRightGlove.mp3","2. PPE — automatic instructions","Automatic instruction","Pick up the right glove with your right hand."
+"Instruction_Ppe_Complete.mp3","2. PPE — automatic instructions","Automatic instruction","P P E complete. You may continue to the Q P C R plate inspection."
+"Instruction_Qpcr_NotStarted.mp3","3. qPCR — automatic instructions","Automatic instruction","Press Start Q P C R Lesson to begin with the prepared 96-well plate."
+"Instruction_Qpcr_InspectPlateId.mp3","3. qPCR — automatic instructions","Automatic instruction","Read the highlighted Plate I D. If it matches the received experiment record, press Confirm Plate I D."
+"Instruction_Qpcr_InspectA1Marker.mp3","3. qPCR — automatic instructions","Automatic instruction","Locate the highlighted A one corner. If the reference corner is clearly identified, press Confirm A one Orientation."
+"Instruction_Qpcr_InspectOpticalSeal.mp3","3. qPCR — automatic instructions","Automatic instruction","Visually inspect the highlighted seal. If it is flat, secure and undamaged, press Confirm Seal."
+"Instruction_Qpcr_InspectBubbles.mp3","3. qPCR — automatic instructions","Automatic instruction","Look across the highlighted wells. If no visible bubbles are present, press Confirm No Bubbles."
+"Instruction_Qpcr_ReturnPlate.mp3","3. qPCR — automatic instructions","Automatic instruction","Move the plate back to its blue home marker and release it."
+"Instruction_Qpcr_PowerOn.mp3","3. qPCR — automatic instructions","Automatic instruction","Press the illuminated power button on the Q P C R instrument."
+"Instruction_Qpcr_OpenDrawer.mp3","3. qPCR — automatic instructions","Automatic instruction","Press the Drawer Open button and wait until the drawer stops moving."
+"Instruction_Qpcr_LoadPlate.mp3","3. qPCR — automatic instructions","Automatic instruction","Grab the plate, align A one with the socket marker, place it in the holder, then release it."
+"Instruction_Qpcr_CloseDrawer.mp3","3. qPCR — automatic instructions","Automatic instruction","Press Drawer Close after the plate is securely seated."
+"Instruction_Qpcr_ConfigureProtocol.mp3","3. qPCR — automatic instructions","Automatic instruction","Select every field and enter its displayed guided value. Confirm each entry before validating the protocol."
+"Instruction_Qpcr_ValidateProtocol.mp3","3. qPCR — automatic instructions","Automatic instruction","Review every field, then press Validate Protocol."
+"Instruction_Qpcr_StartRun.mp3","3. qPCR — automatic instructions","Automatic instruction","Press Start Run on the instrument after validation passes."
+"Instruction_Qpcr_ObserveAmplification.mp3","3. qPCR — automatic instructions","Automatic instruction","Watch the cycle number, temperature stage and fluorescence curves until the run finishes."
+"Instruction_Qpcr_InterpretResults.mp3","3. qPCR — automatic instructions","Automatic instruction","Answer the three screen questions about controls, C Q and the melt curve."
+"Instruction_Qpcr_Complete.mp3","3. qPCR — automatic instructions","Automatic instruction","You have inspected, loaded, configured, run and interpreted a Q P C R experiment."
+"Why_Ppe_WearLabCoat.mp3","4. PPE — optional Why / Read Aloud","Optional Read Aloud","A lab coat helps protect clothing and skin from splashes. This chest gesture represents putting it on; it does not reproduce every real dressing movement."
+"Why_Ppe_TurnOnTap.mp3","4. PPE — optional Why / Read Aloud","Optional Read Aloud","Wet bare hands with clean running water before applying soap. Gloves go on only after washing and drying."
+"Why_Ppe_WetHands.mp3","4. PPE — optional Why / Read Aloud","Optional Read Aloud","Wet bare hands with clean running water before applying soap. Gloves go on only after washing and drying."
+"Why_Ppe_UseSoap.mp3","4. PPE — optional Why / Read Aloud","Optional Read Aloud","Soap and rubbing help loosen dirt and microorganisms so they can be rinsed away."
+"Why_Ppe_RubHands.mp3","4. PPE — optional Why / Read Aloud","Optional Read Aloud","Scrub for at least 20 seconds. Clean palms, backs of hands, between fingers and under nails. The simulation detects relative hand movement, not complete real-world washing technique."
+"Why_Ppe_RinseHands.mp3","4. PPE — optional Why / Read Aloud","Optional Read Aloud","Rinse away soap and loosened contamination with running water."
+"Why_Ppe_TurnOffTap.mp3","4. PPE — optional Why / Read Aloud","Optional Read Aloud","Stop the water when finished. In a real lab avoid recontaminating clean hands and follow the local tap and hygiene procedure."
+"Why_Ppe_DryHands.mp3","4. PPE — optional Why / Read Aloud","Optional Read Aloud","Dry hands before putting on gloves. This dryer gesture represents drying; follow the drying method specified by your laboratory."
+"Why_Ppe_WearLeftGlove.mp3","4. PPE — optional Why / Read Aloud","Optional Read Aloud","Wear clean, appropriately sized gloves to help prevent contact and contamination. Gloves do not replace hand hygiene; change damaged or contaminated gloves."
+"Why_Ppe_WearRightGlove.mp3","4. PPE — optional Why / Read Aloud","Optional Read Aloud","Wear clean, appropriately sized gloves to help prevent contact and contamination. Gloves do not replace hand hygiene; change damaged or contaminated gloves."
+"Why_Ppe_Complete.mp3","4. PPE — optional Why / Read Aloud","Optional Read Aloud","Your coat, handwashing and gloves are complete. These are training checks, not a substitute for your laboratory's approved safety procedures."
+"Why_Qpcr_NotStarted.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","Q P C R copies a selected D N A region while measuring fluorescence during cycling. Team 5 starts with a prepared 96-well plate. Your task is to inspect it, load it, programme the instrument, run the lesson and explain the result. Use WHY at any step to learn the reason behind the action."
+"Why_Qpcr_InspectPlateId.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY CHECK THE I D?
+A plate has 96 wells: rows A through H and columns one through twelve. The label must match the handoff record so results are assigned to the correct experiment. Our record is T four, Q P C R, two zero two six, zero five. If it does not match, stop and resolve the discrepancy; do not guess."
+"Why_Qpcr_InspectA1Marker.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY FIND A one?
+A one means row A, column 1. It fixes the direction of the plate map. Rotating the plate 180 degrees puts samples under the wrong well names. Find the red corner now, and match it to the red corner on the holder during loading."
+"Why_Qpcr_InspectOpticalSeal.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY AN OPTICAL SEAL?
+A flat, intact seal keeps reactions enclosed and reduces evaporation during heating. It must transmit the light used for fluorescence measurements. Check edges and avoid touching the optical surface. If the seal is damaged or lifting, resolve it before loading."
+"Why_Qpcr_InspectBubbles.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY CHECK BUBBLES?
+Bubbles can disturb optical readings. Team 5 receives an already prepared and sealed plate. If bubbles are present, follow the approved brief centrifugation procedure with a balanced plate centrifuge before loading. This lesson's plate is already ready; do not open it or remix its reactions."
+"Why_Qpcr_ReturnPlate.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY RETURN THE PLATE?
+Put the sealed plate flat in its clean handoff position while preparing the machine. Carry it by its edges. A floor drop can damage or compromise it: the simulator leaves it on the floor and blocks loading until Reset provides a fresh training plate."
+"Why_Qpcr_PowerOn.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY POWER ON?
+The electronics, optics and temperature controls must be ready before loading. A real instrument may perform startup checks; follow its manual. This simulator uses a short startup sound and welcome screen. The power button does not start amplification."
+"Why_Qpcr_OpenDrawer.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY OPEN THE COMPARTMENT?
+The plate holder exposes the thermal block, which heats and cools the reactions. Wait for the drawer to stop moving. Never force it. Keep the sealed plate level and identify the holder's red A one corner before inserting it."
+"Why_Qpcr_LoadPlate.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY ALIGN AND SEAT?
+Match both A one corners and lower the plate flat into the holder. Correct seating provides contact with the temperature-controlled block and preserves the well map. Release Grip only when the guide turns green. Amber means misaligned; red explains a rejected attempt."
+"Why_Qpcr_CloseDrawer.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY CLOSE THE COMPARTMENT?
+The plate must stay securely seated before the heated lid and thermal programme operate. The lid helps limit condensation; the enclosure supports consistent temperature and optical measurement. The simulator locks this action until seating succeeds."
+"Why_Qpcr_ConfigureProtocol.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY PROGRAM THE RUN?
+The programme controls temperature, duration and fluorescence collection. Enter the temperatures AND hold times. This is a specified teaching assay using sigh-ber Green, not a universal recipe. A real assay requires validated primer, reagent and instrument instructions. Select a field for its explanation."
+"Why_Qpcr_ValidateProtocol.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY PROGRAM THE RUN?
+The programme controls temperature, duration and fluorescence collection. Enter the temperatures AND hold times. This is a specified teaching assay using sigh-ber Green, not a universal recipe. A real assay requires validated primer, reagent and instrument instructions. Select a field for its explanation."
+"Why_Qpcr_StartRun.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHY VALIDATE BEFORE START?
+Confirm identity, seal, orientation, seating, closed drawer and every programme entry. The run repeatedly heats and cools reactions and measures fluorescence. A wrong setting can cause failed or misleading results. Real experiments also require appropriate controls and replicates."
+"Why_Qpcr_ObserveAmplification.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHAT IS HAPPENING?
+At 95 degrees Celsius the D N A strands separate. At 60 degrees Celsius primers bind; fluorescence is collected. At 72 degrees Celsius the polymerase extends D N A. sigh-ber Green reports double-stranded D N A, including unwanted products. Watch the blue positive control, green teaching sample and orange N T C. Time is accelerated and all curves are synthetic teaching data."
+"Why_Qpcr_InterpretResults.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","HOW DO WE READ THE RESULT?
+C Q (also called C T) is the cycle at which fluorescence crosses a chosen threshold above background. The positive control should amplify; the N T C contains no template and should not show target amplification. Inspect melt peaks for unexpected products. One peak supports consistency but does not prove target identity. These checks do not replace full assay acceptance criteria."
+"Why_Qpcr_Complete.mp3","5. qPCR — optional Why / Read Aloud","Optional Read Aloud","WHAT HAVE YOU LEARNED?
+You checked the handoff, aligned and loaded a sealed plate, programmed temperatures and hold times, monitored fluorescence and interpreted controls, C Q and a melt peak. Keep post P C R plates sealed to reduce carryover contamination. Use the laboratory's validated procedure for disposal and real experiments."
+"Parameter_ReactionVolume.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Reaction volume
+
+Reaction volume is the amount in each well, not the whole plate. Enter 20 microlitres to match this prepared plate and the instrument's thermal settings."
+"Parameter_LidTemperature.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Lid temperature
+
+The heated lid is set to 105 degrees Celsius in this lesson. It helps limit condensation above the reactions. The lid temperature differs from the block temperature."
+"Parameter_InitialDenaturation.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Initial denaturation
+
+The initial hold is 95 degrees Celsius for 120 seconds. It separates D N A strands; activation requirements depend on the chosen polymerase. Use the validated reagent protocol."
+"Parameter_AmplificationCycles.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Amplification cycles
+
+Repeat the thermal sequence 35 times. Fluorescence is sampled each cycle. More cycles do not automatically mean a better or more reliable result."
+"Parameter_Denaturation.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Denaturation
+
+Denaturation is 95 degrees Celsius for 15 seconds in each cycle. Heating separates the D N A strands so primers can bind in the next stage."
+"Parameter_Annealing.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Annealing
+
+Annealing is 60 degrees Celsius for 30 seconds in this teaching assay. Primers bind to complementary D N A. The appropriate temperature depends on primer design and assay validation."
+"Parameter_Extension.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Extension
+
+Extension is 72 degrees Celsius for 30 seconds here. The D N A polymerase extends the primers to make new strands. Required time depends on the enzyme and product length."
+
+"Instruction_Ppe_Presentation_WearLabCoat.mp3","Presentation PPE","Automatic instruction","Pick up the lab coat and bring it to the wear zone in front of your chest."
+"Why_Ppe_Presentation_WearLabCoat.mp3","Presentation PPE","Optional Read Aloud","A lab coat helps protect clothing and skin from splashes. This chest gesture represents putting it on; it does not reproduce every real dressing movement."
+"Instruction_Ppe_Presentation_TurnOnTap.mp3","Presentation PPE","Automatic instruction","Press the tap handle to turn on the water."
+"Why_Ppe_Presentation_TurnOnTap.mp3","Presentation PPE","Optional Read Aloud","This one-second checkpoint demonstrates placing both hands beneath running water. It does not clean or disinfect real hands. Real handwashing requires soap, at least twenty seconds of scrubbing, rinsing and drying, following your laboratory's approved procedure."
+"Instruction_Ppe_Presentation_WetHands.mp3","Presentation PPE","Automatic instruction","Keep both hands beneath the water for one continuous second. If either hand leaves, the timer restarts."
+"Why_Ppe_Presentation_WetHands.mp3","Presentation PPE","Optional Read Aloud","This one-second checkpoint demonstrates placing both hands beneath running water. It does not clean or disinfect real hands. Real handwashing requires soap, at least twenty seconds of scrubbing, rinsing and drying, following your laboratory's approved procedure."
+"Instruction_Ppe_Presentation_TurnOffTap.mp3","Presentation PPE","Automatic instruction","Press the tap handle to turn off the water."
+"Why_Ppe_Presentation_TurnOffTap.mp3","Presentation PPE","Optional Read Aloud","Stop the water when finished. In a real lab avoid recontaminating clean hands and follow the local tap and hygiene procedure."
+"Instruction_Ppe_Presentation_DryHands.mp3","Presentation PPE","Automatic instruction","Keep both hands beneath the dryer for two seconds before putting on gloves."
+"Why_Ppe_Presentation_DryHands.mp3","Presentation PPE","Optional Read Aloud","Dry hands before putting on gloves. This dryer gesture represents drying; follow the drying method specified by your laboratory."
+"Instruction_Ppe_Presentation_WearLeftGlove.mp3","Presentation PPE","Automatic instruction","Pick up the left glove with your left hand."
+"Why_Ppe_Presentation_WearLeftGlove.mp3","Presentation PPE","Optional Read Aloud","Wear clean, appropriately sized gloves to help prevent contact and contamination. Gloves do not replace hand hygiene; change damaged or contaminated gloves."
+"Instruction_Ppe_Presentation_WearRightGlove.mp3","Presentation PPE","Automatic instruction","Pick up the right glove with your right hand."
+"Why_Ppe_Presentation_WearRightGlove.mp3","Presentation PPE","Optional Read Aloud","Wear clean, appropriately sized gloves to help prevent contact and contamination. Gloves do not replace hand hygiene; change damaged or contaminated gloves."
+"Instruction_Ppe_Presentation_Complete.mp3","Presentation PPE","Automatic instruction","Preparation demonstration complete. Continue to Q P C R. This short demonstration is not complete handwashing."
+"Why_Ppe_Presentation_Complete.mp3","Presentation PPE","Optional Read Aloud","You demonstrated the coat, water, drying and glove interactions. Soap and scrubbing were skipped for this presentation; this must not be treated as complete handwashing or a substitute for laboratory safety training."
+"Parameter_FluorescenceAcquisition.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Fluorescence acquisition
+
+Acquire fluorescence at 60 degrees Celsius during annealing in each cycle. Comparing readings at the same stage provides a consistent amplification trace."
+"Parameter_MeltCurveStart.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Melt curve start
+
+After amplification, increase temperature from 65 to 95 degrees Celsius in zero point five degree steps. D N A melting changes sigh-ber fluorescence. A derivative peak shows a melting transition; extra peaks can indicate unwanted products. Dwell time follows the real instrument's method."
+"Parameter_MeltCurveEnd.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Melt curve end
+
+After amplification, increase temperature from 65 to 95 degrees Celsius in zero point five degree steps. D N A melting changes sigh-ber fluorescence. A derivative peak shows a melting transition; extra peaks can indicate unwanted products. Dwell time follows the real instrument's method."
+"Parameter_TemperatureIncrement.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Temperature increment
+
+After amplification, increase temperature from 65 to 95 degrees Celsius in zero point five degree steps. D N A melting changes sigh-ber fluorescence. A derivative peak shows a melting transition; extra peaks can indicate unwanted products. Dwell time follows the real instrument's method."
+"Parameter_PostRunHold.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Post-run hold
+
+The block holds at 4 degrees Celsius after the programme in this lesson. This is a short post-run hold, not a long-term storage method. Keep amplified plates sealed and follow the disposal procedure."
+"Parameter_InitialHoldSeconds.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Initial hold time
+
+The initial hold is 95 degrees Celsius for 120 seconds. It separates D N A strands; activation requirements depend on the chosen polymerase. Use the validated reagent protocol."
+"Parameter_DenaturationSeconds.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Denaturation time
+
+Denaturation is 95 degrees Celsius for 15 seconds in each cycle. Heating separates the D N A strands so primers can bind in the next stage."
+"Parameter_AnnealingSeconds.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Annealing time
+
+Annealing is 60 degrees Celsius for 30 seconds in this teaching assay. Primers bind to complementary D N A. The appropriate temperature depends on primer design and assay validation."
+"Parameter_ExtensionSeconds.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Extension time
+
+Extension is 72 degrees Celsius for 30 seconds here. The D N A polymerase extends the primers to make new strands. Required time depends on the enzyme and product length."
+

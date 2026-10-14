@@ -11,6 +11,7 @@ namespace Team5.qPCR
         [SerializeField] private PPELessonController lesson;
         [SerializeField] private XRSimpleInteractable interactable;
         [SerializeField] private ParticleSystem waterParticles;
+        [SerializeField] private GameObject waterVisual;
         [SerializeField] private AudioSource waterAudio;
         [SerializeField] private AudioSource clickAudio;
         [SerializeField] private Transform movingHandle;
@@ -34,8 +35,17 @@ namespace Team5.qPCR
 
         private void OnDisable()
         {
+            ApplyWaterState(false);
+            if (clickAudio != null) clickAudio.Stop();
             interactable?.selectEntered.RemoveListener(OnSelected);
             if (lesson != null) lesson.ResetRequested -= OnLessonReset;
+        }
+
+        private void Update()
+        {
+            // Lifecycle stop/reset can happen without a physical tap selection.
+            if (lesson == null || !lesson.IsLessonActive || !lesson.IsWaterRunning)
+                ApplyWaterState(false);
         }
 
         private void OnSelected(SelectEnterEventArgs args)
@@ -52,6 +62,7 @@ namespace Team5.qPCR
 
         private void ApplyWaterState(bool running)
         {
+            if (waterVisual != null) waterVisual.SetActive(running);
             if (waterParticles != null)
             {
                 if (running && !waterParticles.isPlaying) waterParticles.Play();

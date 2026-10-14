@@ -7,12 +7,27 @@ namespace Team5.qPCR
     {
         [SerializeField] private PPELessonController lesson;
         [SerializeField] private PPEHandSide side;
+        [SerializeField] private Transform trackedController;
+        [SerializeField] private Vector3 controllerLocalPosition = new Vector3(0, -.02f, -.06f);
+        private Rigidbody body;
 
         public PPEHandSide Side => side;
+        public Transform HandPose => trackedController != null ? trackedController : transform;
 
         private void OnEnable()
         {
+            body = GetComponent<Rigidbody>();
+            if (trackedController == null) trackedController = transform.parent;
             lesson?.RegisterHand(this);
+        }
+
+        private void FixedUpdate()
+        {
+            // A tracked parent's render pose is not a reliable PhysX kinematic target.
+            // Drive the invisible probe explicitly without changing the tracked hand.
+            if (trackedController == null || body == null || !body.isKinematic) return;
+            body.MovePosition(trackedController.TransformPoint(controllerLocalPosition));
+            body.MoveRotation(trackedController.rotation);
         }
 
         private void OnDisable()

@@ -1516,6 +1516,7 @@ MonoBehaviour:
   simulatorObjects:
   - {fileID: 857546350}
   useSimulatorInEditor: 1
+  showSimulatorControlsInEditor: 0
 --- !u!114 &60043100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1590,7 +1591,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1674,7 +1675,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -1811,7 +1812,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -2383,7 +2384,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -5290,7 +5291,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -6314,7 +6315,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -8573,7 +8574,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -8645,6 +8646,7 @@ GameObject:
   - component: {fileID: 330649464}
   - component: {fileID: 330649463}
   - component: {fileID: 330649462}
+  - component: {fileID: 330649466}
   m_Layer: 2
   m_Name: XR Origin (XR Rig)
   m_TagString: Untagged
@@ -8774,13 +8776,32 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1.36144
-  m_Radius: 0.1
+  m_Height: 1.65
+  m_Radius: 0.18
   m_SlopeLimit: 45
-  m_StepOffset: 0.5
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.76072, z: 0}
+  m_StepOffset: 0.15
+  m_SkinWidth: 0.02
+  m_MinMoveDistance: 0
+  m_Center: {x: 0, y: 0.825, z: 0}
+--- !u!114 &330649466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330649459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43357010480e1f243b393e8c1de5d07e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Team5.qPCR.Runtime::Team5.qPCR.HeadBoundaryWarning
+  head: {fileID: 1622404941}
+  fade: {fileID: 1966297288}
+  warning: {fileID: 367697298}
+  solidLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  headRadius: 0.1
 --- !u!1 &331389681
 GameObject:
   m_ObjectHideFlags: 0
@@ -9316,6 +9337,143 @@ RectTransform:
   m_AnchoredPosition: {x: -20, y: 30}
   m_SizeDelta: {x: 200, y: 230}
   m_Pivot: {x: 1, y: 0}
+--- !u!1 &367697297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 367697300}
+  - component: {fileID: 367697299}
+  - component: {fileID: 367697298}
+  m_Layer: 0
+  m_Name: Boundary_Message
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &367697298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367697297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 0.95686275, g: 0.96862745, b: 0.9529412, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 32
+  m_fontSizeBase: 32
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &367697299
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367697297}
+  m_CullTransparentMesh: 1
+--- !u!224 &367697300
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367697297}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1966297292}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 720, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &368119194
 GameObject:
   m_ObjectHideFlags: 0
@@ -9432,7 +9590,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -10085,7 +10243,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4282067734
   m_fontColor: {r: 0.08627451, g: 0.16862746, b: 0.23137255, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -10098,7 +10256,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -12237,7 +12395,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -15256,7 +15414,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -16965,7 +17123,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -18011,7 +18169,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -18659,7 +18817,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -19236,7 +19394,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -20606,10 +20764,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 857546351}
-  - component: {fileID: 857546355}
   - component: {fileID: 857546354}
   - component: {fileID: 857546353}
   - component: {fileID: 857546352}
+  - component: {fileID: 857546355}
+  - component: {fileID: 857546356}
   m_Layer: 0
   m_Name: XR Interaction Simulator
   m_TagString: Untagged
@@ -20895,9 +21054,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 857546350}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da1bb8ac6d49b4bbe8d0a43005a26072, type: 3}
+  m_Script: {fileID: 11500000, guid: a2fbe382fbadf564e8145b3ba90ef5a4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Team5.qPCR.Runtime::Team5.qPCR.CollisionAwareXRInteractionSimulator
   m_CameraTransform: {fileID: 0}
   m_DeviceLifecycleManager: {fileID: 857546354}
   m_HandExpressionManager: {fileID: 857546353}
@@ -21827,6 +21986,21 @@ MonoBehaviour:
   m_RotateYInvert: 0
   m_TranslateSpace: 1
   m_QuickActionControllerInputModes: 01000000020000000300000004000000
+  bodyTransformer: {fileID: 1207213384}
+  groundSpeed: 1
+--- !u!114 &857546356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 857546350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f1cc5f6f3baa3440a5cfa72de9ab49d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Team5.qPCR.Runtime::Team5.qPCR.XRInteractionSimulatorInputBridge
+  simulator: {fileID: 857546355}
 --- !u!1 &862308449
 GameObject:
   m_ObjectHideFlags: 0
@@ -23023,7 +23197,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -24112,7 +24286,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -24685,6 +24859,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 950501772}
   m_CullTransparentMesh: 1
+--- !u!1 &957205221
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 957205222}
+  - component: {fileID: 957205224}
+  - component: {fileID: 957205223}
+  m_Layer: 0
+  m_Name: Darkness
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &957205222
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957205221}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1966297292}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 2000, y: 2000}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &957205223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957205221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &957205224
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957205221}
+  m_CullTransparentMesh: 1
 --- !u!1 &961549131
 GameObject:
   m_ObjectHideFlags: 0
@@ -24870,7 +25119,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -25571,7 +25820,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -25708,7 +25957,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -26236,7 +26485,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -26746,7 +26995,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4282067734
   m_fontColor: {r: 0.08627451, g: 0.16862746, b: 0.23137255, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -26759,7 +27008,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -27186,7 +27435,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -28625,7 +28874,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -29405,7 +29654,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -31431,7 +31680,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -32020,7 +32269,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -32225,7 +32474,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -32926,7 +33175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Mediator: {fileID: 1207213383}
   m_TransformationPriority: 0
-  m_MoveSpeed: 2.5
+  m_MoveSpeed: 1
   m_InAirControlModifier: 0.5
   m_EnableStrafe: 1
   m_EnableFly: 0
@@ -33886,7 +34135,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -35134,7 +35383,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -36666,7 +36915,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -36839,7 +37088,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -37366,7 +37615,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -39389,7 +39638,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -40437,7 +40686,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -40584,6 +40833,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1478052416}
   - component: {fileID: 1478052417}
+  - component: {fileID: 1478052418}
   m_Layer: 0
   m_Name: Lobby_Key_Light
   m_TagString: Untagged
@@ -40671,6 +40921,35 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!114 &1478052418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478052415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &1487422773
 GameObject:
   m_ObjectHideFlags: 0
@@ -43580,7 +43859,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -43797,7 +44076,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4282067734
   m_fontColor: {r: 0.08627451, g: 0.16862746, b: 0.23137255, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -43810,7 +44089,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -43998,6 +44277,7 @@ Transform:
   - {fileID: 543026328}
   - {fileID: 1516441403}
   - {fileID: 916877102}
+  - {fileID: 1966297292}
   m_Father: {fileID: 1854374357}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1622404942
@@ -45301,7 +45581,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -46103,7 +46383,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -47983,7 +48263,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4282067734
   m_fontColor: {r: 0.08627451, g: 0.16862746, b: 0.23137255, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -47996,7 +48276,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -50410,7 +50690,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4282067734
   m_fontColor: {r: 0.08627451, g: 0.16862746, b: 0.23137255, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -50423,7 +50703,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -51104,7 +51384,7 @@ MonoBehaviour:
   cues:
   - Key: Instruction_Qpcr_NotStarted
     Caption: Press Start qPCR Lesson to begin with the prepared 96-well plate.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: d158c340431692c4f8d1c23e1e81fd8f, type: 3}
   - Key: Why_Qpcr_NotStarted
     Caption: qPCR copies a selected DNA region while measuring fluorescence during
       cycling. Team 5 starts with a prepared 96-well plate. Your task is to inspect
@@ -51114,7 +51394,7 @@ MonoBehaviour:
   - Key: Instruction_Qpcr_InspectPlateId
     Caption: Read the highlighted Plate ID. If it matches the received experiment
       record, press Confirm Plate ID.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 67a63857e8636cf4ba6a5c44a59ba8e5, type: 3}
   - Key: Why_Qpcr_InspectPlateId
     Caption: 'WHY CHECK THE ID?
 
@@ -51126,7 +51406,7 @@ MonoBehaviour:
   - Key: Instruction_Qpcr_InspectA1Marker
     Caption: Locate the highlighted A1 corner. If the reference corner is clearly
       identified, press Confirm A1 Orientation.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: c288f7f6d47717542875994abfce5d28, type: 3}
   - Key: Why_Qpcr_InspectA1Marker
     Caption: 'WHY FIND A1?
 
@@ -51138,7 +51418,7 @@ MonoBehaviour:
   - Key: Instruction_Qpcr_InspectOpticalSeal
     Caption: Visually inspect the highlighted seal. If it is flat, secure and undamaged,
       press Confirm Seal.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 591aa72096fe61040af148c920c6768d, type: 3}
   - Key: Why_Qpcr_InspectOpticalSeal
     Caption: 'WHY AN OPTICAL SEAL?
 
@@ -51150,7 +51430,7 @@ MonoBehaviour:
   - Key: Instruction_Qpcr_InspectBubbles
     Caption: Look across the highlighted wells. If no visible bubbles are present,
       press Confirm No Bubbles.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: fa16422aa105cf94ab51a8fb6f748dff, type: 3}
   - Key: Why_Qpcr_InspectBubbles
     Caption: 'WHY CHECK BUBBLES?
 
@@ -51162,7 +51442,7 @@ MonoBehaviour:
     Clip: {fileID: 0}
   - Key: Instruction_Qpcr_ReturnPlate
     Caption: Move the plate back to its blue home marker and release it.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: b9c62ff2316fcb54ba49e5e12f20c5e3, type: 3}
   - Key: Why_Qpcr_ReturnPlate
     Caption: 'WHY RETURN THE PLATE?
 
@@ -51265,7 +51545,7 @@ MonoBehaviour:
       polymerase extends DNA. SYBR Green reports double-stranded DNA, including unwanted
       products. Watch the blue positive control, green teaching sample and orange
       NTC. Time is accelerated and all curves are synthetic teaching data.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 9711741ad3bf5fc468bb80f4cad05373, type: 3}
   - Key: Instruction_Qpcr_InterpretResults
     Caption: Answer the three screen questions about controls, Cq and the melt curve.
     Clip: {fileID: 0}
@@ -51278,7 +51558,7 @@ MonoBehaviour:
       amplification. Inspect melt peaks for unexpected products. One peak supports
       consistency but does not prove target identity. These checks do not replace
       full assay acceptance criteria.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 9419122ded2ecd14dbdcd26255b8b231, type: 3}
   - Key: Instruction_Qpcr_Complete
     Caption: You have inspected, loaded, configured, run and interpreted a qPCR experiment.
     Clip: {fileID: 0}
@@ -51290,11 +51570,11 @@ MonoBehaviour:
       and interpreted controls, Cq and a melt peak. Keep post-PCR plates sealed to
       reduce carryover contamination. Use the laboratory''s validated procedure for
       disposal and real experiments.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 5dfd4fdd1db09934ca860f7d7324ac98, type: 3}
   - Key: Instruction_Ppe_WearLabCoat
     Caption: Pick up the lab coat and bring it to the wear zone in front of your
       chest.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 52bf470370d98b8469cd37d3107989dc, type: 3}
   - Key: Why_Ppe_WearLabCoat
     Caption: A lab coat helps protect clothing and skin from splashes. This chest
       gesture represents putting it on; it does not reproduce every real dressing
@@ -51302,21 +51582,21 @@ MonoBehaviour:
     Clip: {fileID: 0}
   - Key: Instruction_Ppe_TurnOnTap
     Caption: Press the tap handle to turn on the water.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 0610c6d71adc1764fa56ab3230231d67, type: 3}
   - Key: Why_Ppe_TurnOnTap
     Caption: Wet bare hands with clean running water before applying soap. Gloves
       go on only after washing and drying.
     Clip: {fileID: 0}
   - Key: Instruction_Ppe_WetHands
     Caption: Place both hands under the running water.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 01fb4c4a5f78b6c4ba491a42730a21ed, type: 3}
   - Key: Why_Ppe_WetHands
     Caption: Wet bare hands with clean running water before applying soap. Gloves
       go on only after washing and drying.
     Clip: {fileID: 0}
   - Key: Instruction_Ppe_UseSoap
     Caption: Press the soap dispenser once.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 59f66827d57802447b48f7acbab05a49, type: 3}
   - Key: Why_Ppe_UseSoap
     Caption: Soap and rubbing help loosen dirt and microorganisms so they can be
       rinsed away.
@@ -51324,7 +51604,7 @@ MonoBehaviour:
   - Key: Instruction_Ppe_RubHands
     Caption: Rub your hands together for 20 seconds. Clean palms, backs, between
       fingers and under nails. Keep moving both hands close together.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 0af370e1028d26e4c9c7ab8a72f317b9, type: 3}
   - Key: Why_Ppe_RubHands
     Caption: Scrub for at least 20 seconds. Clean palms, backs of hands, between
       fingers and under nails. The simulation detects relative hand movement, not
@@ -51332,44 +51612,110 @@ MonoBehaviour:
     Clip: {fileID: 0}
   - Key: Instruction_Ppe_RinseHands
     Caption: Place both hands under the water again to rinse them.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 5b817969619c80b4687a9b326e054485, type: 3}
   - Key: Why_Ppe_RinseHands
     Caption: Rinse away soap and loosened contamination with running water.
     Clip: {fileID: 0}
   - Key: Instruction_Ppe_TurnOffTap
     Caption: Press the tap handle to turn off the water.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 9d61deee3f8f6aa498ce1542494d21ce, type: 3}
   - Key: Why_Ppe_TurnOffTap
     Caption: Stop the water when finished. In a real lab avoid recontaminating clean
       hands and follow the local tap and hygiene procedure.
     Clip: {fileID: 0}
   - Key: Instruction_Ppe_DryHands
     Caption: Place both hands beneath the hand dryer.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: dca82c1ec8b45284e9edfd95d81eb366, type: 3}
   - Key: Why_Ppe_DryHands
     Caption: Dry hands before putting on gloves. This dryer gesture represents drying;
       follow the drying method specified by your laboratory.
     Clip: {fileID: 0}
   - Key: Instruction_Ppe_WearLeftGlove
     Caption: Pick up the left glove with your left hand.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 966f82088eebe2a489ff6eec3ff7f380, type: 3}
   - Key: Why_Ppe_WearLeftGlove
     Caption: Wear clean, appropriately sized gloves to help prevent contact and contamination.
       Gloves do not replace hand hygiene; change damaged or contaminated gloves.
     Clip: {fileID: 0}
   - Key: Instruction_Ppe_WearRightGlove
     Caption: Pick up the right glove with your right hand.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: e7844a8a9ab54bc43a17d347693d7694, type: 3}
   - Key: Why_Ppe_WearRightGlove
     Caption: Wear clean, appropriately sized gloves to help prevent contact and contamination.
       Gloves do not replace hand hygiene; change damaged or contaminated gloves.
     Clip: {fileID: 0}
   - Key: Instruction_Ppe_Complete
     Caption: PPE complete. You may continue to the qPCR plate inspection.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 06fd721aa60e98f46a95bb902927f105, type: 3}
   - Key: Why_Ppe_Complete
     Caption: Your coat, handwashing and gloves are complete. These are training checks,
       not a substitute for your laboratory's approved safety procedures.
+    Clip: {fileID: 0}
+  - Key: Instruction_Ppe_Presentation_WearLabCoat
+    Caption: Pick up the lab coat and bring it to the wear zone in front of your
+      chest.
+    Clip: {fileID: 8300000, guid: d5f45517987ea7f48bf656521050fdb6, type: 3}
+  - Key: Why_Ppe_Presentation_WearLabCoat
+    Caption: A lab coat helps protect clothing and skin from splashes. This chest
+      gesture represents putting it on; it does not reproduce every real dressing
+      movement.
+    Clip: {fileID: 0}
+  - Key: Instruction_Ppe_Presentation_TurnOnTap
+    Caption: Press the tap handle to turn on the water.
+    Clip: {fileID: 8300000, guid: 60e7d1b3250bf1345a762734394bcb9e, type: 3}
+  - Key: Why_Ppe_Presentation_TurnOnTap
+    Caption: This one-second checkpoint demonstrates placing both hands beneath running
+      water. It does not clean or disinfect real hands. Real handwashing requires
+      soap, at least twenty seconds of scrubbing, rinsing and drying, following your
+      laboratory's approved procedure.
+    Clip: {fileID: 0}
+  - Key: Instruction_Ppe_Presentation_WetHands
+    Caption: Keep both hands beneath the water for one continuous second. If either
+      hand leaves, the timer restarts.
+    Clip: {fileID: 0}
+  - Key: Why_Ppe_Presentation_WetHands
+    Caption: This one-second checkpoint demonstrates placing both hands beneath running
+      water. It does not clean or disinfect real hands. Real handwashing requires
+      soap, at least twenty seconds of scrubbing, rinsing and drying, following your
+      laboratory's approved procedure.
+    Clip: {fileID: 0}
+  - Key: Instruction_Ppe_Presentation_TurnOffTap
+    Caption: Press the tap handle to turn off the water.
+    Clip: {fileID: 8300000, guid: 78c511cbc753a5545af8850836c5a82f, type: 3}
+  - Key: Why_Ppe_Presentation_TurnOffTap
+    Caption: Stop the water when finished. In a real lab avoid recontaminating clean
+      hands and follow the local tap and hygiene procedure.
+    Clip: {fileID: 0}
+  - Key: Instruction_Ppe_Presentation_DryHands
+    Caption: Keep both hands beneath the dryer for two seconds before putting on
+      gloves.
+    Clip: {fileID: 0}
+  - Key: Why_Ppe_Presentation_DryHands
+    Caption: Dry hands before putting on gloves. This dryer gesture represents drying;
+      follow the drying method specified by your laboratory.
+    Clip: {fileID: 0}
+  - Key: Instruction_Ppe_Presentation_WearLeftGlove
+    Caption: Pick up the left glove with your left hand.
+    Clip: {fileID: 8300000, guid: 7821aa4878465774eb8bd1708592fde8, type: 3}
+  - Key: Why_Ppe_Presentation_WearLeftGlove
+    Caption: Wear clean, appropriately sized gloves to help prevent contact and contamination.
+      Gloves do not replace hand hygiene; change damaged or contaminated gloves.
+    Clip: {fileID: 0}
+  - Key: Instruction_Ppe_Presentation_WearRightGlove
+    Caption: Pick up the right glove with your right hand.
+    Clip: {fileID: 8300000, guid: 76025fe9b682ce84a9f93cdcf6e20737, type: 3}
+  - Key: Why_Ppe_Presentation_WearRightGlove
+    Caption: Wear clean, appropriately sized gloves to help prevent contact and contamination.
+      Gloves do not replace hand hygiene; change damaged or contaminated gloves.
+    Clip: {fileID: 0}
+  - Key: Instruction_Ppe_Presentation_Complete
+    Caption: Preparation demonstration complete. Continue to qPCR. This short demonstration
+      is not complete handwashing.
+    Clip: {fileID: 0}
+  - Key: Why_Ppe_Presentation_Complete
+    Caption: You demonstrated the coat, water, drying and glove interactions. Soap
+      and scrubbing were skipped for this presentation; this must not be treated
+      as complete handwashing or a substitute for laboratory safety training.
     Clip: {fileID: 0}
   - Key: Parameter_ReactionVolume
     Caption: 'Reaction volume
@@ -51378,7 +51724,7 @@ MonoBehaviour:
       Reaction volume is the amount in each well,
       not the whole plate. Enter 20 microlitres to match this prepared plate and
       the instrument''s thermal settings.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 5e442ee33a4a2724d9e434ed5f71da68, type: 3}
   - Key: Parameter_LidTemperature
     Caption: 'Lid temperature
 
@@ -51386,7 +51732,7 @@ MonoBehaviour:
       The heated lid is set to 105 degrees C in this
       lesson. It helps limit condensation above the reactions. The lid temperature
       differs from the block temperature.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: c013f04e45e7e7e45a06fa77ac3245c8, type: 3}
   - Key: Parameter_InitialDenaturation
     Caption: 'Initial denaturation
 
@@ -51394,7 +51740,7 @@ MonoBehaviour:
       The initial hold is 95 degrees C for 120
       seconds. It separates DNA strands; activation requirements depend on the chosen
       polymerase. Use the validated reagent protocol.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 2511372a93ea1da4ea22307b59c3daff, type: 3}
   - Key: Parameter_AmplificationCycles
     Caption: 'Amplification cycles
 
@@ -51402,7 +51748,7 @@ MonoBehaviour:
       Repeat the thermal sequence 35 times.
       Fluorescence is sampled each cycle. More cycles do not automatically mean a
       better or more reliable result.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 838f94de8c68e27458d529a5c2027a32, type: 3}
   - Key: Parameter_Denaturation
     Caption: 'Denaturation
 
@@ -51410,7 +51756,7 @@ MonoBehaviour:
       Denaturation is 95 degrees C for 15 seconds in
       each cycle. Heating separates the DNA strands so primers can bind in the next
       stage.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: fc0711ba378506144b196430ecab6707, type: 3}
   - Key: Parameter_Annealing
     Caption: 'Annealing
 
@@ -51418,7 +51764,7 @@ MonoBehaviour:
       Annealing is 60 degrees C for 30 seconds in this
       teaching assay. Primers bind to complementary DNA. The appropriate temperature
       depends on primer design and assay validation.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 434e32ccc6779e941959ca47ad9d663f, type: 3}
   - Key: Parameter_Extension
     Caption: 'Extension
 
@@ -51426,7 +51772,7 @@ MonoBehaviour:
       Extension is 72 degrees C for 30 seconds here. The
       DNA polymerase extends the primers to make new strands. Required time depends
       on the enzyme and product length.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 7f8c20c79bec3b34aa73526902d473c0, type: 3}
   - Key: Parameter_FluorescenceAcquisition
     Caption: 'Fluorescence acquisition
 
@@ -51434,7 +51780,7 @@ MonoBehaviour:
       Acquire fluorescence at 60 degrees
       C during annealing in each cycle. Comparing readings at the same stage provides
       a consistent amplification trace.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 6fb8a663546692a499dee408c584c334, type: 3}
   - Key: Parameter_MeltCurveStart
     Caption: 'Melt curve start
 
@@ -51443,7 +51789,7 @@ MonoBehaviour:
       from 65 to 95 degrees C in 0.5-degree steps. DNA melting changes SYBR fluorescence.
       A derivative peak shows a melting transition; extra peaks can indicate unwanted
       products. Dwell time follows the real instrument''s method.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 6cc8d6541ee256e49816fabf3e52a470, type: 3}
   - Key: Parameter_MeltCurveEnd
     Caption: 'Melt curve end
 
@@ -51452,7 +51798,7 @@ MonoBehaviour:
       65 to 95 degrees C in 0.5-degree steps. DNA melting changes SYBR fluorescence.
       A derivative peak shows a melting transition; extra peaks can indicate unwanted
       products. Dwell time follows the real instrument''s method.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 5854c34f9a03a4e4085cb6fe796b2fcc, type: 3}
   - Key: Parameter_TemperatureIncrement
     Caption: 'Temperature increment
 
@@ -51461,7 +51807,7 @@ MonoBehaviour:
       from 65 to 95 degrees C in 0.5-degree steps. DNA melting changes SYBR fluorescence.
       A derivative peak shows a melting transition; extra peaks can indicate unwanted
       products. Dwell time follows the real instrument''s method.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: e9de4853bf5572045b25a1235547e38f, type: 3}
   - Key: Parameter_PostRunHold
     Caption: 'Post-run hold
 
@@ -51469,7 +51815,7 @@ MonoBehaviour:
       The block holds at 4 degrees C after the programme
       in this lesson. This is a short post-run hold, not a long-term storage method.
       Keep amplified plates sealed and follow the disposal procedure.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 69756cee56bb2cf43aa566c980016cc9, type: 3}
   - Key: Parameter_InitialHoldSeconds
     Caption: 'Initial hold time
 
@@ -51477,7 +51823,7 @@ MonoBehaviour:
       The initial hold is 95 degrees C for 120
       seconds. It separates DNA strands; activation requirements depend on the chosen
       polymerase. Use the validated reagent protocol.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 1452cdfd8044a3042a15c5c228910bf4, type: 3}
   - Key: Parameter_DenaturationSeconds
     Caption: 'Denaturation time
 
@@ -51485,7 +51831,7 @@ MonoBehaviour:
       Denaturation is 95 degrees C for 15 seconds
       in each cycle. Heating separates the DNA strands so primers can bind in the
       next stage.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 23c82842d764d0e4e80075a49c5a41b3, type: 3}
   - Key: Parameter_AnnealingSeconds
     Caption: 'Annealing time
 
@@ -51493,7 +51839,7 @@ MonoBehaviour:
       Annealing is 60 degrees C for 30 seconds in
       this teaching assay. Primers bind to complementary DNA. The appropriate temperature
       depends on primer design and assay validation.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 7aa15a4e2e9665640aa760fbd66a26ba, type: 3}
   - Key: Parameter_ExtensionSeconds
     Caption: 'Extension time
 
@@ -51501,15 +51847,15 @@ MonoBehaviour:
       Extension is 72 degrees C for 30 seconds here.
       The DNA polymerase extends the primers to make new strands. Required time depends
       on the enzyme and product length.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 1012d7f93be22a7459bf541675f1303a, type: 3}
   - Key: Instruction_Lobby_Welcome
     Caption: Welcome to the T5 XR Genomics Laboratory. Enter a nickname, then select
       Continue.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 26dbda00cd2999c48b19012a42a303b1, type: 3}
   - Key: Instruction_Lobby_Ready
     Caption: Your laboratory is ready. Select Enter Laboratory. First, prepare safely.
       Then you will load and run Q P C R.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 89dfb37c704ec764eb385775b7d95192, type: 3}
 --- !u!82 &1875145369
 AudioSource:
   m_ObjectHideFlags: 0
@@ -53218,6 +53564,124 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1965010695}
   m_CullTransparentMesh: 1
+--- !u!1 &1966297287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1966297292}
+  - component: {fileID: 1966297291}
+  - component: {fileID: 1966297290}
+  - component: {fileID: 1966297289}
+  - component: {fileID: 1966297288}
+  m_Layer: 0
+  m_Name: Room_Boundary_Fade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!225 &1966297288
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966297287}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
+--- !u!114 &1966297289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966297287}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7951c64acb0fa62458bf30a60089fe2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.UI.TrackedDeviceGraphicRaycaster
+  m_IgnoreReversedGraphics: 0
+  m_CheckFor2DOcclusion: 0
+  m_CheckFor3DOcclusion: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RaycastTriggerInteraction: 1
+--- !u!114 &1966297290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966297287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 14
+  m_PresetInfoIsWorld: 0
+--- !u!223 &1966297291
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966297287}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 1622404942}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 999
+  m_TargetDisplay: 0
+--- !u!224 &1966297292
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966297287}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.33}
+  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 957205222}
+  - {fileID: 367697300}
+  m_Father: {fileID: 1622404941}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 2000, y: 2000}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1969226624
 GameObject:
   m_ObjectHideFlags: 0
@@ -54059,7 +54523,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -54329,7 +54793,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -55245,7 +55709,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -56156,7 +56620,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -56700,7 +57164,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -57413,7 +57877,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2

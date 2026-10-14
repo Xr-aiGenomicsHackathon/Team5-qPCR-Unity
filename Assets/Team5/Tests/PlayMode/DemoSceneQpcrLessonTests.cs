@@ -13,6 +13,7 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs.Readers;
 
 namespace Team5.qPCR.PlayModeTests
 {
+    [Category("CurrentTrainingRoute")]
     public sealed class DemoSceneQpcrLessonTests
     {
         [UnitySetUp]

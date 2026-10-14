@@ -26,6 +26,8 @@ namespace Team5.qPCR
         Right
     }
 
+    public enum PPELessonMode { FullTraining = 0, Presentation = 1 }
+
     [Serializable]
     public sealed class PPEAudioPrompt
     {
@@ -45,6 +47,12 @@ namespace Team5.qPCR
     public sealed class PPELessonController : MonoBehaviour
     {
         [SerializeField] private bool beginOnStart = true;
+        [SerializeField] private PPELessonMode mode = PPELessonMode.FullTraining;
+        public const string PresentationNotice = "Abbreviated PPE demonstration—not complete handwashing.";
+        private static readonly PPELessonStep[] PresentationSteps = {
+            PPELessonStep.WearLabCoat, PPELessonStep.TurnOnTap, PPELessonStep.WetHands,
+            PPELessonStep.TurnOffTap, PPELessonStep.DryHands, PPELessonStep.WearLeftGlove,
+            PPELessonStep.WearRightGlove, PPELessonStep.Complete };
         [Header("Lesson UI (optional)")]
         [SerializeField] private TMP_Text instructionText;
         [SerializeField] private TMP_Text targetText;
@@ -85,10 +93,23 @@ namespace Team5.qPCR
         public event Action Completed;
         public bool IsLessonActive { get; private set; }
         public float StepProgress => stepProgress;
+        public PPELessonMode Mode => mode;
+        public bool LeftUnderWater => leftUnderWater;
+        public bool RightUnderWater => rightUnderWater;
+        public bool LeftInDryer => leftInDryer;
+        public bool RightInDryer => rightInDryer;
+        public int ActiveStepCount => mode == PPELessonMode.Presentation ? PresentationSteps.Length : 11;
+        public int ActiveStepNumber => mode == PPELessonMode.Presentation
+            ? Array.IndexOf(PresentationSteps, CurrentStep) + 1 : (int)CurrentStep + 1;
+        public string CurrentInstruction => InstructionFor(CurrentStep, mode);
+        public string InstructionCueKey => "Instruction_Ppe_" + (mode == PPELessonMode.Presentation ? "Presentation_" : "") + CurrentStep;
+        public string WhyCueKey => "Why_Ppe_" + (mode == PPELessonMode.Presentation ? "Presentation_" : "") + CurrentStep;
+        public void ConfigureMode(PPELessonMode value) { mode = value; }
         public static bool IsScrubMotion(Vector3 previousDifference, Vector3 currentDifference, float seconds)
             => seconds > 0f && Vector3.Distance(previousDifference, currentDifference) / seconds >= .025f;
         public void BeginLesson() { IsLessonActive = true; ResetLesson(); }
-        public void StopLesson() { IsLessonActive = false; narrationSource?.Stop(); }
+        public void StopLesson() { IsLessonActive = false; IsWaterRunning = false; if (narrationSource != null) narrationSource.Stop(); }
+        private void OnDisable() { StopLesson(); ResetRequested?.Invoke(); }
 
         public PPELessonStep CurrentStep { get; private set; } = PPELessonStep.WearLabCoat;
         public bool IsWaterRunning { get; private set; }
@@ -115,7 +136,8 @@ namespace Team5.qPCR
             {
                 case PPELessonStep.WetHands:
                     UpdateTimedStep(IsWaterRunning && leftUnderWater && rightUnderWater,
-                        wetHandsSeconds, PPELessonStep.UseSoap, "Wetting hands");
+                        wetHandsSeconds, mode == PPELessonMode.Presentation ? PPELessonStep.TurnOffTap : PPELessonStep.UseSoap,
+                        mode == PPELessonMode.Presentation ? "Water checkpoint" : "Wetting hands", true);
                     break;
                 case PPELessonStep.RubHands:
                     UpdateTimedStep(HandsAreRubbing(delta), rubHandsSeconds,
@@ -135,15 +157,17 @@ namespace Team5.qPCR
         public void RegisterHand(PPEHandProbe probe)
         {
             if (probe == null) return;
-            if (probe.Side == PPEHandSide.Left) leftHand = probe.transform;
-            else rightHand = probe.transform;
+            if (probe.Side == PPEHandSide.Left) leftHand = probe.HandPose;
+            else rightHand = probe.HandPose;
         }
 
         public void UnregisterHand(PPEHandProbe probe)
         {
             if (probe == null) return;
-            if (probe.Side == PPEHandSide.Left && leftHand == probe.transform) leftHand = null;
-            if (probe.Side == PPEHandSide.Right && rightHand == probe.transform) rightHand = null;
+            if (probe.Side == PPEHandSide.Left && leftHand == probe.HandPose)
+            { leftHand = null; leftUnderWater = false; leftInDryer = false; }
+            if (probe.Side == PPEHandSide.Right && rightHand == probe.HandPose)
+            { rightHand = null; rightUnderWater = false; rightInDryer = false; }
         }
 
         public bool TryWearCoat()
@@ -243,10 +267,11 @@ namespace Team5.qPCR
         }
 
         private void UpdateTimedStep(bool condition, float requiredSeconds,
-            PPELessonStep nextStep, string progressLabel)
+            PPELessonStep nextStep, string progressLabel, bool continuous = false)
         {
             if (!condition)
             {
+                if (continuous) stepProgress = 0f;
                 if (progressText != null)
                     progressText.text = $"{progressLabel}: {stepProgress:0.0} / {requiredSeconds:0.0} seconds";
                 return;
@@ -282,7 +307,7 @@ namespace Team5.qPCR
             hasPreviousHandPose = false;
 
             if (targetText != null) targetText.text = "Current target: " + TargetFor(step);
-            if (instructionText != null) instructionText.text = InstructionFor(step);
+            if (instructionText != null) instructionText.text = InstructionFor(step, mode);
             if (progressText != null) progressText.text = string.Empty;
             if (feedbackText != null) feedbackText.text = string.Empty;
             feedbackRemaining = 0f;
@@ -294,6 +319,8 @@ namespace Team5.qPCR
 
         private void PlayNarration(PPELessonStep step)
         {
+            // Full-training recordings must never describe skipped presentation tasks.
+            if (mode == PPELessonMode.Presentation) return;
             if (narrationSource == null || narrationClips == null) return;
             narrationSource.Stop();
             foreach (var prompt in narrationClips)
@@ -338,6 +365,17 @@ namespace Team5.qPCR
                 PPELessonStep.WearLeftGlove => "Pick up the left glove with your left hand.",
                 PPELessonStep.WearRightGlove => "Pick up the right glove with your right hand.",
                 _ => "PPE complete. You may continue to the qPCR plate inspection."
+            };
+        }
+
+        public static string InstructionFor(PPELessonStep step, PPELessonMode mode)
+        {
+            if (mode != PPELessonMode.Presentation) return InstructionFor(step);
+            return step switch {
+                PPELessonStep.WetHands => "Keep both hands beneath the water for one continuous second. If either hand leaves, the timer restarts.",
+                PPELessonStep.DryHands => "Keep both hands beneath the dryer for two seconds before putting on gloves.",
+                PPELessonStep.Complete => "Preparation demonstration complete. Continue to qPCR. This short demonstration is not complete handwashing.",
+                _ => InstructionFor(step)
             };
         }
     }

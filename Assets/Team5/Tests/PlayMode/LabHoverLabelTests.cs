@@ -10,6 +10,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors.Casters;
 
 namespace Team5.qPCR.PlayModeTests
 {
+    [Category("CurrentTrainingRoute")]
     public sealed class LabHoverLabelTests
     {
         private GameObject fixture;
@@ -49,6 +50,12 @@ namespace Team5.qPCR.PlayModeTests
         {
             controller.UpdatePointer(0,Aim,false,.3f);target.enabled=false;controller.UpdatePointer(0,Aim,false,.3f);Assert.IsNull(controller.VisibleTarget(0));
             target.enabled=true;controller.UpdatePointer(0,Aim,false,.3f);target.gameObject.SetActive(false);controller.UpdatePointer(0,Aim,false,.3f);Assert.IsNull(controller.VisibleTarget(0));
+        }
+        [Test] public void HiddenPickupMeshesDoNotLeaveGhostLabels()
+        {
+            controller.UpdatePointer(0,Aim,false,.3f);Assert.AreEqual(target,controller.VisibleTarget(0));
+            target.GetComponent<Renderer>().enabled=false;
+            controller.UpdatePointer(0,Aim,false,.3f);Assert.IsNull(controller.VisibleTarget(0));
         }
         [UnityTest] public IEnumerator SceneLabelsAreNonInteractiveAndUseExistingAimPoses()
         {

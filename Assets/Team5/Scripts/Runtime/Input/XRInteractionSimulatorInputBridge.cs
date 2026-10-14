@@ -12,7 +12,7 @@ namespace Team5.qPCR
     /// <summary>
     /// Compatibility bridge for the XRI 3.3.2 Interaction Simulator in Unity 6000.3.
     /// Its immediate InputState.Change calls do not reach the existing simulated
-    /// controller devices in this editor combination, while queued state events do.
+    /// controller and HMD devices in this editor combination, while queued state events do.
     /// Active only for Editor/Windows simulated devices; never alters real OpenXR input.
     /// </summary>
     [DisallowMultipleComponent]
@@ -26,10 +26,14 @@ namespace Team5.qPCR
             typeof(XRInteractionSimulator).GetField("m_LeftControllerState", PrivateInstance);
         private static readonly FieldInfo RightStateField =
             typeof(XRInteractionSimulator).GetField("m_RightControllerState", PrivateInstance);
+        private static readonly FieldInfo HmdStateField =
+            typeof(XRInteractionSimulator).GetField("m_HMDState", PrivateInstance);
         private static readonly FieldInfo LeftDeviceField =
             typeof(SimulatedDeviceLifecycleManager).GetField("m_LeftControllerDevice", PrivateInstance);
         private static readonly FieldInfo RightDeviceField =
             typeof(SimulatedDeviceLifecycleManager).GetField("m_RightControllerDevice", PrivateInstance);
+        private static readonly FieldInfo HmdDeviceField =
+            typeof(SimulatedDeviceLifecycleManager).GetField("m_HMDDevice", PrivateInstance);
 
         [SerializeField] private XRInteractionSimulator simulator;
 
@@ -58,6 +62,12 @@ namespace Team5.qPCR
             QueueControllerState(
                 RightDeviceField.GetValue(manager) as InputDevice,
                 (XRSimulatedControllerState)RightStateField.GetValue(simulator));
+            if (HmdStateField != null && HmdDeviceField != null)
+            {
+                var device = HmdDeviceField.GetValue(manager) as InputDevice;
+                if (device != null && device.added)
+                    InputSystem.QueueStateEvent(device, (XRSimulatedHMDState)HmdStateField.GetValue(simulator));
+            }
         }
 
         private static void QueueControllerState(InputDevice device, XRSimulatedControllerState state)

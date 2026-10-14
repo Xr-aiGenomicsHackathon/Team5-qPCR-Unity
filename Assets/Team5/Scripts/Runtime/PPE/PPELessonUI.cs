@@ -15,21 +15,33 @@ namespace Team5.qPCR
         [SerializeField] private Transform pointer;
         [SerializeField] private Transform[] targets;
         [SerializeField] private GameObject handSurfaceDiagram;
+        [SerializeField] private TMP_Text detection;
+        [SerializeField] private TMP_Text presentationNotice;
         private void OnEnable() { if (lesson != null) lesson.StepChanged += Present; }
         private void OnDisable() { if (lesson != null) lesson.StepChanged -= Present; }
         private void Present(PPELessonStep state)
         {
             if (title != null) title.text = state == PPELessonStep.Complete ? "Ready for qPCR" : PPELessonController.TargetFor(state);
-            if (step != null) step.text = $"Lab preparation {(int)state + 1} / 11";
-            if (purpose != null) purpose.text = Explanation(state).Split(new[] { ". " }, System.StringSplitOptions.None)[0] + ".";
+            if (step != null) step.text = $"Lab preparation {lesson.ActiveStepNumber} / {lesson.ActiveStepCount}";
+            var explanation = Explanation(state, lesson.Mode);
+            if (purpose != null) purpose.text = explanation.Split(new[] { ". " }, System.StringSplitOptions.None)[0] + ".";
+            if (presentationNotice != null)
+            { presentationNotice.text = PPELessonController.PresentationNotice; presentationNotice.gameObject.SetActive(lesson.Mode == PPELessonMode.Presentation); }
             if (handSurfaceDiagram != null) handSurfaceDiagram.SetActive(state == PPELessonStep.RubHands);
             if (purpose != null) purpose.gameObject.SetActive(state != PPELessonStep.RubHands);
             if (whyPanel != null) whyPanel.SetActive(false);
-            if (whyText != null) whyText.text = Explanation(state);
-            narration?.PlayInstruction("Instruction_Ppe_" + state, "Prepare for lab work", PPELessonController.InstructionFor(state));
+            if (whyText != null) whyText.text = explanation;
+            narration?.PlayInstruction(lesson.InstructionCueKey, "Prepare for lab work", lesson.CurrentInstruction);
         }
         private void LateUpdate()
         {
+            if (detection != null && lesson != null)
+            {
+                var drying = lesson.CurrentStep == PPELessonStep.DryHands;
+                detection.gameObject.SetActive(drying || lesson.CurrentStep == PPELessonStep.WetHands || lesson.CurrentStep == PPELessonStep.RinseHands);
+                detection.text = "Left: " + ((drying ? lesson.LeftInDryer : lesson.LeftUnderWater) ? "DETECTED" : "move under outlet") +
+                    "     Right: " + ((drying ? lesson.RightInDryer : lesson.RightUnderWater) ? "DETECTED" : "move under outlet");
+            }
             var index = lesson == null ? -1 : (int)lesson.CurrentStep;
             var target = targets != null && index >= 0 && index < targets.Length ? targets[index] : null;
             if (pointer == null) return;
@@ -40,12 +52,21 @@ namespace Team5.qPCR
         {
             if (whyPanel == null) return;
             whyPanel.SetActive(!whyPanel.activeSelf);
-            if (!whyPanel.activeSelf && narration != null && narration.CurrentKey == "Why_Ppe_" + lesson.CurrentStep) narration.StopReading();
+            if (!whyPanel.activeSelf && narration != null && narration.CurrentKey == lesson.WhyCueKey) narration.StopReading();
         }
         public void ReadAloud()
         {
             if (whyPanel != null && whyPanel.activeSelf)
-                narration?.Play("Why_Ppe_" + lesson.CurrentStep, "Why this step?", Explanation(lesson.CurrentStep));
+                narration?.Play(lesson.WhyCueKey, "Why this step?", Explanation(lesson.CurrentStep, lesson.Mode));
+        }
+        public static string Explanation(PPELessonStep state, PPELessonMode mode)
+        {
+            if (mode != PPELessonMode.Presentation) return Explanation(state);
+            if (state == PPELessonStep.WetHands || state == PPELessonStep.TurnOnTap)
+                return "This one-second checkpoint demonstrates placing both hands beneath running water. It does not clean or disinfect real hands. Real handwashing requires soap, at least twenty seconds of scrubbing, rinsing and drying, following your laboratory's approved procedure.";
+            if (state == PPELessonStep.Complete)
+                return "You demonstrated the coat, water, drying and glove interactions. Soap and scrubbing were skipped for this presentation; this must not be treated as complete handwashing or a substitute for laboratory safety training.";
+            return Explanation(state);
         }
         public static string Explanation(PPELessonStep state) => state switch
         {

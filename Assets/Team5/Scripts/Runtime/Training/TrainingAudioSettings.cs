@@ -53,7 +53,7 @@ namespace Team5.qPCR
             if (simulatorObjects != null) foreach (var item in simulatorObjects) if (item != null) item.SetActive(value);
             // The XRI loader may place its simulator in DontDestroyOnLoad rather than this scene.
             foreach (var item in FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None))
-                if (item != null && (item.GetType().Name == "XRInteractionSimulator" || item.GetType().Name == "XRDeviceSimulator"))
+                if (item is XRInteractionSimulator || item is XRDeviceSimulator)
                     item.gameObject.SetActive(value && Application.isEditor);
             if (simulatorRefresh != null) StopCoroutine(simulatorRefresh);
             if (isActiveAndEnabled) simulatorRefresh = StartCoroutine(RefreshSimulatorPresentation(value));

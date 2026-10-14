@@ -29,13 +29,13 @@ The PC simulator switch is deliberately hidden from learner UI. Select `Training
 - Unchecked before Play: test with a connected headset.
 - Player builds disable the simulator automatically and require the configured XR input/runtime.
 
-Use the simulator's own controls overlay for its current bindings. Aim at UI and use the UI/trigger action; grab physical objects using grip. Object interactions require the actual controller within 22 cm. A pointing label can be read from farther away without enabling remote grabbing.
+For developer help, enable **Show Simulator Controls In Editor** on that component; the simulator help overlay is hidden by default. Aim at UI and use the UI/trigger action; grab physical objects using grip. Object interactions require the actual controller within 22 cm. A pointing label can be read from farther away without enabling remote grabbing.
 
 There is no new desktop-camera lesson route. Windows builds target the configured VR runtime; a Mac editor clone can use simulation, but native Mac headset support is not implied.
 
 ## Learning and identification
 
-- Complete coat → wet hands → soap → 20-second moving scrub → rinse → tap off → dry → gloves before qPCR.
+- Presentation default: coat → tap on → both hands beneath water for one continuous second → tap off → dry for two seconds → left glove → right glove → qPCR. This abbreviated demonstration is **not complete handwashing**. Full Training retains soap, a 20-second movement-based scrub and rinse.
 - Point at a labelled object for 0.2 seconds, within 3 metres, to see its name and purpose. Walls occlude labels and touchscreen/UI input takes priority.
 - Plate checks are visual observations confirmed on the lesson card, not artificial label-touch tasks.
 - Release the plate near its clean home or correctly aligned drawer holder to snap it into place. A floor drop compromises the teaching plate and requires Reset.
@@ -54,10 +54,12 @@ Put your own MP4/H.264/AAC teaching clip in `Assets/Team5/Videos/Teaching/`. In 
 
 ## Development and release
 
-See [testing, wiring and builds](Documentation/TESTING.md), [Git/LFS updates](Documentation/GITHUB.md), [science notes](Documentation/SCIENCE.md) and [asset provenance](Documentation/ASSET_PROVENANCE.md).
+This README is the only published Markdown file. Instruction sheets and development notes stay local and are not required to clone or open the project.
 
 Builders use LobbyScene first and DemoScene second. Use a new build-output subfolder: existing builds are not deleted automatically. Build helpers require the pinned editor and preserve existing XR settings rather than stripping features for the old desktop MVP.
 
 Baked lighting, probes, fonts, textures, audio and their metadata must accompany the scenes. Generated Library/Temp/Logs folders, credentials and signing keys must not be committed. No automatic push or publication is performed.
 
 Physical-headset verification and independent Mac verification must be recorded separately from simulator tests. Hardware performance cannot be assumed identical. Confirm asset permissions before wider distribution.
+
+Source Sans 3 fonts retain Adobe's copyright notice and the SIL Open Font License in [the font licence](Assets/Team5/UI/Fonts/LICENSE.txt). Unity dependencies retain their package licences. Supplied model redistribution rights are not verified; inclusion does not grant independent reuse or redistribution permission.

@@ -27,17 +27,20 @@ namespace Team5.qPCR.Editor
                     var original=materials[i];if(original==null||original.shader==null||!original.shader.name.Contains("Universal Render Pipeline"))continue;
                     var role=name.Contains("glass")&&!name.Contains("touchscreen")?"Glass":name.Contains("wall")?"Wall":name=="epoxy_floor"?"Floor":name.Contains("worktop")?(original.name.ToLowerInvariant().Contains("titanuim")?"Steel":"Worktop"):name.Contains("handle")?"Steel":name.Contains("cabinet")?"Cabinet":null;
                     if(role==null)continue;
-                    var key=AssetDatabase.GetAssetPath(original).StartsWith("Assets/Team5/Materials/Training/")?original.name:original.name+"_"+role;
+                    // Scope every finish to T5, including materials from an earlier polish pass.
+                    // Existing model and shared training materials are never edited in place.
+                    var key=original.name.StartsWith("T5_")&&original.name.EndsWith("_"+role)
+                        ?original.name:"T5_"+original.name+"_"+role;
                     if(!cache.TryGetValue(key,out var material))
                     {
                         Folder("Assets/Team5/Materials/Training");var path="Assets/Team5/Materials/Training/"+key+".mat";
                         material=AssetDatabase.LoadAssetAtPath<Material>(path);
                         if(material==null){material=new Material(original){name=key};AssetDatabase.CreateAsset(material,path);}
-                        if(role=="Wall"){material.color=new Color(.95f,.96f,.94f);material.SetFloat("_Smoothness",.16f);material.SetFloat("_BumpScale",.12f);}
-                        if(role=="Floor"){material.SetFloat("_Smoothness",.38f);material.SetFloat("_Metallic",0);material.SetFloat("_BumpScale",.18f);if(material.mainTextureScale==Vector2.one)material.mainTextureScale=new Vector2(6,4);}
+                        if(role=="Wall"){material.color=Paper;material.SetFloat("_Smoothness",.16f);material.SetFloat("_BumpScale",.12f);}
+                        if(role=="Floor"){material.SetFloat("_Smoothness",.28f);material.SetFloat("_Metallic",0);material.SetFloat("_BumpScale",.18f);if(material.mainTextureScale==Vector2.one)material.mainTextureScale=new Vector2(6,4);}
                         if(role=="Worktop"){material.color=new Color(.10f,.14f,.17f);material.SetTexture("_BaseMap",null);material.SetTexture("_BumpMap",null);material.DisableKeyword("_NORMALMAP");material.SetFloat("_Smoothness",.3f);material.SetFloat("_Metallic",.05f);}
-                        if(role=="Steel"){material.color=new Color(.67f,.7f,.73f);material.SetFloat("_Metallic",.85f);material.SetFloat("_Smoothness",.5f);}
-                        if(role=="Cabinet"){material.color=new Color(.9f,.92f,.91f);material.SetFloat("_Smoothness",.35f);}
+                        if(role=="Steel"){material.color=new Color(.67f,.7f,.73f);material.SetFloat("_Metallic",.85f);material.SetFloat("_Smoothness",.38f);}
+                        if(role=="Cabinet"){material.color=Paper;material.SetFloat("_Smoothness",.25f);}
                         if(role=="Glass")material.SetFloat("_Smoothness",.75f);
                         cache[key]=material;
                     }

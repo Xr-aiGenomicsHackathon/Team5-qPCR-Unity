@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Unity.XR.CoreUtils;
 
 namespace Team5.qPCR
 {
@@ -28,7 +29,20 @@ namespace Team5.qPCR
         {
             yield return null;
             TrainingSession.PpeComplete = false;
-            if (origin != null) { origin.position = ppeSpawn; origin.rotation = Quaternion.Euler(0, spawnYaw, 0); }
+            if (origin != null)
+            {
+                var xr = origin.GetComponent<XROrigin>();
+                var body = origin.GetComponent<CharacterController>();
+                if (body != null) body.enabled = false;
+                if (xr != null && xr.Camera != null)
+                {
+                    var height = Mathf.Clamp(xr.CameraInOriginSpaceHeight, 1.1f, 2.1f);
+                    xr.MatchOriginUpCameraForward(Vector3.up, Quaternion.Euler(0, spawnYaw, 0) * Vector3.forward);
+                    xr.MoveCameraToWorldLocation(ppeSpawn + Vector3.up * height);
+                }
+                else { origin.position = ppeSpawn; origin.rotation = Quaternion.Euler(0, spawnYaw, 0); }
+                if (body != null) body.enabled = true;
+            }
             if (recapPanel != null) recapPanel.SetActive(false);
             if (qpcrCard != null) qpcrCard.SetActive(false);
             if (ppeCard != null) ppeCard.SetActive(true);
@@ -78,6 +92,7 @@ namespace Team5.qPCR
         }
         public void ReturnToLobby()
         {
+            ppe?.StopLesson();
             FindFirstObjectByType<NarrationController>()?.StopReading();
             transition?.Load("LobbyScene");
         }

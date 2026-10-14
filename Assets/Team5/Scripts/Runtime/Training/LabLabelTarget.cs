@@ -10,7 +10,20 @@ namespace Team5.qPCR
         [SerializeField] private Transform labelAnchor;
         public string DisplayName => displayName;
         public string Purpose => purpose;
-        public bool IsAvailable => isActiveAndEnabled && !string.IsNullOrWhiteSpace(displayName);
+        private Renderer[] visibleRenderers;
+        private void Awake() => visibleRenderers = GetComponentsInChildren<Renderer>(true);
+        public bool IsAvailable
+        {
+            get
+            {
+                if (!isActiveAndEnabled || string.IsNullOrWhiteSpace(displayName)) return false;
+                // Pickups can hide their meshes without disabling the logical root or proxy.
+                if (visibleRenderers == null || visibleRenderers.Length == 0) return true;
+                foreach (var renderer in visibleRenderers)
+                    if (renderer != null && renderer.enabled && renderer.gameObject.activeInHierarchy) return true;
+                return false;
+            }
+        }
         public Vector3 LabelPosition(Vector3 hitPoint) => labelAnchor != null ? labelAnchor.position : hitPoint;
         public void Configure(string objectName, string objectPurpose, Transform anchor = null)
         { displayName = objectName; purpose = objectPurpose; labelAnchor = anchor; }

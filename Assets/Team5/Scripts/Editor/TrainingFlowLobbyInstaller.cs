@@ -79,6 +79,7 @@ namespace Team5.qPCR.Editor
             Set(controller,"nicknameText",name);Set(controller,"feedbackText",feedback);Set(controller,"entryPanel",entry.gameObject);Set(controller,"welcomePanel",practice.gameObject);Set(controller,"enterButton",enter);Set(controller,"narration",narration);Set(controller,"transition",BuildFade(Named("Main Camera")));
             practice.gameObject.SetActive(false);
             BuildSettings(root.transform,narration,new Vector3(0,.94f,1.65f));
+            RepairNavigation();
             EditorSceneManager.SaveScene(lobby,LobbyPath);SceneManager.SetActiveScene(demo);EditorSceneManager.CloseScene(lobby,true);
             EditorBuildSettings.scenes=new[]{new EditorBuildSettingsScene(LobbyPath,true),new EditorBuildSettingsScene(DemoPath,true)};
             AssetDatabase.SaveAssets();

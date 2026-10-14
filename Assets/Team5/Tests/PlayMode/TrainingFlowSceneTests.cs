@@ -14,6 +14,7 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs.Simulation;
 
 namespace Team5.qPCR.PlayModeTests
 {
+    [Category("CurrentTrainingRoute")]
     public sealed class TrainingFlowSceneTests
     {
         private static void Set(object obj,string field,object value)=>obj.GetType().GetField(field,BindingFlags.Instance|BindingFlags.NonPublic).SetValue(obj,value);
@@ -91,6 +92,7 @@ namespace Team5.qPCR.PlayModeTests
         [UnityTest] public IEnumerator FullPpeUsesMotionThenUnblocksPcr()
         {
             var ppe=Object.FindFirstObjectByType<PPELessonController>();
+            ppe.ConfigureMode(PPELessonMode.FullTraining); ppe.BeginLesson();
             Set(ppe,"wetHandsSeconds",.05f);Set(ppe,"rinseHandsSeconds",.05f);Set(ppe,"dryHandsSeconds",.05f);
             Assert.IsTrue(ppe.TryWearCoat());Assert.IsTrue(ppe.TrySetTap(true));
             ppe.SetHandUnderWater(PPEHandSide.Left,true);ppe.SetHandUnderWater(PPEHandSide.Right,true);
