@@ -85,8 +85,11 @@ namespace Team5.qPCR
             coatRoot.gameObject.SetActive(true);
             if (coatBody == null) coatBody = coatRoot.GetComponent<Rigidbody>();
             if (coatBody == null) return;
-            coatBody.linearVelocity = Vector3.zero;
-            coatBody.angularVelocity = Vector3.zero;
+            if (!coatBody.isKinematic)
+            {
+                coatBody.linearVelocity = Vector3.zero;
+                coatBody.angularVelocity = Vector3.zero;
+            }
         }
 
         private void Reset()

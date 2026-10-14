@@ -31,12 +31,16 @@ namespace Team5.qPCR
             if (grab != null && grab.isSelected) return;
             transform.SetParent(homeAnchor, false);
             transform.localPosition = Vector3.zero;
-            transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+            transform.localRotation = Quaternion.identity;
             var body = GetComponent<Rigidbody>();
             if (body != null)
             {
-                body.linearVelocity = Vector3.zero;
-                body.angularVelocity = Vector3.zero;
+                if (!body.isKinematic)
+                {
+                    body.linearVelocity = Vector3.zero;
+                    body.angularVelocity = Vector3.zero;
+                }
+                body.isKinematic = true;
             }
             GetComponent<PlateController>()?.SetA1Aligned(false);
             instrument?.MarkPlateRemoved();

@@ -215,7 +215,8 @@ namespace Team5.qPCR
             stepProgress = 0f;
             feedbackRemaining = 0f;
             if (feedbackText != null) feedbackText.text = string.Empty;
-            narrationSource?.Stop();
+            if (narrationSource != null)
+                narrationSource.Stop();
             ResetRequested?.Invoke();
             SetStep(PPELessonStep.WearLabCoat, true);
         }
