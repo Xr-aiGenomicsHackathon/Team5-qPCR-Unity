@@ -130,3 +130,9 @@ InitTestScene*.unity*
 /Assets/Temp.meta
 # Superseded material conversion attempts, retained locally only.
 /Assets/Team5/Materials/RealisticLab/Artist_*_Artist_*.mat*
+
+# Keep Markdown instructions and development notes local; publish only root README.
+*.[mM][dD]
+!/README.md
+# Ignore Unity metadata belonging to local-only Markdown assets as well.
+*.[mM][dD].meta
