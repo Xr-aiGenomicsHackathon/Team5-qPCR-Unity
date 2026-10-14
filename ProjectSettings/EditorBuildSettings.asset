@@ -6,9 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Team5/Scenes/LobbyScene.unity
+    guid: c3da6377b6bda6742946235dd0479d83
+  - enabled: 1
     path: Assets/Team5/Scenes/DemoScene.unity
     guid: cee253e7b5b5d904781af7fb48e33945
-  - enabled: 1
+  - enabled: 0
     path: Assets/Team5/Scenes/Team5_qPCR_RealisticLab.unity
     guid: a5c13ee474760c9478cb49589c4e58a6
   m_configObjects:

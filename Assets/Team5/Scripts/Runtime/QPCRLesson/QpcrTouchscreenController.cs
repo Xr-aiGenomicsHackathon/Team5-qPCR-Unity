@@ -166,6 +166,7 @@ namespace Team5.qPCR
                 var label = QpcrProtocolValidator.LabelFor(invalid);
                 SetValidation($"Protocol blocked: correct {label} before starting the run.", false);
                 Highlight(invalid, Error);
+                GetComponentInChildren<QpcrProtocolPages>(true)?.ShowParameter(invalid);
                 lesson.ReportRejectedAction($"Correct the red protocol field: {label}.");
                 machineAudio?.PlayError();
                 return;
@@ -180,6 +181,14 @@ namespace Team5.qPCR
                 lesson.TryComplete(QpcrLessonState.ValidateProtocol);
             if (startRunButton != null)
                 startRunButton.interactable = true;
+            GetComponentInChildren<QpcrProtocolPages>(true)?.ShowReview();
+        }
+        public void EditProtocol()
+        {
+            if (lesson == null || !lesson.TryReconfigureProtocol()) return;
+            IsProtocolValid = false;
+            if (startRunButton != null) startRunButton.interactable = false;
+            GetComponentInChildren<QpcrProtocolPages>(true)?.ShowPage(0);
         }
 
         public void RequestStartRun()

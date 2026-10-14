@@ -26,20 +26,34 @@ namespace Team5.qPCR
         [SerializeField] private TMP_Text whyText;
 
         private Coroutine feedbackRoutine;
+        private string explanationKey;
+        public string ExplanationKey => explanationKey;
         public void ConfigureTeaching(GameObject panel, TMP_Text text) { whyPanel = panel; whyText = text; }
         public void ToggleWhy()
         {
             if (whyPanel == null) return;
             whyPanel.SetActive(!whyPanel.activeSelf);
-            if (whyPanel.activeSelf && whyText != null)
-                whyText.text = QpcrTeachingContent.Explain(lesson == null ? QpcrLessonState.NotStarted : lesson.CurrentState);
+            if (whyPanel.activeSelf && whyText != null && string.IsNullOrEmpty(explanationKey))
+                SetStepExplanation(lesson == null ? QpcrLessonState.NotStarted : lesson.CurrentState);
+            if (!whyPanel.activeSelf) narration?.StopReading();
+        }
+        public void ReadExplanation()
+        {
+            if (whyPanel == null || !whyPanel.activeSelf || whyText == null) return;
+            narration?.Play(explanationKey, "Why this step?", whyText.text);
+        }
+        public void StopReading() => narration?.StopReading();
+        private void SetStepExplanation(QpcrLessonState state)
+        {
+            explanationKey = "Why_Qpcr_" + state;
+            if (whyText != null) whyText.text = QpcrTeachingContent.Explain(state);
         }
         public void ShowParameterExplanation(QpcrProtocolParameter parameter)
         {
             var text = QpcrTeachingContent.Explain(parameter);
             if (whyPanel != null) whyPanel.SetActive(true);
             if (whyText != null) whyText.text = QpcrProtocolValidator.LabelFor(parameter) + "\n\n" + text;
-            narration?.Play("Parameter_" + parameter, QpcrProtocolValidator.LabelFor(parameter), text);
+            explanationKey = "Parameter_" + parameter;
         }
 
         public void Configure(QpcrLessonController lessonController, PlateInspectionController inspectionController,
@@ -97,7 +111,7 @@ namespace Team5.qPCR
         public void BeginLesson()
         {
             lesson?.BeginLesson();
-            if (startButton != null)
+            if (startButton != null && lesson != null && lesson.IsLessonActive)
                 startButton.gameObject.SetActive(false);
         }
 
@@ -148,6 +162,7 @@ namespace Team5.qPCR
             ShowInspectionProgress(0, 4);
             if (startButton != null) startButton.gameObject.SetActive(true);
             SetConfirmButton(QpcrLessonState.NotStarted);
+            SetStepExplanation(QpcrLessonState.NotStarted);
         }
 
         private void OnStateChanged(QpcrLessonState state)
@@ -169,9 +184,9 @@ namespace Team5.qPCR
                 if (progressText != null) progressText.text = "qPCR workflow in progress";
             }
 
-            if (whyText != null) whyText.text = QpcrTeachingContent.Explain(state);
-            narration?.Play(state.ToString(), presentation.Title,
-                presentation.Instruction + "\n\n" + QpcrTeachingContent.Explain(state));
+            SetStepExplanation(state);
+            if (whyPanel != null) whyPanel.SetActive(false);
+            narration?.PlayInstruction("Instruction_Qpcr_" + state, presentation.Title, presentation.Instruction);
         }
 
         private void SetConfirmButton(QpcrLessonState state)

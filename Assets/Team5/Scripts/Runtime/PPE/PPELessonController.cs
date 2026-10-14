@@ -44,6 +44,7 @@ namespace Team5.qPCR
     /// </summary>
     public sealed class PPELessonController : MonoBehaviour
     {
+        [SerializeField] private bool beginOnStart = true;
         [Header("Lesson UI (optional)")]
         [SerializeField] private TMP_Text instructionText;
         [SerializeField] private TMP_Text targetText;
@@ -59,7 +60,7 @@ namespace Team5.qPCR
 
         [Header("Required hold times")]
         [SerializeField, Min(0.1f)] private float wetHandsSeconds = 2f;
-        [SerializeField, Min(0.1f)] private float rubHandsSeconds = 4f;
+        [SerializeField, Min(0.1f)] private float rubHandsSeconds = 20f;
         [SerializeField, Min(0.1f)] private float rinseHandsSeconds = 3f;
         [SerializeField, Min(0.1f)] private float dryHandsSeconds = 2f;
         [SerializeField, Min(0.05f)] private float handRubDistance = 0.28f;
@@ -76,9 +77,18 @@ namespace Team5.qPCR
         private bool rightInDryer;
         private float stepProgress;
         private float feedbackRemaining;
+        private Vector3 previousHandDifference;
+        private bool hasPreviousHandPose;
 
         public event Action<PPELessonStep> StepChanged;
         public event Action ResetRequested;
+        public event Action Completed;
+        public bool IsLessonActive { get; private set; }
+        public float StepProgress => stepProgress;
+        public static bool IsScrubMotion(Vector3 previousDifference, Vector3 currentDifference, float seconds)
+            => seconds > 0f && Vector3.Distance(previousDifference, currentDifference) / seconds >= .025f;
+        public void BeginLesson() { IsLessonActive = true; ResetLesson(); }
+        public void StopLesson() { IsLessonActive = false; narrationSource?.Stop(); }
 
         public PPELessonStep CurrentStep { get; private set; } = PPELessonStep.WearLabCoat;
         public bool IsWaterRunning { get; private set; }
@@ -87,11 +97,12 @@ namespace Team5.qPCR
 
         private void Start()
         {
-            ResetLesson();
+            if (beginOnStart) BeginLesson();
         }
 
         private void Update()
         {
+            if (!IsLessonActive) return;
             var delta = Time.deltaTime;
             if (feedbackRemaining > 0f)
             {
@@ -107,7 +118,7 @@ namespace Team5.qPCR
                         wetHandsSeconds, PPELessonStep.UseSoap, "Wetting hands");
                     break;
                 case PPELessonStep.RubHands:
-                    UpdateTimedStep(AreHandsCloseTogether(), rubHandsSeconds,
+                    UpdateTimedStep(AreHandsCloseTogether() && HandsAreRubbing(delta), rubHandsSeconds,
                         PPELessonStep.RinseHands, "Rubbing hands");
                     break;
                 case PPELessonStep.RinseHands:
@@ -180,7 +191,9 @@ namespace Team5.qPCR
             else
             {
                 SetStep(PPELessonStep.Complete);
+                IsLessonActive = false;
                 onPpeCompleted?.Invoke();
+                Completed?.Invoke();
             }
             return true;
         }
@@ -213,6 +226,7 @@ namespace Team5.qPCR
             leftInDryer = false;
             rightInDryer = false;
             stepProgress = 0f;
+            hasPreviousHandPose = false;
             feedbackRemaining = 0f;
             if (feedbackText != null) feedbackText.text = string.Empty;
             if (narrationSource != null)
@@ -223,7 +237,7 @@ namespace Team5.qPCR
 
         private bool RequireStep(PPELessonStep required)
         {
-            if (CurrentStep == required) return true;
+            if (IsLessonActive && CurrentStep == required) return true;
             ReportRejectedAction($"Complete the current task first: {CurrentTargetLabel.ToLowerInvariant()}.");
             return false;
         }
@@ -250,12 +264,22 @@ namespace Team5.qPCR
             return leftHand != null && rightHand != null &&
                    Vector3.Distance(leftHand.position, rightHand.position) <= handRubDistance;
         }
+        private bool HandsAreRubbing(float delta)
+        {
+            if (leftHand == null || rightHand == null) { hasPreviousHandPose = false; return false; }
+            var difference = leftHand.position - rightHand.position;
+            var moving = hasPreviousHandPose && IsScrubMotion(previousHandDifference, difference, delta);
+            previousHandDifference = difference;
+            hasPreviousHandPose = true;
+            return moving;
+        }
 
         private void SetStep(PPELessonStep step, bool force = false)
         {
             if (!force && CurrentStep == step) return;
             CurrentStep = step;
             stepProgress = 0f;
+            hasPreviousHandPose = false;
 
             if (targetText != null) targetText.text = "Current target: " + TargetFor(step);
             if (instructionText != null) instructionText.text = InstructionFor(step);
@@ -281,7 +305,7 @@ namespace Team5.qPCR
             }
         }
 
-        private static string TargetFor(PPELessonStep step)
+        public static string TargetFor(PPELessonStep step)
         {
             return step switch
             {
@@ -299,7 +323,7 @@ namespace Team5.qPCR
             };
         }
 
-        private static string InstructionFor(PPELessonStep step)
+        public static string InstructionFor(PPELessonStep step)
         {
             return step switch
             {
@@ -307,7 +331,7 @@ namespace Team5.qPCR
                 PPELessonStep.TurnOnTap => "Press the tap handle to turn on the water.",
                 PPELessonStep.WetHands => "Place both hands under the running water.",
                 PPELessonStep.UseSoap => "Press the soap dispenser once.",
-                PPELessonStep.RubHands => "Bring both hands together and rub them.",
+                PPELessonStep.RubHands => "Rub your hands together for 20 seconds. Clean palms, backs, between fingers and under nails. Keep moving both hands close together.",
                 PPELessonStep.RinseHands => "Place both hands under the water again to rinse them.",
                 PPELessonStep.TurnOffTap => "Press the tap handle to turn off the water.",
                 PPELessonStep.DryHands => "Place both hands beneath the hand dryer.",

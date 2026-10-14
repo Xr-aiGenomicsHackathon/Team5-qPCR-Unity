@@ -20,6 +20,13 @@ namespace Team5.qPCR.PlayModeTests
         {
             yield return SceneManager.LoadSceneAsync("DemoScene", LoadSceneMode.Single);
             yield return null;
+            // Isolate the pre-existing station regressions from the new PPE route.
+            // TrainingFlowSceneTests separately exercise the real prerequisite and reach gates.
+            var session = Object.FindFirstObjectByType<LabSessionCoordinator>();
+            if (session != null) { session.StopAllCoroutines(); session.enabled = false; }
+            Object.FindFirstObjectByType<QpcrLessonController>(FindObjectsInactive.Include).ConfigurePpePrerequisite(null);
+            foreach(var filter in Object.FindObjectsByType<NearbySelectionFilter>(FindObjectsInactive.Include,FindObjectsSortMode.None)) filter.enabled=false;
+            var card=Resources.FindObjectsOfTypeAll<GameObject>().First(go=>go.scene.IsValid()&&go.name=="Plate_Instruction_Canvas");card.SetActive(true);
         }
 
         [Test]

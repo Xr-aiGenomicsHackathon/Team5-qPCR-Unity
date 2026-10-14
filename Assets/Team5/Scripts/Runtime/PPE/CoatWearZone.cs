@@ -46,7 +46,7 @@ namespace Team5.qPCR
             if (coatGrab == null || !coatGrab.isSelected) return;
             if (lesson == null || !lesson.TryWearCoat()) return;
 
-            if (coatBody != null)
+            if (coatBody != null && !coatBody.isKinematic)
             {
                 coatBody.linearVelocity = Vector3.zero;
                 coatBody.angularVelocity = Vector3.zero;

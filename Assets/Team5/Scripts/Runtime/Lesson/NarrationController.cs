@@ -25,9 +25,30 @@ namespace Team5.qPCR
         [SerializeField] private NarrationCue[] cues = Array.Empty<NarrationCue>();
 
         private NarrationCue currentCue;
+        private NarrationCue instructionCue;
+        private string instructionTitle;
+        private string instructionCaption;
 
         public bool IsMuted => audioSource != null && audioSource.mute;
+        public bool IsSpeaking => audioSource != null && audioSource.isPlaying && !audioSource.mute;
+        public string CurrentKey => currentCue?.Key;
         public string CurrentCaption => currentCue == null ? string.Empty : currentCue.Caption;
+
+        public void PlayInstruction(string key, string title, string caption)
+        {
+            instructionCue = new NarrationCue { Key = key, Caption = caption,
+                Clip = cues.FirstOrDefault(c => c != null && c.Key == key)?.Clip };
+            instructionTitle = title;
+            instructionCaption = caption;
+            Play(key, title, caption);
+        }
+
+        public void ReplayInstruction()
+        {
+            if (instructionCue != null) Play(instructionCue.Key, instructionTitle, instructionCaption);
+        }
+
+        public void StopReading() => audioSource?.Stop();
 
         public void Configure(AudioSource source, TMP_Text[] titles, TMP_Text[] captions, Slider[] volumes,
             Toggle[] mutes, Button[] replay, NarrationCue[] availableCues)
@@ -45,14 +66,14 @@ namespace Team5.qPCR
         {
             foreach (var slider in volumeSliders) slider?.onValueChanged.AddListener(SetVolume);
             foreach (var toggle in muteToggles) toggle?.onValueChanged.AddListener(SetMuted);
-            foreach (var button in replayButtons) button?.onClick.AddListener(Replay);
+            foreach (var button in replayButtons) button?.onClick.AddListener(ReplayInstruction);
         }
 
         private void OnDisable()
         {
             foreach (var slider in volumeSliders) slider?.onValueChanged.RemoveListener(SetVolume);
             foreach (var toggle in muteToggles) toggle?.onValueChanged.RemoveListener(SetMuted);
-            foreach (var button in replayButtons) button?.onClick.RemoveListener(Replay);
+            foreach (var button in replayButtons) button?.onClick.RemoveListener(ReplayInstruction);
         }
 
         private void Start()
@@ -76,7 +97,8 @@ namespace Team5.qPCR
         public void Play(string key, string title, string fallbackCaption)
         {
             currentCue = cues.FirstOrDefault(item => item != null &&
-                string.Equals(item.Key, key, StringComparison.OrdinalIgnoreCase));
+                string.Equals(item.Key, key, StringComparison.OrdinalIgnoreCase))
+                ?? new NarrationCue { Key = key, Caption = fallbackCaption };
             var caption = currentCue != null && !string.IsNullOrWhiteSpace(currentCue.Caption)
                 ? currentCue.Caption
                 : fallbackCaption;
@@ -105,7 +127,8 @@ namespace Team5.qPCR
         {
             if (audioSource == null) return;
             audioSource.mute = value;
-            if (!value && currentCue?.Clip != null && !audioSource.isPlaying) Replay();
+            if (value) audioSource.Stop();
+            TrainingSession.VoiceMuted = value;
         }
 
         public void ToggleMuted()
@@ -117,12 +140,14 @@ namespace Team5.qPCR
         public void SetVolume(float value)
         {
             if (audioSource != null) audioSource.volume = Mathf.Clamp01(value);
+            TrainingSession.VoiceVolume = Mathf.Clamp01(value);
             foreach (var slider in volumeSliders) slider?.SetValueWithoutNotify(Mathf.Clamp01(value));
         }
 
         public void ResetNarration()
         {
             currentCue = null;
+            instructionCue = null;
             audioSource?.Stop();
             SetText(captionTitles, "Choose a lesson mode");
             SetText(captionTexts, "Guided Training gives spoken prompts and cues. Assessment records mistakes and requested hints.");

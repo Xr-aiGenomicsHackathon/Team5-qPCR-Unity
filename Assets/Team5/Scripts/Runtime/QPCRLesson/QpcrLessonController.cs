@@ -6,6 +6,15 @@ namespace Team5.qPCR
     public sealed class QpcrLessonController : MonoBehaviour
     {
         [SerializeField] private bool beginOnStart;
+        [SerializeField] private PPELessonController requiredPpe;
+        public bool CanBeginLesson => requiredPpe == null || requiredPpe.IsComplete;
+        public void ConfigurePpePrerequisite(PPELessonController ppe) => requiredPpe = ppe;
+        public bool TryReconfigureProtocol()
+        {
+            if (!IsLessonActive || CurrentState is not (QpcrLessonState.ValidateProtocol or QpcrLessonState.StartRun)) return false;
+            SetState(QpcrLessonState.ConfigureProtocol);
+            return true;
+        }
 
         public QpcrLessonState CurrentState { get; private set; } = QpcrLessonState.NotStarted;
         public string CurrentTarget => GetPresentation(CurrentState).Target;
@@ -23,6 +32,11 @@ namespace Team5.qPCR
 
         public void BeginLesson()
         {
+            if (!CanBeginLesson)
+            {
+                ReportRejectedAction("Complete your lab coat, handwashing and gloves before starting qPCR.");
+                return;
+            }
             IsLessonActive = true;
             SetState(QpcrLessonState.InspectPlateId);
             FeedbackRequested?.Invoke(
