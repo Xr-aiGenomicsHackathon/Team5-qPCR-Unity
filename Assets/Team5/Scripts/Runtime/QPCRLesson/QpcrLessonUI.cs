@@ -22,8 +22,25 @@ namespace Team5.qPCR
         [SerializeField] private Button confirmObservationButton;
         [SerializeField] private TMP_Text confirmObservationLabel;
         [SerializeField] private Button resetButton;
+        [SerializeField] private GameObject whyPanel;
+        [SerializeField] private TMP_Text whyText;
 
         private Coroutine feedbackRoutine;
+        public void ConfigureTeaching(GameObject panel, TMP_Text text) { whyPanel = panel; whyText = text; }
+        public void ToggleWhy()
+        {
+            if (whyPanel == null) return;
+            whyPanel.SetActive(!whyPanel.activeSelf);
+            if (whyPanel.activeSelf && whyText != null)
+                whyText.text = QpcrTeachingContent.Explain(lesson == null ? QpcrLessonState.NotStarted : lesson.CurrentState);
+        }
+        public void ShowParameterExplanation(QpcrProtocolParameter parameter)
+        {
+            var text = QpcrTeachingContent.Explain(parameter);
+            if (whyPanel != null) whyPanel.SetActive(true);
+            if (whyText != null) whyText.text = QpcrProtocolValidator.LabelFor(parameter) + "\n\n" + text;
+            narration?.Play("Parameter_" + parameter, QpcrProtocolValidator.LabelFor(parameter), text);
+        }
 
         public void Configure(QpcrLessonController lessonController, PlateInspectionController inspectionController,
             NarrationController narrationController, TMP_Text step, TMP_Text title, TMP_Text target,
@@ -90,6 +107,7 @@ namespace Team5.qPCR
             inspection?.ResetInspection();
             narration?.ResetNarration();
             ResetDisplay();
+            if (whyPanel != null) whyPanel.SetActive(false);
         }
 
         public void ConfirmVisualInspection()
@@ -151,8 +169,9 @@ namespace Team5.qPCR
                 if (progressText != null) progressText.text = "qPCR workflow in progress";
             }
 
+            if (whyText != null) whyText.text = QpcrTeachingContent.Explain(state);
             narration?.Play(state.ToString(), presentation.Title,
-                presentation.Instruction + "\n\n" + presentation.Explanation);
+                presentation.Instruction + "\n\n" + QpcrTeachingContent.Explain(state));
         }
 
         private void SetConfirmButton(QpcrLessonState state)

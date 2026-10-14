@@ -7,6 +7,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Readers;
 
 namespace Team5.qPCR.PlayModeTests
 {
@@ -86,6 +89,57 @@ namespace Team5.qPCR.PlayModeTests
         }
 
         [UnityTest]
+        public IEnumerator ReleasedPlateFallsUnderGravity()
+        {
+            var lesson = Object.FindFirstObjectByType<QpcrLessonController>();
+            var grab = Object.FindFirstObjectByType<PlateInspectionController>().GetComponent<XRGrabInteractable>();
+            var manager = Object.FindFirstObjectByType<XRInteractionManager>();
+            var handObject = new GameObject("Regression test hand", typeof(SphereCollider), typeof(XRDirectInteractor));
+            handObject.GetComponent<SphereCollider>().isTrigger = true;
+            var hand = handObject.GetComponent<XRDirectInteractor>();
+            hand.selectInput.inputSourceMode = XRInputButtonReader.InputSourceMode.ManualValue;
+            hand.selectInput.manualPerformed = true;
+            hand.selectInput.manualValue = 1f;
+            hand.keepSelectedTargetValid = true;
+            handObject.transform.position = grab.transform.position;
+            lesson.BeginLesson();
+            yield return null;
+            manager.SelectEnter((IXRSelectInteractor)hand, (IXRSelectInteractable)grab);
+            Assert.IsTrue(grab.isSelected, "The release test must exercise the actual XRI selection lifecycle.");
+            // Inject a held pose; this test measures release physics, not the
+            // simulated controller's pose provider or a grab transformer.
+            grab.trackPosition = false;
+            grab.trackRotation = false;
+            grab.transform.position = new Vector3(0f,1.2f,0f);
+            grab.GetComponent<Rigidbody>().position = grab.transform.position;
+            hand.selectInput.manualPerformed = false;
+            hand.selectInput.manualValue = 0f;
+            manager.SelectExit((IXRSelectInteractor)hand, (IXRSelectInteractable)grab);
+            var height = grab.transform.position.y;
+            yield return new WaitForSeconds(.3f);
+            Assert.IsFalse(grab.GetComponent<Rigidbody>().isKinematic, "Release must restore a dynamic Rigidbody.");
+            Assert.Less(grab.transform.position.y, height - .1f, "A released plate must fall, not float.");
+            yield return new WaitForSeconds(.8f);
+            Assert.IsTrue(grab.GetComponent<QpcrPlateHandling>().IsCompromised, "A floor drop must block reuse of the plate.");
+            Object.Destroy(handObject);
+        }
+
+        [UnityTest]
+        public IEnumerator AmplificationGraphHasRendererAndProducesVisibleMesh()
+        {
+            var graph = Object.FindFirstObjectByType<AmplificationGraphView>(FindObjectsInactive.Include);
+            Assert.IsNotNull(graph.GetComponent<CanvasRenderer>(), "The graph requires a CanvasRenderer.");
+            graph.GetComponentInParent<Canvas>(true).gameObject.SetActive(true);
+            for (var t = graph.transform; t != null && t.GetComponent<Canvas>() == null; t = t.parent)
+                t.gameObject.SetActive(true);
+            graph.SetProgress(.75f);
+            Canvas.ForceUpdateCanvases();
+            yield return null;
+            var mesh = graph.canvasRenderer.GetMesh();
+            Assert.Greater(mesh.vertexCount, 100, "The graph must render actual curves and axes.");
+        }
+
+        [UnityTest]
         public IEnumerator CompleteGuidedProtocolRunsAllCyclesAndRequiresCorrectControlInterpretation()
         {
             var lesson = Object.FindFirstObjectByType<QpcrLessonController>(FindObjectsInactive.Include);
@@ -132,7 +186,47 @@ namespace Team5.qPCR.PlayModeTests
             Assert.AreEqual(QpcrLessonState.InterpretResults, lesson.CurrentState);
             Assert.AreEqual(35, run.CurrentCycle);
             results.ConfirmValidControls();
+            Assert.AreEqual(QpcrLessonState.InterpretResults, lesson.CurrentState);
+            results.ConfirmValidControls();
+            results.ConfirmValidControls();
             Assert.AreEqual(QpcrLessonState.Complete, lesson.CurrentState);
+        }
+
+        [UnityTest]
+        public IEnumerator HomeAndDrawerSnapUseReleasedPoseAndRejectWrongA1()
+        {
+            var lesson=Object.FindFirstObjectByType<QpcrLessonController>();
+            var inspection=Object.FindFirstObjectByType<PlateInspectionController>();
+            var handling=inspection.GetComponent<QpcrPlateHandling>();
+            var home=handling.transform.parent;
+            lesson.BeginLesson();
+            handling.transform.position=home.position+new Vector3(.04f,.04f,.02f);
+            handling.ResolveReleasedPose();
+            Assert.Less(Vector3.Distance(handling.transform.position,home.position),.001f);
+            for(var i=0;i<4;i++) inspection.ConfirmCurrentVisualCheck();
+            Object.FindFirstObjectByType<QpcrPowerController>().GetComponent<XRSimpleInteractable>()
+                .selectEntered.Invoke(new SelectEnterEventArgs());
+            GameObject.Find("/40_QPCR_STATION/TEAM5_REAL_TIME_QPCR_INSTRUMENT/PHYSICAL_MACHINE_CONTROLS/Drawer_Open_Button")
+                .GetComponent<XRSimpleInteractable>().selectEntered.Invoke(new SelectEnterEventArgs());
+            yield return new WaitForSeconds(.8f);
+            var socket=Object.FindFirstObjectByType<QpcrPlateSocket>();
+            var attach=socket.transform.Find("Plate_Attach");
+            handling.transform.SetPositionAndRotation(attach.position,attach.rotation*Quaternion.Euler(0,180,0));
+            handling.ResolveReleasedPose();
+            Assert.IsFalse(socket.IsPlateSeated);
+            Assert.AreEqual(QpcrLessonState.LoadPlate,lesson.CurrentState);
+            handling.transform.SetPositionAndRotation(attach.position+Vector3.up*.03f,attach.rotation);
+            handling.ResolveReleasedPose();
+            Assert.IsTrue(socket.IsPlateSeated);
+            Assert.AreEqual(QpcrLessonState.CloseDrawer,lesson.CurrentState);
+            Assert.Less(Vector3.Distance(handling.transform.position,attach.position),.001f);
+            GameObject.Find("/40_QPCR_STATION/TEAM5_REAL_TIME_QPCR_INSTRUMENT/PHYSICAL_MACHINE_CONTROLS/Drawer_Close_Button")
+                .GetComponent<XRSimpleInteractable>().selectEntered.Invoke(new SelectEnterEventArgs());
+            yield return new WaitForSeconds(.8f);
+            Assert.Less(Vector3.Distance(handling.transform.position,attach.position),.001f);
+            Object.FindFirstObjectByType<QpcrLessonUI>().ResetLesson();
+            Assert.Less(Vector3.Distance(handling.transform.position,home.position),.001f);
+            Assert.IsFalse(socket.IsPlateSeated);
         }
     }
 }

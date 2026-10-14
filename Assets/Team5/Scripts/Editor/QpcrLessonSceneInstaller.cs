@@ -19,6 +19,194 @@ namespace Team5.qPCR.Editor
         private const string PlatePath = "/40_QPCR_STATION/TEAM4_HANDOFF_PLATE_STATION/Prepared_Plate_Home_Anchor/T4_QPCR_2026_05_PREPARED_PLATE";
         private const string InstrumentPath = "/40_QPCR_STATION/TEAM5_REAL_TIME_QPCR_INSTRUMENT";
 
+        [MenuItem("Team 5/qPCR Lesson/Repair Physics Graphs And Teaching In DemoScene")]
+        public static void RepairDemoScene()
+        {
+            if (SceneManager.GetActiveScene().name != "DemoScene" || EditorApplication.isPlaying)
+                throw new InvalidOperationException("Repair requires DemoScene in Edit Mode.");
+            var lesson = Require("/50_LESSON_AND_UI/QPCR_LESSON_SYSTEM").GetComponent<QpcrLessonController>();
+            var plate = Require(PlatePath);
+            var home = plate.transform.parent;
+            var instrument = Require(InstrumentPath);
+            var drawer = instrument.GetComponentInChildren<QpcrDrawerController>(true);
+            var socket = drawer.GetComponentInChildren<QpcrPlateSocket>(true);
+            var grab = plate.GetComponent<XRGrabInteractable>();
+            grab.retainTransformParent = false;
+            grab.forceGravityOnDetach = true;
+            if (plate.GetComponent<PlateDropRecovery>() != null) plate.GetComponent<PlateDropRecovery>().enabled = false;
+            var homeGuide = home.Find("Clean_Plate_Home_Guide");
+            if (homeGuide == null)
+            {
+                var marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                marker.name = "Clean_Plate_Home_Guide";
+                marker.transform.SetParent(home, false);
+                marker.transform.localPosition = new Vector3(0f, -.002f, 0f);
+                marker.transform.localScale = new Vector3(.16f,.003f,.12f);
+                UnityEngine.Object.DestroyImmediate(marker.GetComponent<Collider>());
+                marker.GetComponent<Renderer>().sharedMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Team5/Materials/InteractiveVR/M_LessonCue.mat");
+                homeGuide = marker.transform;
+            }
+            Ensure<QpcrPlateHandling>(plate).Configure(lesson,home,socket,homeGuide.GetComponent<Renderer>());
+            var attach = socket.transform.Find("Plate_Attach");
+            attach.localPosition = new Vector3(0f,.012f,0f);
+            var a1 = socket.transform.Find("A1_Red_Corner");
+            if (a1 == null)
+            {
+                var marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                marker.name = "A1_Red_Corner"; marker.transform.SetParent(socket.transform,false);
+                marker.transform.localPosition = new Vector3(-.06f,.016f,.04f);
+                marker.transform.localScale = new Vector3(.014f,.004f,.014f);
+                UnityEngine.Object.DestroyImmediate(marker.GetComponent<Collider>());
+                var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                mat.color = new Color(.95f,.08f,.10f);
+                const string path = "Assets/Team5/Materials/InteractiveVR/M_QpcrA1Red.mat";
+                var saved = AssetDatabase.LoadAssetAtPath<Material>(path);
+                if (saved == null) { AssetDatabase.CreateAsset(mat,path); saved=mat; }
+                else UnityEngine.Object.DestroyImmediate(mat);
+                marker.GetComponent<Renderer>().sharedMaterial=saved;
+            }
+            var drawerBox=drawer.GetComponent<BoxCollider>();
+            if(drawerBox!=null) { drawerBox.center=new Vector3(0f,-.014f,.08f); drawerBox.size=new Vector3(.24f,.025f,.18f); }
+            foreach(var descriptor in instrument.GetComponentsInChildren<LabObjectDescriptor>(true))
+            {
+                descriptor.enabled=false;
+                if(descriptor.GetComponent<Collider>()!=null && !descriptor.transform.IsChildOf(instrument.transform.Find("PHYSICAL_MACHINE_CONTROLS")))
+                    descriptor.GetComponent<Collider>().enabled=false;
+            }
+            var oldSocket=FindDescendant(drawer.transform,"A1_ORIENTATION_SENSITIVE_PLATE_SOCKET");
+            if(oldSocket!=null) oldSocket.gameObject.SetActive(false);
+
+            var uiRoot=Require("/50_LESSON_AND_UI/QPCR_STATION_UI").transform;
+            var lessonPanel=uiRoot.Find("Plate_Instruction_Canvas").GetComponent<RectTransform>();
+            var lessonUi=lessonPanel.GetComponent<QpcrLessonUI>();
+            var runSettings=new SerializedObject(lesson.GetComponent<QpcrRunController>());
+            runSettings.FindProperty("simulatedDurationSeconds").floatValue=45f;
+            runSettings.ApplyModifiedPropertiesWithoutUndo();
+            var pointer=uiRoot.GetComponentInChildren<QpcrGuidancePointer>(true);
+            var pointerSettings=new SerializedObject(pointer);
+            pointerSettings.FindProperty("beamHeight").floatValue=.09f;
+            pointerSettings.ApplyModifiedPropertiesWithoutUndo();
+            // Add a separate explanation panel while retaining the current task card.
+            var why=uiRoot.Find("Why_This_Step");
+            if(why==null)
+            {
+                var go=new GameObject("Why_This_Step",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster),typeof(TrackedDeviceGraphicRaycaster),typeof(QpcrWorldSpacePanel));
+                go.transform.SetParent(uiRoot,false); why=go.transform;
+            }
+            var whyRect=why.GetComponent<RectTransform>();
+            whyRect.sizeDelta=new Vector2(600f,400f);
+            why.position=new Vector3(3.18f,1.60f,2.98f); why.localScale=Vector3.one*.00068f;
+            why.GetComponent<Canvas>().renderMode=RenderMode.WorldSpace;
+            why.GetComponent<Canvas>().worldCamera=Camera.main;
+            UiImage(whyRect,"Background",Vector2.zero,new Vector2(600,400),new Color(.04f,.10f,.18f,.98f));
+            var whyText=UiText(whyRect,"Why_Text",new Vector2(0,12),new Vector2(540,320),21,Color.white);
+            lessonUi.ConfigureTeaching(why.gameObject,whyText);
+            var whyButton=UiButton(lessonPanel,"Why_Button",new Vector2(-226,-153),new Vector2(140,34),"Why this step?");
+            whyButton.onClick=new Button.ButtonClickedEvent();
+            UnityEventTools.AddVoidPersistentListener(whyButton.onClick,lessonUi.ToggleWhy);
+            var audioRoot=Require("/50_LESSON_AND_UI/QPCR_AUDIO");
+            var narration=audioRoot.GetComponent<NarrationController>();
+            var mute=UiButton(lessonPanel,"Mute_Button",new Vector2(276,-153),new Vector2(86,34),"Mute");
+            var feedbackText=lessonPanel.Find("Temporary_Feedback").GetComponent<TMP_Text>();
+            Place(feedbackText,new Vector2(0,-107),new Vector2(590,52)); feedbackText.fontSize=14f;
+            mute.onClick=new Button.ButtonClickedEvent();
+            UnityEventTools.AddVoidPersistentListener(mute.onClick,narration.ToggleMuted);
+            why.gameObject.SetActive(false);
+
+            var canvas=instrument.transform.Find("QPCR_TOUCHSCREEN_V2").GetComponent<Canvas>();
+            var screen=canvas.GetComponent<QpcrTouchscreenController>();
+            var protocol=canvas.transform.Find("Protocol_Panel").GetComponent<RectTransform>();
+            var fieldViews=new List<QpcrProtocolFieldView>();
+            var parameters=(QpcrProtocolParameter[])Enum.GetValues(typeof(QpcrProtocolParameter));
+            for(var index=0;index<parameters.Length;index++)
+            {
+                var parameter=parameters[index];
+                var button=UiButton(protocol,"Field_"+parameter,new Vector2(-290+(index/8)*292,224-(index%8)*49),new Vector2(278,42),"");
+                var label=UiText(button.GetComponent<RectTransform>(),"Label",new Vector2(-40,0),new Vector2(174,38),15,new Color(.08f,.13f,.21f));
+                label.text=QpcrProtocolValidator.LabelFor(parameter);
+                var value=UiText(button.GetComponent<RectTransform>(),"Value",new Vector2(90,0),new Vector2(70,38),15,new Color(.08f,.13f,.21f));
+                value.text="--";
+                button.onClick=new Button.ButtonClickedEvent();
+                UnityEventTools.AddIntPersistentListener(button.onClick,screen.SelectField,index);
+                fieldViews.Add(new QpcrProtocolFieldView {Parameter=parameter,Label=label,Value=value,Background=button.GetComponent<Image>(),SelectButton=button});
+            }
+            var welcome=canvas.transform.Find("Welcome_Panel").gameObject;
+            var runPanel=canvas.transform.Find("Run_Panel").gameObject;
+            var resultPanel=canvas.transform.Find("Results_Panel").GetComponent<RectTransform>();
+            var validate=protocol.Find("Validate_Protocol").GetComponent<Button>();
+            var start=protocol.Find("Start_Run").GetComponent<Button>();
+            var validation=protocol.Find("Validation").GetComponent<TMP_Text>();
+            Place(validation,new Vector2(-150,-260),new Vector2(540,75));
+            validation.fontSize=17;
+            var input=protocol.Find("Active_Input_Background/Active_Input").GetComponent<TMP_Text>(); input.text="Select a field";
+            screen.Configure(lesson,lesson.GetComponent<QpcrProtocolValidator>(),audioRoot.GetComponent<QpcrMachineAudio>(),welcome,protocol.gameObject,runPanel,resultPanel.gameObject,fieldViews.ToArray(),input,validation,validate,start);
+            var back=protocol.Find("Numeric_Keypad/Key_⌫");
+            if(back!=null) back.GetComponentInChildren<TMP_Text>().text="DEL";
+            UiText(protocol,"Assay_Label",new Vector2(-220,269),new Vector2(450,20),14,new Color(.5f,.8f,1f)).text="SYBR Green teaching assay · enter temperatures and times";
+            var graph=runPanel.transform.Find("Amplification_Graph").GetComponent<AmplificationGraphView>();
+            Ensure<CanvasRenderer>(graph.gameObject);
+            Place(graph,new Vector2(0,60),new Vector2(760,310));
+            graph.raycastTarget=false;
+            var melt=runPanel.transform.Find("Melt_Curve").GetComponent<MeltCurveView>();
+            Ensure<CanvasRenderer>(melt.gameObject);
+            Place(melt,new Vector2(0,-126),new Vector2(600,105));
+            ChartLabels(runPanel.GetComponent<RectTransform>());
+            var resultsGraphRect=UiRect(resultPanel,"Results_Amplification_Graph",new Vector2(0,88),new Vector2(760,240));
+            Ensure<CanvasRenderer>(resultsGraphRect.gameObject);
+            var resultsGraph=Ensure<AmplificationGraphView>(resultsGraphRect.gameObject); resultsGraph.raycastTarget=false;
+            var resultsMeltRect=UiRect(resultPanel,"Results_Melt_Curve",new Vector2(0,88),new Vector2(760,240));
+            Ensure<CanvasRenderer>(resultsMeltRect.gameObject);
+            var resultsMelt=Ensure<MeltCurveView>(resultsMeltRect.gameObject); resultsMelt.raycastTarget=false;
+            UiText(resultPanel,"Results_Legend",new Vector2(0,225),new Vector2(820,28),19,Color.white).text="Blue: positive control   Green: sample   Orange: NTC   Dashed: threshold";
+            UiText(resultPanel,"Axis_Label",new Vector2(0,-48),new Vector2(780,28),18,Color.white).text="Cycles 0-35 · normalized fluorescence | Melt view: 65-95°C, -dF/dT";
+            var interpretation=resultPanel.Find("Interpretation").GetComponent<TMP_Text>();
+            Place(interpretation,new Vector2(0,-117),new Vector2(800,95)); interpretation.fontSize=22; interpretation.color=Color.white;
+            var good=resultPanel.Find("Controls_Valid").GetComponent<Button>(); Place(good,new Vector2(-192,-210),new Vector2(355,58));
+            var bad=resultPanel.Find("Controls_Invalid").GetComponent<Button>(); Place(bad,new Vector2(192,-210),new Vector2(355,58));
+            var disclaimer=resultPanel.Find("Disclaimer").GetComponent<TMP_Text>(); Place(disclaimer,new Vector2(0,-278),new Vector2(800,45)); disclaimer.fontSize=15;
+            disclaimer.text="Synthetic teaching curves. Example checks do not establish patient diagnosis or full assay validity.";
+            lesson.GetComponent<ResultsLessonController>().ConfigureGraphs(resultsGraph,resultsMelt);
+            var sources=audioRoot.GetComponents<AudioSource>();
+            narration.Configure(sources[2],Array.Empty<TMP_Text>(),Array.Empty<TMP_Text>(),Array.Empty<Slider>(),Array.Empty<Toggle>(),new[]{lessonPanel.Find("Replay_Narration").GetComponent<Button>()},ImprovedNarrationCues());
+            foreach(var t in UnityEngine.Object.FindObjectsByType<TMP_Text>(FindObjectsInactive.Include,FindObjectsSortMode.None))
+                if(t.transform.IsChildOf(canvas.transform)) EditorUtility.SetDirty(t);
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+            Debug.Log("DemoScene qPCR physics, graph rendering and teaching repaired.");
+        }
+
+        private static void Place(Component item, Vector2 position, Vector2 size)
+        { var r=item.GetComponent<RectTransform>(); r.anchoredPosition=position; r.sizeDelta=size; }
+        private static RectTransform UiRect(RectTransform parent,string name,Vector2 position,Vector2 size)
+        { var existing=parent.Find(name); var r=existing!=null?existing.GetComponent<RectTransform>():CreateRect(parent,name,position,size); r.anchoredPosition=position; r.sizeDelta=size; return r; }
+        private static TMP_Text UiText(RectTransform parent,string name,Vector2 position,Vector2 size,float font,Color color)
+        { var r=UiRect(parent,name,position,size); var t=Ensure<TextMeshProUGUI>(r.gameObject); t.fontSize=font; t.color=color; t.raycastTarget=false; t.enableWordWrapping=true; return t; }
+        private static Image UiImage(RectTransform parent,string name,Vector2 position,Vector2 size,Color color)
+        { var r=UiRect(parent,name,position,size); var i=Ensure<Image>(r.gameObject); i.color=color; i.raycastTarget=false; return i; }
+        private static Button UiButton(RectTransform parent,string name,Vector2 position,Vector2 size,string label)
+        {
+            var r=UiRect(parent,name,position,size); var image=Ensure<Image>(r.gameObject); image.color=new Color(.18f,.34f,.54f); image.raycastTarget=true;
+            var b=Ensure<Button>(r.gameObject); b.targetGraphic=image;
+            var text=UiText(r,"Label",Vector2.zero,size-new Vector2(10,6),17,Color.white); text.text=label; text.alignment=TextAlignmentOptions.Center;
+            return b;
+        }
+        private static void ChartLabels(RectTransform panel)
+        {
+            UiText(panel,"Chart_Legend",new Vector2(0,240),new Vector2(800,27),18,Color.white).text="Blue: positive   Green: sample   Orange: NTC   Dashed: threshold";
+            UiText(panel,"Chart_Y",new Vector2(-300,211),new Vector2(230,24),16,Color.white).text="Normalized fluorescence";
+            UiText(panel,"Chart_X",new Vector2(0,-109),new Vector2(740,24),16,Color.white).text="0           5          10          15          20          25          30          35 cycles";
+            UiText(panel,"Melt_Label",new Vector2(0,-190),new Vector2(800,24),16,Color.white).text="Melt: 65-95°C · -dF/dT       Accelerated time · synthetic teaching curves";
+        }
+        private static NarrationCue[] ImprovedNarrationCues()
+        {
+            var cues=new List<NarrationCue>();
+            foreach(QpcrLessonState state in Enum.GetValues(typeof(QpcrLessonState)))
+                cues.Add(new NarrationCue {Key=state.ToString(),Caption=QpcrLessonController.GetPresentation(state).Instruction+"\n\n"+QpcrTeachingContent.Explain(state),Clip=AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Team5/Audio/QpcrTeaching/"+state+".wav")});
+            foreach(QpcrProtocolParameter p in Enum.GetValues(typeof(QpcrProtocolParameter)))
+                cues.Add(new NarrationCue {Key="Parameter_"+p,Caption=QpcrTeachingContent.Explain(p),Clip=AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Team5/Audio/QpcrTeaching/Parameter_"+p+".wav")});
+            return cues.ToArray();
+        }
+
         [MenuItem("Team 5/qPCR Lesson/Install Or Refresh In DemoScene")]
         public static void Install()
         {
@@ -116,6 +304,16 @@ namespace Team5.qPCR.Editor
             Undo.CollapseUndoOperations(undoGroup);
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
             Debug.Log("Team 5 VR-first qPCR lesson installed in DemoScene.");
+            RepairDemoScene();
+        }
+
+        public static string ExportTeachingNarration()
+        {
+            var lines=ImprovedNarrationCues().Select(c=>new { key=c.Key, text=c.Caption }).ToArray();
+            var path=System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(),"Temp","QpcrTeachingScript.json");
+            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
+            System.IO.File.WriteAllText(path,Newtonsoft.Json.JsonConvert.SerializeObject(lines));
+            return path;
         }
 
         private static void ConfigurePlateFoundation(GameObject plate, Transform homeAnchor)

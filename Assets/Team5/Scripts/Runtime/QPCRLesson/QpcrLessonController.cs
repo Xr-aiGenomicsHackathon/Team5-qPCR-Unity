@@ -175,11 +175,11 @@ namespace Team5.qPCR
                 QpcrLessonState.ConfigureProtocol => new QpcrStepPresentation(
                     "Configure the qPCR protocol", "Instrument touchscreen",
                     "Select every field and enter its displayed guided value. Confirm each entry before validating the protocol.",
-                    "Training protocol: 20 µL; lid 105°C; initial 95°C; 35 cycles; 95/60/72°C; acquire at 60°C; melt 65–95°C by 0.5°C; hold 4°C."),
+                    "This lesson uses SYBR Green and a specified teaching protocol. Select a field to hear its purpose. WHY explains the complete programme."),
                 QpcrLessonState.ValidateProtocol => new QpcrStepPresentation(
                     "Validate the protocol", "Validate Protocol button",
                     "Review every field, then press Validate Protocol.",
-                    "Validation prevents the run from starting with missing or unsafe settings."),
+                    "Validation checks temperatures, hold times and volume against this lesson's specified protocol."),
                 QpcrLessonState.StartRun => new QpcrStepPresentation(
                     "Start the qPCR run", "Start Run button",
                     "Press Start Run on the instrument after validation passes.",
@@ -190,7 +190,7 @@ namespace Team5.qPCR
                     "True amplification produces a rising fluorescence curve as product accumulates."),
                 QpcrLessonState.InterpretResults => new QpcrStepPresentation(
                     "Interpret the controls", "Results analysis",
-                    "Compare the curves, then choose whether the controls passed or failed.",
+                    "Answer the three screen questions about controls, Cq and the melt curve.",
                     "Controls pass when the positive control amplifies and the no-template control (NTC) remains flat."),
                 QpcrLessonState.Complete => new QpcrStepPresentation(
                     "qPCR lesson complete", "Completed workflow",

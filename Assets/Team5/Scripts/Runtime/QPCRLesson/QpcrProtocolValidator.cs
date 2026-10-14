@@ -17,7 +17,11 @@ namespace Team5.qPCR
         MeltCurveStart,
         MeltCurveEnd,
         TemperatureIncrement,
-        PostRunHold
+        PostRunHold,
+        InitialHoldSeconds,
+        DenaturationSeconds,
+        AnnealingSeconds,
+        ExtensionSeconds
     }
 
     [Serializable]
@@ -66,6 +70,10 @@ namespace Team5.qPCR
             QpcrProtocolParameter.MeltCurveEnd => 95f,
             QpcrProtocolParameter.TemperatureIncrement => 0.5f,
             QpcrProtocolParameter.PostRunHold => 4f,
+            QpcrProtocolParameter.InitialHoldSeconds => 120f,
+            QpcrProtocolParameter.DenaturationSeconds => 15f,
+            QpcrProtocolParameter.AnnealingSeconds => 30f,
+            QpcrProtocolParameter.ExtensionSeconds => 30f,
             _ => 0f
         };
 
@@ -83,6 +91,10 @@ namespace Team5.qPCR
             QpcrProtocolParameter.MeltCurveEnd => "Melt curve end",
             QpcrProtocolParameter.TemperatureIncrement => "Temperature increment",
             QpcrProtocolParameter.PostRunHold => "Post-run hold",
+            QpcrProtocolParameter.InitialHoldSeconds => "Initial hold time",
+            QpcrProtocolParameter.DenaturationSeconds => "Denaturation time",
+            QpcrProtocolParameter.AnnealingSeconds => "Annealing time",
+            QpcrProtocolParameter.ExtensionSeconds => "Extension time",
             _ => parameter.ToString()
         };
 
@@ -91,6 +103,8 @@ namespace Team5.qPCR
             QpcrProtocolParameter.ReactionVolume => "µL",
             QpcrProtocolParameter.AmplificationCycles => "cycles",
             QpcrProtocolParameter.TemperatureIncrement => "°C",
+            QpcrProtocolParameter.InitialHoldSeconds or QpcrProtocolParameter.DenaturationSeconds or
+                QpcrProtocolParameter.AnnealingSeconds or QpcrProtocolParameter.ExtensionSeconds => "s",
             _ => "°C"
         };
     }

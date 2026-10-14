@@ -57,6 +57,20 @@ namespace Team5.qPCR
 
         private void Start() => ResetSocket();
 
+        private void LateUpdate()
+        {
+            if (!IsPlateSeated || plate == null || attachTransform == null) return;
+            // A Rigidbody retains a world pose. Keep it synchronized with the
+            // animated holder after XRI detach and during drawer movement.
+            plate.SetPositionAndRotation(attachTransform.position, attachTransform.rotation);
+            if (plateBody != null)
+            {
+                plateBody.isKinematic = true;
+                plateBody.position = attachTransform.position;
+                plateBody.rotation = attachTransform.rotation;
+            }
+        }
+
         private void OnDisable()
         {
             if (plateGrab != null)
@@ -76,6 +90,7 @@ namespace Team5.qPCR
 
         public void ResetSocket()
         {
+            StopAllCoroutines();
             IsPlateSeated = false;
             plateInside = false;
             SetGuideColor(new Color(0.12f, 0.42f, 0.92f, 0.65f));
@@ -115,26 +130,38 @@ namespace Team5.qPCR
 
         private void OnPlateReleased(SelectExitEventArgs args)
         {
+            if (plate != null && plate.GetComponent<QpcrPlateHandling>() != null) return;
+            TrySeatReleasedPlate();
+        }
+
+        public bool TrySeatReleasedPlate()
+        {
             if (lesson == null || lesson.CurrentState != QpcrLessonState.LoadPlate)
-                return;
+                return false;
+            if (plate == null || plate.GetComponent<QpcrPlateHandling>()?.IsCompromised == true)
+            { Reject("Use a fresh plate. Reset after a floor drop."); return false; }
             if (drawer == null || !drawer.IsOpen || drawer.IsMoving)
             {
                 Reject("Open the instrument drawer before loading the plate.");
-                return;
+                return false;
             }
-            if (!plateInside)
+            // Pose evaluation works even if release occurs before the next
+            // physics step delivers OnTriggerEnter/Stay.
+            var local = attachTransform.InverseTransformPoint(plate.position);
+            if (Mathf.Abs(local.x) > .065f || Mathf.Abs(local.z) > .05f || local.y < -.04f || local.y > .09f)
             {
-                Reject("Move the plate fully into the highlighted thermal-block socket before releasing it.");
-                return;
+                Reject("Lower the plate into the outlined holder, then release Grip. Keep the plate flat and match the red A1 corners.");
+                return false;
             }
             if (!IsOrientationValid(plate))
             {
                 Reject("A1 is facing the wrong direction. Rotate the plate until the A1 corner matches the socket marker.");
                 StartCoroutine(FlashGuideError());
-                return;
+                return false;
             }
 
             SeatPlate();
+            return true;
         }
 
         private void SeatPlate()
@@ -160,6 +187,7 @@ namespace Team5.qPCR
             machineAudio?.PlayButton();
             (lastHoldingInteractor as XRBaseInputInteractor)?.SendHapticImpulse(0.48f, 0.1f);
             lesson.TryComplete(QpcrLessonState.LoadPlate);
+            lesson.ReportInformation("Plate seated securely. A1 matches the holder. You can now close the compartment.");
         }
 
         private void Reject(string message)
@@ -178,6 +206,7 @@ namespace Team5.qPCR
 
         private void UpdateGuideForPose()
         {
+            if (IsPlateSeated) return;
             SetGuideColor(IsOrientationValid(plate)
                 ? new Color(0.16f, 0.72f, 0.38f, 0.8f)
                 : new Color(1f, 0.66f, 0.12f, 0.8f));
@@ -199,6 +228,8 @@ namespace Team5.qPCR
         {
             if (state == QpcrLessonState.NotStarted)
                 ResetSocket();
+            if (guidanceRenderer != null)
+                guidanceRenderer.enabled = state is QpcrLessonState.LoadPlate or QpcrLessonState.CloseDrawer;
         }
     }
 }

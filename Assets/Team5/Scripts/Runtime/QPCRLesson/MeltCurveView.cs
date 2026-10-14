@@ -3,10 +3,12 @@ using UnityEngine.UI;
 
 namespace Team5.qPCR
 {
+    [RequireComponent(typeof(CanvasRenderer))]
     public sealed class MeltCurveView : MaskableGraphic
     {
         [SerializeField, Range(0f, 1f)] private float visibility;
         [SerializeField, Min(1f)] private float lineThickness = 3f;
+        public void SetProgress(float value) { visibility = Mathf.Clamp01(value); SetVerticesDirty(); }
 
         public void SetVisible(bool value)
         {
@@ -21,7 +23,7 @@ namespace Team5.qPCR
             var rect = GetPixelAdjustedRect();
             Vector2? previous = null;
             const int points = 48;
-            for (var index = 0; index <= points; index++)
+            for (var index = 0; index <= Mathf.FloorToInt(points * visibility); index++)
             {
                 var x = index / (float)points;
                 var peak = Mathf.Exp(-Mathf.Pow((x - .63f) / .09f, 2f));
@@ -37,7 +39,7 @@ namespace Team5.qPCR
             var direction = (b - a).normalized;
             var normal = new Vector2(-direction.y, direction.x) * lineThickness * .5f;
             var start = vh.currentVertCount;
-            var curveColor = new Color(.45f, .18f, .76f, 1f);
+            var curveColor = new Color(.78f, .60f, 1f, 1f);
             vh.AddVert(a - normal, curveColor, Vector2.zero);
             vh.AddVert(a + normal, curveColor, Vector2.zero);
             vh.AddVert(b + normal, curveColor, Vector2.zero);

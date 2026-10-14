@@ -19,7 +19,7 @@ namespace Team5.qPCR
         [SerializeField] private TMP_Text temperatureText;
         [SerializeField] private UnityEngine.UI.Image progressFill;
         [SerializeField] private XRSimpleInteractable physicalStartButton;
-        [SerializeField, Min(5f)] private float simulatedDurationSeconds = 28f;
+        [SerializeField, Min(5f)] private float simulatedDurationSeconds = 45f;
 
         public bool IsRunning { get; private set; }
         public int CurrentCycle { get; private set; }
@@ -99,20 +99,30 @@ namespace Team5.qPCR
             {
                 elapsed += Time.deltaTime;
                 var normalized = Mathf.Clamp01(elapsed / simulatedDurationSeconds);
-                var exactCycle = normalized * 35f;
+                var cyclingProgress = Mathf.Clamp01((normalized - .08f) / .80f);
+                var exactCycle = cyclingProgress * 35f;
                 CurrentCycle = Mathf.Clamp(Mathf.FloorToInt(exactCycle) + 1, 1, 35);
                 var phase = exactCycle - Mathf.Floor(exactCycle);
                 string stage;
                 float temperature;
-                if (phase < .25f) { stage = "Denaturation"; temperature = 95f; }
-                else if (phase < .62f) { stage = "Annealing + fluorescence"; temperature = 60f; }
-                else { stage = "Extension"; temperature = 72f; }
+                if (phase < .20f) { stage = "Denaturation · 15 s"; temperature = 95f; }
+                else if (phase < .60f) { stage = "Anneal + acquire · 30 s"; temperature = 60f; }
+                else { stage = "Extension · 30 s"; temperature = 72f; }
+
+                if (normalized < .08f) { stage = "Initial hold · 120 s"; temperature = 95f; CurrentCycle = 0; }
+                if (normalized >= .88f)
+                {
+                    var meltProgress = Mathf.Clamp01((normalized - .88f) / .12f);
+                    stage = "Melt curve · 0.5°C steps";
+                    temperature = 65f + Mathf.Floor(meltProgress * 60f) * .5f;
+                    meltCurve?.SetProgress(meltProgress);
+                }
 
                 if (cycleText != null) cycleText.text = $"Cycle {CurrentCycle:00} / 35";
                 if (stageText != null) stageText.text = stage;
                 if (temperatureText != null) temperatureText.text = $"{temperature:0} °C";
                 if (progressFill != null) progressFill.fillAmount = normalized;
-                amplificationGraph?.SetProgress(normalized);
+                amplificationGraph?.SetProgress(cyclingProgress);
                 yield return null;
             }
 

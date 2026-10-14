@@ -88,6 +88,7 @@ namespace Team5.qPCR
             RefreshFieldColours();
             RefreshInputText();
             var parameter = fields[index].Parameter;
+            FindFirstObjectByType<QpcrLessonUI>()?.ShowParameterExplanation(parameter);
             SetValidation(
                 $"Guided value: {QpcrProtocolValidator.ExpectedValue(parameter):0.##} " +
                 $"{QpcrProtocolValidator.UnitFor(parameter)}. Enter it, then press Confirm value.", true);
@@ -171,7 +172,7 @@ namespace Team5.qPCR
             }
 
             IsProtocolValid = true;
-            SetValidation("Protocol valid. All 12 required values match the approved training protocol.", true);
+            SetValidation($"Protocol valid. All {fields.Length} required values match this teaching assay.", true);
             machineAudio?.PlayButton();
             if (lesson.CurrentState == QpcrLessonState.ConfigureProtocol)
                 lesson.TryComplete(QpcrLessonState.ConfigureProtocol);

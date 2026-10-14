@@ -11,6 +11,11 @@ namespace Team5.qPCR
         [SerializeField] private TMP_Text interpretationText;
         [SerializeField] private Button validControlsButton;
         [SerializeField] private Button invalidControlsButton;
+        [SerializeField] private AmplificationGraphView resultsGraph;
+        [SerializeField] private MeltCurveView resultsMelt;
+        private int question;
+        public void ConfigureGraphs(AmplificationGraphView graph, MeltCurveView melt)
+        { resultsGraph = graph; resultsMelt = melt; }
 
         public void Configure(QpcrLessonController lessonController, QpcrMachineAudio audio,
             TMP_Text interpretation, Button validButton, Button invalidButton)
@@ -44,20 +49,27 @@ namespace Team5.qPCR
         {
             if (lesson == null || lesson.CurrentState != QpcrLessonState.InterpretResults)
                 return;
-            if (interpretationText != null)
-            {
-                interpretationText.text = "Correct. The positive control amplified and the NTC remained flat. The controls passed.";
-                interpretationText.color = new Color(0.16f, 0.72f, 0.38f, 1f);
-            }
             machineAudio?.PlayButton();
-            lesson.TryComplete(QpcrLessonState.InterpretResults);
+            question++;
+            if (question >= 3)
+            {
+                interpretationText.text = "Completed: controls, Cq and melt analysis.\nKeep the amplified plate sealed. These are synthetic teaching results.";
+                lesson.TryComplete(QpcrLessonState.InterpretResults);
+                validControlsButton.interactable = invalidControlsButton.interactable = false;
+            }
+            else ShowQuestion();
         }
 
         public void RejectValidControls()
         {
             if (lesson == null || lesson.CurrentState != QpcrLessonState.InterpretResults)
                 return;
-            const string message = "Look again: the positive-control curve rises, while the no-template control remains flat.";
+            var message = question switch
+            {
+                1 => "Cq/Ct is the threshold-crossing cycle, not the final height of the curve.",
+                2 => "One melt peak supports consistency, but does not prove the DNA product's identity.",
+                _ => "The positive control rises; the NTC remains below threshold. These example control checks pass."
+            };
             if (interpretationText != null)
             {
                 interpretationText.text = message;
@@ -69,17 +81,34 @@ namespace Team5.qPCR
 
         public void ResetResults()
         {
-            if (interpretationText != null)
+            question = 0;
+            if (validControlsButton != null) validControlsButton.interactable = true;
+            if (invalidControlsButton != null) invalidControlsButton.interactable = true;
+            ShowQuestion();
+        }
+        private void ShowQuestion()
+        {
+            if (interpretationText == null) return;
+            interpretationText.color = Color.white;
+            interpretationText.text = question switch
             {
-                interpretationText.text = "Positive control: amplified\nNo-template control (NTC): flat\nChoose the correct interpretation.";
-                interpretationText.color = new Color(0.15f, 0.2f, 0.28f, 1f);
-            }
+                1 => $"2/3 · What does Cq/Ct measure?\nExample positive Cq: {AmplificationGraphView.Cq(true):0.0}; sample: {AmplificationGraphView.Cq(false):0.0}; NTC: undetermined.",
+                2 => "3/3 · What does a single melt peak tell us?\nA peak supports one dominant melting transition; identity needs further evidence.",
+                _ => "1/3 · Blue positive control rises; orange NTC is flat.\nDo these example controls meet their expected behaviour?"
+            };
+            validControlsButton.GetComponentInChildren<TMP_Text>().text = question switch
+            { 1 => "Threshold-crossing cycle", 2 => "Supports consistency", _ => "Expected controls" };
+            invalidControlsButton.GetComponentInChildren<TMP_Text>().text = question switch
+            { 1 => "Final curve height", 2 => "Proves target identity", _ => "Controls failed" };
+            if (resultsGraph != null) { resultsGraph.gameObject.SetActive(question != 2); resultsGraph.SetProgress(1f); }
+            if (resultsMelt != null) { resultsMelt.gameObject.SetActive(question == 2); resultsMelt.SetVisible(true); }
         }
 
         private void OnStateChanged(QpcrLessonState state)
         {
             if (state == QpcrLessonState.NotStarted)
                 ResetResults();
+            if (state == QpcrLessonState.InterpretResults) ShowQuestion();
         }
     }
 }

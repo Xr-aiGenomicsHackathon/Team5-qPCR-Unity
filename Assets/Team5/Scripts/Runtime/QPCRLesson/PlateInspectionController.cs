@@ -74,6 +74,11 @@ namespace Team5.qPCR
 
         public bool ConfirmCurrentVisualCheck()
         {
+            if (GetComponent<QpcrPlateHandling>()?.IsCompromised == true)
+            {
+                lesson?.ReportRejectedAction("Reset the lesson to replace the dropped plate before inspection.");
+                return false;
+            }
             if (lesson == null || !lesson.IsLessonActive)
             {
                 lesson?.ReportRejectedAction("Press Start qPCR Lesson before confirming the plate.");
@@ -185,12 +190,10 @@ namespace Team5.qPCR
 
             if (plateGrab != null)
             {
-                plateGrab.enabled = state is QpcrLessonState.InspectPlateId
-                    or QpcrLessonState.InspectA1Marker
-                    or QpcrLessonState.InspectOpticalSeal
-                    or QpcrLessonState.InspectBubbles
-                    or QpcrLessonState.ReturnPlate
-                    or QpcrLessonState.LoadPlate;
+                // Never cancel a grab merely because the lesson advanced. The
+                // socket owns the lock once the plate has actually been seated.
+                var socket = FindFirstObjectByType<QpcrPlateSocket>(FindObjectsInactive.Include);
+                plateGrab.enabled = socket == null || !socket.IsPlateSeated;
             }
 
             RefreshHotspots();
@@ -198,6 +201,7 @@ namespace Team5.qPCR
 
         private void OnPlateReleased(SelectExitEventArgs args)
         {
+            if (GetComponent<QpcrPlateHandling>() != null) return;
             if (lesson == null || lesson.CurrentState != QpcrLessonState.ReturnPlate || plateHomeAnchor == null)
                 return;
 
@@ -213,6 +217,8 @@ namespace Team5.qPCR
 
         private void SnapPlateHome()
         {
+            var handling=GetComponent<QpcrPlateHandling>();
+            if(handling!=null) { handling.SnapHome(); return; }
             if (plateHomeAnchor == null)
                 return;
             transform.SetParent(plateHomeAnchor, false);

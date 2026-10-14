@@ -16,7 +16,7 @@ namespace Team5.qPCR
         [SerializeField] private LineRenderer beam;
         [SerializeField] private Transform marker;
         [SerializeField] private QpcrPointerTarget[] targets = Array.Empty<QpcrPointerTarget>();
-        [SerializeField, Min(.05f)] private float beamHeight = .20f;
+        [SerializeField, Min(.05f)] private float beamHeight = .09f;
         [SerializeField, Min(0f)] private float targetOffset = .015f;
         [SerializeField, Min(.1f)] private float pulseSpeed = 5f;
         [SerializeField, Range(0f, .5f)] private float pulseAmount = .18f;
@@ -69,6 +69,8 @@ namespace Team5.qPCR
                 return;
 
             var end = activeTarget.position + Vector3.up * targetOffset;
+            if (activeTarget is RectTransform rect)
+                end = rect.TransformPoint(new Vector3(rect.rect.xMin, rect.rect.yMax, 0f));
             var start = end + Vector3.up * beamHeight;
 
             if (beam != null)
