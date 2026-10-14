@@ -8,6 +8,9 @@ using UnityEngine.TestTools;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit.Inputs;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Simulation;
 
 namespace Team5.qPCR.PlayModeTests
 {
@@ -69,6 +72,25 @@ namespace Team5.qPCR.PlayModeTests
             Assert.IsFalse(simulator.gameObject.activeSelf);
             Assert.IsTrue((bool)typeof(TrainingAudioSettings).GetField("useSimulatorInEditor",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(settings));
             Assert.IsFalse(Resources.FindObjectsOfTypeAll<GameObject>().Any(go=>go.scene.IsValid()&&go.name=="Practice_Select"&&go.activeInHierarchy));
+        }
+        [UnityTest] public IEnumerator SimulatorReevaluatesTrackedControllersAfterSceneStartup()
+        {
+            var left=InputSystem.AddDevice<XRSimulatedController>();
+            var right=InputSystem.AddDevice<XRSimulatedController>();
+            try
+            {
+                InputSystem.SetDeviceUsage(left,CommonUsages.LeftHand);InputSystem.SetDeviceUsage(right,CommonUsages.RightHand);
+                var state=new XRSimulatedControllerState {isTracked=true,trackingState=3,deviceRotation=Quaternion.identity};
+                InputSystem.QueueStateEvent(left,state);InputSystem.QueueStateEvent(right,state);InputSystem.Update();
+                yield return null;
+                var modality=Object.FindFirstObjectByType<XRInputModalityManager>();
+                modality.leftController.SetActive(false);modality.rightController.SetActive(false);
+                Object.FindFirstObjectByType<TrainingAudioSettings>().SetSimulator(true);
+                yield return null;yield return null;yield return null;
+                Assert.IsTrue(modality.leftController.activeInHierarchy);
+                Assert.IsTrue(modality.rightController.activeInHierarchy);
+            }
+            finally {InputSystem.RemoveDevice(left);InputSystem.RemoveDevice(right);}
         }
     }
 }

@@ -4,7 +4,7 @@
 
 Use **Unity 6000.3.26f1** and the saved **LobbyScene → DemoScene** route. The old realistic-lab scene is outside this presentation route. Legacy tests for that old scene are not evidence for the current lesson and should not be counted as presentation tests.
 
-Open `Assets/Team5/Scenes/LobbyScene.unity`, enter a nickname and press Continue, then Enter Laboratory. There is no practice gate and no learner-facing PC Simulator checkbox. For PC testing, leave **TrainingAudioSettings → Use Simulator In Editor** checked in both scenes. For headset testing, uncheck before Play; builds disable simulation automatically.
+Open `Assets/Team5/Scenes/LobbyScene.unity`, enter a nickname and press Continue, then Enter Laboratory. There is no practice gate and no learner-facing PC Simulator checkbox or help overlay. For PC testing, leave **TrainingAudioSettings → Use Simulator In Editor** checked in both scenes. The optional **Show Simulator Controls In Editor** developer help overlay defaults to off; keyboard control still works. For headset testing, uncheck Use Simulator before Play; builds disable simulation automatically. After transitions the settings component re-evaluates simulated tracking once, without forcing controllers active on a headset.
 
 ## Inspector wiring and values
 

@@ -82,13 +82,23 @@ namespace Team5.qPCR.Editor
             {if(existing!=null)existing.gameObject.SetActive(false);return;}
             var renderers=target.GetComponentsInChildren<Renderer>(true).Where(r=>r.enabled&&r.gameObject.activeInHierarchy&&!(r is LineRenderer)&&!(r is ParticleSystemRenderer)&&r.GetComponentInParent<Canvas>()==null&&r.GetComponentInParent<LabLabelTarget>()==target).ToArray();
             Bounds bounds;
-            if(renderers.Length>0){bounds=renderers[0].bounds;foreach(var r in renderers.Skip(1))bounds.Encapsulate(r.bounds);}
-            else if(target.GetComponent<Collider>()!=null)bounds=target.GetComponent<Collider>().bounds;
+            if(renderers.Length>0){bounds=BoundsInLabelSpace(renderers[0],target.transform);foreach(var r in renderers.Skip(1))bounds.Encapsulate(BoundsInLabelSpace(r,target.transform));}
+            else if(target.GetComponent<Collider>()!=null){var world=target.GetComponent<Collider>().bounds;bounds=new Bounds(target.transform.InverseTransformPoint(world.center),Vector3.zero);for(var corner=0;corner<8;corner++)bounds.Encapsulate(target.transform.InverseTransformPoint(world.center+Vector3.Scale(world.extents,new Vector3((corner&1)==0?-1:1,(corner&2)==0?-1:1,(corner&4)==0?-1:1))));}
             else return;
             var proxy=Child(target.transform,"LabelOnlyProxy");proxy.SetActive(true);proxy.layer=layer;proxy.transform.localPosition=Vector3.zero;proxy.transform.localRotation=Quaternion.identity;proxy.transform.localScale=Vector3.one;
-            var box=Ensure<BoxCollider>(proxy);box.isTrigger=true;box.center=target.transform.InverseTransformPoint(bounds.center);
-            var scale=target.transform.lossyScale;box.size=new Vector3(Mathf.Max(.004f,bounds.size.x/Mathf.Max(.0001f,Mathf.Abs(scale.x))),Mathf.Max(.004f,bounds.size.y/Mathf.Max(.0001f,Mathf.Abs(scale.y))),Mathf.Max(.004f,bounds.size.z/Mathf.Max(.0001f,Mathf.Abs(scale.z))));
+            var box=Ensure<BoxCollider>(proxy);box.isTrigger=true;box.center=bounds.center;
+            box.size=new Vector3(Mathf.Max(.004f,bounds.size.x),Mathf.Max(.004f,bounds.size.y),Mathf.Max(.004f,bounds.size.z));
             Ensure<LabLabelProxy>(proxy).Configure(target);
+        }
+        private static Bounds BoundsInLabelSpace(Renderer renderer,Transform target)
+        {
+            var local=renderer.localBounds;var result=new Bounds(target.InverseTransformPoint(renderer.transform.TransformPoint(local.center)),Vector3.zero);
+            for(var corner=0;corner<8;corner++)
+            {
+                var point=local.center+Vector3.Scale(local.extents,new Vector3((corner&1)==0?-1:1,(corner&2)==0?-1:1,(corner&4)==0?-1:1));
+                result.Encapsulate(target.InverseTransformPoint(renderer.transform.TransformPoint(point)));
+            }
+            return result;
         }
         private static bool Describe(Transform t,out string title,out string purpose)
         {
