@@ -39,7 +39,7 @@ namespace Team5.qPCR
         private int requestVersion;
         private bool preparationFailed;
         private bool userMuted = true;
-        private bool closedByLearner;
+        private QpcrLessonState? lastState;
         public bool IsPanelOpen => panel != null && panel.activeSelf;
         public bool IsUserMuted => userMuted;
         public bool HasVideo => currentCue?.Clip != null;
@@ -72,6 +72,7 @@ namespace Team5.qPCR
             if (lesson != null) lesson.StateChanged -= OnStateChanged;
             if (player != null) { player.errorReceived -= OnError; player.loopPointReached -= OnVideoFinished; }
             StopPlayback();
+            lastState = null;
         }
         private void Update()
         {
@@ -81,14 +82,17 @@ namespace Team5.qPCR
         }
         private void OnStateChanged(QpcrLessonState state)
         {
+            // A duplicate state notification must not reopen a learner-closed video.
+            if (lastState == state) return;
+            lastState = state;
             if (state == QpcrLessonState.NotStarted)
             {
-                Close(); currentCue = null; closedByLearner = false; RefreshAvailability(); return;
+                Close(); currentCue = null; RefreshAvailability(); return;
             }
             var mapped = Array.Find(cues, c => c != null && c.State == state && c.Clip != null);
             if (mapped != null)
             {
-                StopPlayback(); currentCue = mapped; closedByLearner = false; userMuted = true;
+                StopPlayback(); currentCue = mapped; userMuted = true;
                 if (mapped.AutoOpen) Open();
             }
             else if (state == QpcrLessonState.InterpretResults || state == QpcrLessonState.Complete) Close();
@@ -102,7 +106,6 @@ namespace Team5.qPCR
         public void Open()
         {
             if (!HasVideo || player == null || panel == null) return;
-            closedByLearner = false;
             StopPlayback();
             panel.SetActive(true);
             if (title != null) title.text = currentCue.Title;
@@ -147,7 +150,6 @@ namespace Team5.qPCR
         public void ToggleSound() => userMuted = !userMuted;
         public void Close()
         {
-            closedByLearner = true;
             StopPlayback();
             if (panel != null) panel.SetActive(false);
         }
@@ -158,6 +160,12 @@ namespace Team5.qPCR
             if (player != null) { player.Stop(); player.clip = null; }
             videoAudio?.Stop();
             if (picture != null) picture.enabled = false;
+            if (videoTexture != null && videoTexture.IsCreated())
+            {
+                var previous = RenderTexture.active;
+                try { RenderTexture.active = videoTexture; GL.Clear(false, true, Color.black); }
+                finally { RenderTexture.active = previous; }
+            }
         }
         private void OnError(VideoPlayer source, string message)
         {

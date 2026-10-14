@@ -21,6 +21,11 @@ namespace Team5.qPCR.Editor
             if(material==null){material=new Material(Shader.Find("Universal Render Pipeline/Lit"));AssetDatabase.CreateAsset(material,path);}
             material.color=color;material.SetFloat("_Metallic",metallic);material.SetFloat("_Smoothness",smoothness);return material;
         }
+        private static AudioSource PpeAudio(Transform parent,string name,PpeSoundKind kind,bool loop=false)
+        {
+            var root=Child(parent,name);var source=Ensure<AudioSource>(root);source.playOnAwake=false;source.loop=loop;source.volume=loop?.25f:.45f;source.spatialBlend=1;source.minDistance=.4f;source.maxDistance=3;
+            EnumValue(Ensure<PpeSoundEffect>(root),"kind",(int)kind);return source;
+        }
         private static GameObject Primitive(Transform parent,string name,PrimitiveType type,Vector3 position,Vector3 scale,Material material,bool collider=false)
         {
             var existing=parent.Find(name);var go=existing==null?GameObject.CreatePrimitive(type):existing.gameObject;
@@ -50,6 +55,7 @@ namespace Team5.qPCR.Editor
             coat.GetComponent<Rigidbody>().isKinematic=true;coat.GetComponent<Rigidbody>().useGravity=false;
             var zone=Named("CoatWearZone");zone.SetParent(Named("Main Camera"),false);zone.localPosition=new Vector3(0,-.45f,.35f);zone.localScale=Vector3.one;
             var wear=Ensure<CoatWearZone>(zone.gameObject);Set(wear,"lesson",ppe);Set(wear,"coatRoot",coat);Set(wear,"coatGrab",grab);
+            Set(wear,"wearAudio",PpeAudio(zone,"Coat_Wear_Sound",PpeSoundKind.Coat));
             var chest=Ensure<BoxCollider>(zone.gameObject);chest.isTrigger=true;chest.center=Vector3.zero;chest.size=new Vector3(.6f,.65f,.35f);
 
             var handwash=Named("HANDWASH_STATION");var tap=Named("Tap_Handle");tap.position=new Vector3(2.56f,1.35f,-2.01f);
@@ -66,6 +72,7 @@ namespace Team5.qPCR.Editor
             var waterAudio=Ensure<AudioSource>(water);waterAudio.playOnAwake=false;waterAudio.loop=true;waterAudio.volume=.22f;waterAudio.spatialBlend=1;waterAudio.minDistance=.5f;waterAudio.maxDistance=3;
             waterAudio.clip=AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Team5/Scripts/Audio/NewScene/water-running-faucet-by-alex-jauk-royalty-free-music-940002.wav");
             var tapController=Ensure<TapController>(tap.gameObject);Set(tapController,"lesson",ppe);Set(tapController,"interactable",tap.GetComponent<XRSimpleInteractable>());Set(tapController,"waterParticles",particles);Set(tapController,"waterAudio",waterAudio);Set(tapController,"movingHandle",tap.Find("Tap_Handle_Visible"));
+            Set(tapController,"clickAudio",PpeAudio(tap,"Tap_Click",PpeSoundKind.Tap));
             particles.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);
             var wash=Named("HandWashVolume");wash.position=new Vector3(2.28f,1.06f,-2.01f);wash.GetComponent<BoxCollider>().size=new Vector3(.32f,.24f,.25f);wash.GetComponent<BoxCollider>().isTrigger=true;
             Set(Ensure<HandWashZone>(wash.gameObject),"lesson",ppe);
@@ -75,9 +82,11 @@ namespace Team5.qPCR.Editor
             Primitive(soap,"Soap_Pump",PrimitiveType.Cube,soap.position+Vector3.up*.14f,new Vector3(.12f,.035f,.06f),steel);
             var soapBox=Ensure<BoxCollider>(soap.gameObject);soapBox.center=new Vector3(0,.13f,0);soapBox.size=new Vector3(.14f,.08f,.10f);
             var soapController=Ensure<SoapDispenserController>(soap.gameObject);Set(soapController,"lesson",ppe);Set(soapController,"interactable",Ensure<XRSimpleInteractable>(soap.gameObject));Set(soapController,"movingButton",soap.Find("Soap_Pump"));
+            Set(soapController,"soapAudio",PpeAudio(soap,"Soap_Sound",PpeSoundKind.Soap));
             var dryerZone=Child(handwash,"Dryer_Hand_Zone");dryerZone.transform.position=new Vector3(3.47f,1.32f,-1.74f);
             var dryerBox=Ensure<BoxCollider>(dryerZone);dryerBox.isTrigger=true;dryerBox.size=new Vector3(.34f,.23f,.3f);
             Set(Ensure<HandDryerZone>(dryerZone),"lesson",ppe);
+            Set(dryerZone.GetComponent<HandDryerZone>(),"dryerAudio",PpeAudio(dryerZone.transform,"Dryer_Sound",PpeSoundKind.Dryer,true));
             var appearance=Ensure<HandAppearanceController>(ppe.gameObject);
             Objects(appearance,"leftHandRenderers",Named("Left Hand Model").GetComponentsInChildren<Renderer>(true).Cast<UnityEngine.Object>().ToArray());
             Objects(appearance,"rightHandRenderers",Named("Right Hand Model").GetComponentsInChildren<Renderer>(true).Cast<UnityEngine.Object>().ToArray());
@@ -93,6 +102,7 @@ namespace Team5.qPCR.Editor
                 var interactable=Ensure<XRSimpleInteractable>(root.gameObject);interactable.colliders.Clear();interactable.colliders.Add(box);
                 var pickup=Ensure<GlovePickupController>(root.gameObject);Set(pickup,"lesson",ppe);Set(pickup,"handAppearance",appearance);EnumValue(pickup,"gloveSide",i);Set(pickup,"interactable",interactable);Set(pickup,"expectedControllerRoot",i==0?left:right);
                 Objects(pickup,"pickupRenderers",new UnityEngine.Object[]{mesh});Objects(pickup,"pickupColliders",new UnityEngine.Object[]{box});
+                Set(pickup,"gloveAudio",PpeAudio(root,"Glove_Sound",PpeSoundKind.Glove));
             }
             var canvas=Canvas(Named("50_LESSON_AND_UI"),"PPE_Instruction_Canvas",new Vector3(5.15f,1.6f,-2.72f),new Vector2(1000,740),.00075f);Ensure<QpcrWorldSpacePanel>(canvas);
             Image(canvas.transform,"Background",Vector2.zero,new Vector2(1000,740),Paper);
@@ -105,6 +115,21 @@ namespace Team5.qPCR.Editor
             var feedback=Text(canvas.transform,"Feedback",new Vector2(0,-191),new Vector2(900,70),24,"");
             Set(ppe,"instructionText",instruction);Set(ppe,"targetText",target);Set(ppe,"progressText",progress);Set(ppe,"feedbackText",feedback);Set(ppe,"narrationSource",(UnityEngine.Object)null);
             var ui=Ensure<PPELessonUI>(canvas);Set(ui,"lesson",ppe);Set(ui,"narration",narration);Set(ui,"title",title);Set(ui,"purpose",purpose);Set(ui,"step",step);
+            var diagram=Rect(canvas.transform,"Hand_Surface_Reminders",new Vector2(0,-35),new Vector2(880,120));
+            var labels=new[]{"Palms","Backs","Between fingers","Under nails"};
+            for(var index=0;index<4;index++)
+            {
+                var icon=Rect(diagram,"Hand_"+index,new Vector2(-330+index*220,10),new Vector2(200,115));
+                Image(icon,"Palm",new Vector2(0,-4),new Vector2(54,43),index<2?Teal:Soft);
+                for(var finger=0;finger<5;finger++)
+                {
+                    Image(icon,"Finger_"+finger,new Vector2(-24+finger*12,27),new Vector2(9,33),Soft);
+                    if(index==3)Image(icon,"Nail_"+finger,new Vector2(-24+finger*12,41),new Vector2(7,6),Teal);
+                    if(index==2&&finger<4)Image(icon,"Gap_"+finger,new Vector2(-18+finger*12,20),new Vector2(3,26),Teal);
+                }
+                Text(icon,"Label",new Vector2(0,-46),new Vector2(200,32),20,labels[index]).alignment=TextAlignmentOptions.Center;
+            }
+            Set(ui,"handSurfaceDiagram",diagram.gameObject);diagram.gameObject.SetActive(false);
             var why=Canvas(canvas.transform,"PPE_Why",new Vector3(4.43f,1.6f,-2.72f),new Vector2(900,700),1f);why.transform.localScale=Vector3.one;
             // Nested canvas inherits the parent's metre-per-UI-unit scale.
             Image(why.transform,"Background",Vector2.zero,new Vector2(900,700),Paper);

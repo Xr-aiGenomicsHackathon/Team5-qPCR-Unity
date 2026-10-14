@@ -35,7 +35,7 @@ namespace Team5.qPCR
             whyPanel.SetActive(!whyPanel.activeSelf);
             if (whyPanel.activeSelf && whyText != null && string.IsNullOrEmpty(explanationKey))
                 SetStepExplanation(lesson == null ? QpcrLessonState.NotStarted : lesson.CurrentState);
-            if (!whyPanel.activeSelf) narration?.StopReading();
+            if (!whyPanel.activeSelf && narration != null && narration.CurrentKey == explanationKey) narration.StopReading();
         }
         public void ReadExplanation()
         {

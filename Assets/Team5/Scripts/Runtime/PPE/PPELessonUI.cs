@@ -14,6 +14,7 @@ namespace Team5.qPCR
         [SerializeField] private TMP_Text whyText;
         [SerializeField] private Transform pointer;
         [SerializeField] private Transform[] targets;
+        [SerializeField] private GameObject handSurfaceDiagram;
         private void OnEnable() { if (lesson != null) lesson.StepChanged += Present; }
         private void OnDisable() { if (lesson != null) lesson.StepChanged -= Present; }
         private void Present(PPELessonStep state)
@@ -21,6 +22,8 @@ namespace Team5.qPCR
             if (title != null) title.text = state == PPELessonStep.Complete ? "Ready for qPCR" : PPELessonController.TargetFor(state);
             if (step != null) step.text = $"Lab preparation {(int)state + 1} / 11";
             if (purpose != null) purpose.text = Explanation(state).Split(new[] { ". " }, System.StringSplitOptions.None)[0] + ".";
+            if (handSurfaceDiagram != null) handSurfaceDiagram.SetActive(state == PPELessonStep.RubHands);
+            if (purpose != null) purpose.gameObject.SetActive(state != PPELessonStep.RubHands);
             if (whyPanel != null) whyPanel.SetActive(false);
             if (whyText != null) whyText.text = Explanation(state);
             narration?.PlayInstruction("Instruction_Ppe_" + state, "Prepare for lab work", PPELessonController.InstructionFor(state));
@@ -37,7 +40,7 @@ namespace Team5.qPCR
         {
             if (whyPanel == null) return;
             whyPanel.SetActive(!whyPanel.activeSelf);
-            if (!whyPanel.activeSelf) narration?.StopReading();
+            if (!whyPanel.activeSelf && narration != null && narration.CurrentKey == "Why_Ppe_" + lesson.CurrentStep) narration.StopReading();
         }
         public void ReadAloud()
         {

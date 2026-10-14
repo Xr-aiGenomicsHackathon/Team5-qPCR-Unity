@@ -51,7 +51,7 @@ namespace Team5.qPCR
                 coatBody.linearVelocity = Vector3.zero;
                 coatBody.angularVelocity = Vector3.zero;
             }
-            wearAudio?.Play();
+            if (wearAudio != null) wearAudio.Play();
             coatRoot.gameObject.SetActive(false);
         }
 

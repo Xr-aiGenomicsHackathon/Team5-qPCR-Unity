@@ -142,11 +142,11 @@ namespace Team5.qPCR.Editor
         }
         private static void BuildSettings(Transform parent,NarrationController narration,Vector3 position)
         {
-            var canvas=Canvas(parent,"Training_Audio_Settings",position,new Vector2(820,95),.0007f);
-            Ensure<QpcrWorldSpacePanel>(canvas);Image(canvas.transform,"Background",Vector2.zero,new Vector2(820,95),Paper);
-            Text(canvas.transform,"Volume_Label",new Vector2(-300,0),new Vector2(150,45),22,"Voice volume");
-            var volume=Volume(canvas.transform,new Vector2(-105,0));var mute=Toggle(canvas.transform,"Mute",new Vector2(140,0),"Mute voice");
-            var simulator=Toggle(canvas.transform,"Simulator",new Vector2(330,0),"PC simulator");
+            var canvas=Canvas(parent,"Training_Audio_Settings",position,new Vector2(1000,95),.0007f);
+            Ensure<QpcrWorldSpacePanel>(canvas);Image(canvas.transform,"Background",Vector2.zero,new Vector2(1000,95),Paper);
+            Text(canvas.transform,"Volume_Label",new Vector2(-400,0),new Vector2(150,45),22,"Voice volume");
+            var volume=Volume(canvas.transform,new Vector2(-200,0));var mute=Toggle(canvas.transform,"Mute",new Vector2(100,0),"Mute voice");
+            var simulator=Toggle(canvas.transform,"Simulator",new Vector2(365,0),"PC simulator");
             var settings=Ensure<TrainingAudioSettings>(canvas);Set(settings,"narration",narration);Set(settings,"volume",volume);Set(settings,"mute",mute);Set(settings,"simulator",simulator);
             Objects(settings,"simulatorObjects",UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsInactive.Include,FindObjectsSortMode.None).Where(t=>t.gameObject.scene==SceneManager.GetActiveScene()&&t.name=="XR Interaction Simulator").Select(t=>(UnityEngine.Object)t.gameObject).ToArray());
         }

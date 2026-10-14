@@ -55,7 +55,7 @@ namespace Team5.qPCR
             if (!accepted) return;
 
             handAppearance?.SetGloved(gloveSide, true);
-            gloveAudio?.Play();
+            if (gloveAudio != null) gloveAudio.Play();
             SetPickupVisible(false);
         }
 

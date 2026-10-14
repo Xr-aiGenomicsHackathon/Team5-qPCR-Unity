@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System;
+using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEditor.Events;
@@ -78,7 +79,9 @@ namespace Team5.qPCR.Editor
         public static GameObject Canvas(Transform parent,string name,Vector3 position,Vector2 size,float scale=.0009f)
         {
             var r=Rect(parent,name,Vector2.zero,size);r.position=position;r.localScale=Vector3.one*scale;
-            var canvas=Ensure<UnityEngine.Canvas>(r.gameObject);canvas.renderMode=RenderMode.WorldSpace;canvas.worldCamera=Camera.main;
+            var canvas=Ensure<UnityEngine.Canvas>(r.gameObject);canvas.renderMode=RenderMode.WorldSpace;
+            canvas.worldCamera=UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects()
+                .SelectMany(go=>go.GetComponentsInChildren<Camera>(true)).FirstOrDefault(camera=>camera.CompareTag("MainCamera"));
             Ensure<CanvasScaler>(r.gameObject).dynamicPixelsPerUnit=14;
             Ensure<TrackedDeviceGraphicRaycaster>(r.gameObject);
             // XR raycasting owns pointer dispatch; avoid a second raycaster duplicating events.

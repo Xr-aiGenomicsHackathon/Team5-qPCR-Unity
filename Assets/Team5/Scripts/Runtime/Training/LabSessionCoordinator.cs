@@ -43,6 +43,11 @@ namespace Team5.qPCR
         }
         private void OnPpeStep(PPELessonStep state)
         {
+            if (state == PPELessonStep.WearLabCoat)
+            {
+                TrainingSession.PpeComplete = false;
+                if (continueButton != null) continueButton.gameObject.SetActive(false);
+            }
             if (coatWornIndicator != null) coatWornIndicator.gameObject.SetActive(state != PPELessonStep.WearLabCoat);
         }
         private void OnPpeComplete()

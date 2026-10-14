@@ -118,7 +118,7 @@ namespace Team5.qPCR
                         wetHandsSeconds, PPELessonStep.UseSoap, "Wetting hands");
                     break;
                 case PPELessonStep.RubHands:
-                    UpdateTimedStep(AreHandsCloseTogether() && HandsAreRubbing(delta), rubHandsSeconds,
+                    UpdateTimedStep(HandsAreRubbing(delta), rubHandsSeconds,
                         PPELessonStep.RinseHands, "Rubbing hands");
                     break;
                 case PPELessonStep.RinseHands:
@@ -266,7 +266,7 @@ namespace Team5.qPCR
         }
         private bool HandsAreRubbing(float delta)
         {
-            if (leftHand == null || rightHand == null) { hasPreviousHandPose = false; return false; }
+            if (!AreHandsCloseTogether()) { hasPreviousHandPose = false; return false; }
             var difference = leftHand.position - rightHand.position;
             var moving = hasPreviousHandPose && IsScrubMotion(previousHandDifference, difference, delta);
             previousHandDifference = difference;

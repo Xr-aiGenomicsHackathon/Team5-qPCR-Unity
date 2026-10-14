@@ -53,7 +53,7 @@ namespace Team5.qPCR
             foreach (var probe in overlaps.Keys)
                 if (probe != null) lesson?.SetHandInDryer(probe.Side, false);
             overlaps.Clear();
-            dryerAudio?.Stop();
+            if (dryerAudio != null) dryerAudio.Stop();
         }
 
         private void Reset()
