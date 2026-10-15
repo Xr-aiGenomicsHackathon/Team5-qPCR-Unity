@@ -647,7 +647,7 @@ MonoBehaviour:
   - Key: Instruction_Lobby_Ready
     Caption: Your laboratory is ready. Select Enter Laboratory. First, prepare safely.
       Then you will load and run Q P C R.
-    Clip: {fileID: 8300000, guid: 5887362af087a9341813e942d586393c, type: 3}
+    Clip: {fileID: 8300000, guid: 89dfb37c704ec764eb385775b7d95192, type: 3}
 --- !u!82 &1639471
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14644,15 +14644,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: e87375397e28f7f4aa2bc847e5f9f07a, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.2298
+      value: 2.570405
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e87375397e28f7f4aa2bc847e5f9f07a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.2298
+      value: 2.570405
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e87375397e28f7f4aa2bc847e5f9f07a, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.2298
+      value: 2.570405
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e87375397e28f7f4aa2bc847e5f9f07a, type: 3}
       propertyPath: m_LocalPosition.x
