@@ -495,15 +495,15 @@ MonoBehaviour:
     Clip: {fileID: 0}
   - Key: Instruction_Ppe_Presentation_WearRightGlove
     Caption: Pick up the right glove with your right hand.
-    Clip: {fileID: 8300000, guid: 76025fe9b682ce84a9f93cdcf6e20737, type: 3}
+    Clip: {fileID: 8300000, guid: e7844a8a9ab54bc43a17d347693d7694, type: 3}
   - Key: Why_Ppe_Presentation_WearRightGlove
     Caption: Wear clean, appropriately sized gloves to help prevent contact and contamination.
       Gloves do not replace hand hygiene; change damaged or contaminated gloves.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: b41cd4c7704266048a4cf7fe5857e309, type: 3}
   - Key: Instruction_Ppe_Presentation_Complete
     Caption: Preparation demonstration complete. Continue to qPCR. This short demonstration
       is not complete handwashing.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 06fd721aa60e98f46a95bb902927f105, type: 3}
   - Key: Why_Ppe_Presentation_Complete
     Caption: You demonstrated the coat, water, drying and glove interactions. Soap
       and scrubbing were skipped for this presentation; this must not be treated
