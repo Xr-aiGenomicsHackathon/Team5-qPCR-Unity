@@ -508,7 +508,7 @@ MonoBehaviour:
     Caption: You demonstrated the coat, water, drying and glove interactions. Soap
       and scrubbing were skipped for this presentation; this must not be treated
       as complete handwashing or a substitute for laboratory safety training.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 1072bf0a7f8cb494c8af5682251c6e3e, type: 3}
   - Key: Parameter_ReactionVolume
     Caption: 'Reaction volume
 
