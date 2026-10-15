@@ -30,7 +30,7 @@ namespace Team5.qPCR.PlayModeTests
         {
             previousMute = TrainingSession.VoiceMuted;
             previousVolume = TrainingSession.VoiceVolume;
-            // The user removed the simulator but an editor-only sample help menu
+            // The user removed the simulator but its sample help UI
             // remains. Disable that orphan in this test instance before Start;
             // do not change saved scenes or create any simulated input devices.
             SceneManager.sceneLoaded += DisableOrphanedSimulatorHelp;
@@ -48,7 +48,7 @@ namespace Team5.qPCR.PlayModeTests
         private static void DisableOrphanedSimulatorHelp(Scene scene, LoadSceneMode mode)
         {
             foreach (var component in scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<MonoBehaviour>(true)))
-                if (component != null && component.GetType().Name == "XRInteractionSimulatorPlayModeMenu") component.enabled = false;
+                if (component != null && component.GetType().Name.StartsWith("XRInteractionSimulator", StringComparison.Ordinal)) component.enabled = false;
         }
 
         [TearDown]
@@ -63,9 +63,10 @@ namespace Team5.qPCR.PlayModeTests
         private IEnumerator WaitForVideo()
         {
             var deadline = Time.realtimeSinceStartup + 15f;
-            while (!player.isPlaying && Time.realtimeSinceStartup < deadline) yield return null;
+            while ((!player.isPlaying || player.frame < 1) && Time.realtimeSinceStartup < deadline) yield return null;
             Assert.IsTrue(player.isPrepared, "The imported MP4 must prepare in the Editor.");
             Assert.IsTrue(player.isPlaying, "The assigned cue must start playback.");
+            Assert.Greater(player.frame, 0L, "Verify decoded frames, not just the Play flag.");
         }
 
         [UnityTest]
