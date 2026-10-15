@@ -69,7 +69,7 @@ namespace Team5.qPCR
             QpcrProtocolParameter.MeltCurveStart => 65f,
             QpcrProtocolParameter.MeltCurveEnd => 95f,
             QpcrProtocolParameter.TemperatureIncrement => 0.5f,
-            QpcrProtocolParameter.PostRunHold => 4f,
+            QpcrProtocolParameter.PostRunHold => 15f,
             QpcrProtocolParameter.InitialHoldSeconds => 120f,
             QpcrProtocolParameter.DenaturationSeconds => 15f,
             QpcrProtocolParameter.AnnealingSeconds => 30f,

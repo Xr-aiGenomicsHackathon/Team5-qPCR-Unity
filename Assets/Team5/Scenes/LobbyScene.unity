@@ -50143,7 +50143,7 @@ MonoBehaviour:
       cycling. Team 5 starts with a prepared 96-well plate. Your task is to inspect
       it, load it, programme the instrument, run the lesson and explain the result.
       Use WHY at any step to learn the reason behind the action.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 9540ac42c10ceba4f92f703f5d4fb4ec, type: 3}
   - Key: Instruction_Qpcr_InspectPlateId
     Caption: Read the highlighted Plate ID. If it matches the received experiment
       record, press Confirm Plate ID.
@@ -50155,7 +50155,7 @@ MonoBehaviour:
       1-12. The label must match the handoff record so results are assigned to the
       correct experiment. Our record is T4-QPCR-2026-05. If it does not match, stop
       and resolve the discrepancy; do not guess.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 2814f0cb4207e33429db11499a088c92, type: 3}
   - Key: Instruction_Qpcr_InspectA1Marker
     Caption: Locate the highlighted A1 corner. If the reference corner is clearly
       identified, press Confirm A1 Orientation.
@@ -50167,7 +50167,7 @@ MonoBehaviour:
       of the plate map. Rotating the plate 180 degrees puts samples under the wrong
       well names. Find the red corner now, and match it to the red corner on the
       holder during loading.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 8b1f5cf621173b24eb9e67268f6b3f9f, type: 3}
   - Key: Instruction_Qpcr_InspectOpticalSeal
     Caption: Visually inspect the highlighted seal. If it is flat, secure and undamaged,
       press Confirm Seal.
@@ -50179,7 +50179,7 @@ MonoBehaviour:
       and reduces evaporation during heating. It must transmit the light used for
       fluorescence measurements. Check edges and avoid touching the optical surface.
       If the seal is damaged or lifting, resolve it before loading.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 512ca20a917295d41a0fa197ad634da4, type: 3}
   - Key: Instruction_Qpcr_InspectBubbles
     Caption: Look across the highlighted wells. If no visible bubbles are present,
       press Confirm No Bubbles.
@@ -50192,7 +50192,7 @@ MonoBehaviour:
       the approved brief centrifugation procedure with a balanced plate centrifuge
       before loading. This lesson''s plate is already ready; do not open it or remix
       its reactions.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: dfcdbb5d29e5a2645a71ef9cda7c82a7, type: 3}
   - Key: Instruction_Qpcr_ReturnPlate
     Caption: Move the plate back to its blue home marker and release it.
     Clip: {fileID: 8300000, guid: b9c62ff2316fcb54ba49e5e12f20c5e3, type: 3}
@@ -50203,10 +50203,10 @@ MonoBehaviour:
       handoff position while preparing the machine. Carry it by its edges. A floor
       drop can damage or compromise it: the simulator leaves it on the floor and
       blocks loading until Reset provides a fresh training plate.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: ac7df5cc40254824e97cbabe29970f18, type: 3}
   - Key: Instruction_Qpcr_PowerOn
     Caption: Press the illuminated power button on the qPCR instrument.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: d7c5043b6d41d674cbc5e28b1ed1f6ea, type: 3}
   - Key: Why_Qpcr_PowerOn
     Caption: 'WHY POWER ON?
 
@@ -50214,10 +50214,10 @@ MonoBehaviour:
       must be ready before loading. A real instrument may perform startup checks;
       follow its manual. This simulator uses a short startup sound and welcome screen.
       The power button does not start amplification.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 097ef55988ca68d48980ab8a7f64c140, type: 3}
   - Key: Instruction_Qpcr_OpenDrawer
     Caption: Press the Drawer Open button and wait until the drawer stops moving.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: bedce57c25da22c48ad0897563f2ba6f, type: 3}
   - Key: Why_Qpcr_OpenDrawer
     Caption: 'WHY OPEN THE COMPARTMENT?
 
@@ -50225,11 +50225,11 @@ MonoBehaviour:
       block, which heats and cools the reactions. Wait for the drawer to stop moving.
       Never force it. Keep the sealed plate level and identify the holder''s red
       A1 corner before inserting it.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 09affc4baede5eb4293a3d408e53bdc0, type: 3}
   - Key: Instruction_Qpcr_LoadPlate
     Caption: Grab the plate, align A1 with the socket marker, place it in the holder,
       then release it.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: fe369dd7419b8a140ace8d0f7eba05e4, type: 3}
   - Key: Why_Qpcr_LoadPlate
     Caption: 'WHY ALIGN AND SEAT?
 
@@ -50237,10 +50237,10 @@ MonoBehaviour:
       flat into the holder. Correct seating provides contact with the temperature-controlled
       block and preserves the well map. Release Grip only when the guide turns green.
       Amber means misaligned; red explains a rejected attempt.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: f900fda9aaa4c664c8f87013297b229a, type: 3}
   - Key: Instruction_Qpcr_CloseDrawer
     Caption: Press Drawer Close after the plate is securely seated.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 6521b0d655f900442b70a8388cc2b96b, type: 3}
   - Key: Why_Qpcr_CloseDrawer
     Caption: 'WHY CLOSE THE COMPARTMENT?
 
@@ -50248,11 +50248,11 @@ MonoBehaviour:
       before the heated lid and thermal programme operate. The lid helps limit condensation;
       the enclosure supports consistent temperature and optical measurement. The
       simulator locks this action until seating succeeds.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 90a8c0e2c6e5fbe44b796f4bee1b0a46, type: 3}
   - Key: Instruction_Qpcr_ConfigureProtocol
     Caption: Select every field and enter its displayed guided value. Confirm each
       entry before validating the protocol.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: a161d81a585a7e047ad30820196687d6, type: 3}
   - Key: Why_Qpcr_ConfigureProtocol
     Caption: 'WHY PROGRAM THE RUN?
 
@@ -50261,10 +50261,10 @@ MonoBehaviour:
       a specified teaching assay using SYBR Green, not a universal recipe. A real
       assay requires validated primer, reagent and instrument instructions. Select
       a field for its explanation.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 9769773c8c5389a41825940e36d1cecc, type: 3}
   - Key: Instruction_Qpcr_ValidateProtocol
     Caption: Review every field, then press Validate Protocol.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: e6ba03fadd0a4a44e879116edf3498ba, type: 3}
   - Key: Why_Qpcr_ValidateProtocol
     Caption: 'WHY PROGRAM THE RUN?
 
@@ -50273,10 +50273,10 @@ MonoBehaviour:
       a specified teaching assay using SYBR Green, not a universal recipe. A real
       assay requires validated primer, reagent and instrument instructions. Select
       a field for its explanation.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: c5ee641e83e43c942944648566d3ff71, type: 3}
   - Key: Instruction_Qpcr_StartRun
     Caption: Press Start Run on the instrument after validation passes.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: dd536132216b88d489474c3405831f59, type: 3}
   - Key: Why_Qpcr_StartRun
     Caption: 'WHY VALIDATE BEFORE START?
 
@@ -50285,11 +50285,11 @@ MonoBehaviour:
       and cools reactions and measures fluorescence. A wrong setting can cause failed
       or misleading results. Real experiments also require appropriate controls and
       replicates.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: b880e3cf46bfcaa4fa5fb6fd16b80543, type: 3}
   - Key: Instruction_Qpcr_ObserveAmplification
     Caption: Watch the cycle number, temperature stage and fluorescence curves until
       the run finishes.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 640674f02853597489e1a3fe406bb336, type: 3}
   - Key: Why_Qpcr_ObserveAmplification
     Caption: 'WHAT IS HAPPENING?
 
@@ -50301,7 +50301,7 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 9711741ad3bf5fc468bb80f4cad05373, type: 3}
   - Key: Instruction_Qpcr_InterpretResults
     Caption: Answer the three screen questions about controls, Cq and the melt curve.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 02a89ce1a650fdd4bb2345630f0ef3fd, type: 3}
   - Key: Why_Qpcr_InterpretResults
     Caption: 'HOW DO WE READ THE RESULT?
 
@@ -50314,7 +50314,7 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 9419122ded2ecd14dbdcd26255b8b231, type: 3}
   - Key: Instruction_Qpcr_Complete
     Caption: You have inspected, loaded, configured, run and interpreted a qPCR experiment.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 44cdf45483a01784992db87a7cd37571, type: 3}
   - Key: Why_Qpcr_Complete
     Caption: 'WHAT HAVE YOU LEARNED?
 
@@ -50332,28 +50332,28 @@ MonoBehaviour:
     Caption: A lab coat helps protect clothing and skin from splashes. This chest
       gesture represents putting it on; it does not reproduce every real dressing
       movement.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: f41c94f8e8e0abc49baea44688fe3ebb, type: 3}
   - Key: Instruction_Ppe_TurnOnTap
     Caption: Press the tap handle to turn on the water.
     Clip: {fileID: 8300000, guid: 0610c6d71adc1764fa56ab3230231d67, type: 3}
   - Key: Why_Ppe_TurnOnTap
     Caption: Wet bare hands with clean running water before applying soap. Gloves
       go on only after washing and drying.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 0917e631128fa164cac36e17e8c0aad1, type: 3}
   - Key: Instruction_Ppe_WetHands
     Caption: Place both hands under the running water.
     Clip: {fileID: 8300000, guid: 01fb4c4a5f78b6c4ba491a42730a21ed, type: 3}
   - Key: Why_Ppe_WetHands
     Caption: Wet bare hands with clean running water before applying soap. Gloves
       go on only after washing and drying.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: af4ff5b539bf3174fa25d119df06202d, type: 3}
   - Key: Instruction_Ppe_UseSoap
     Caption: Press the soap dispenser once.
     Clip: {fileID: 8300000, guid: 59f66827d57802447b48f7acbab05a49, type: 3}
   - Key: Why_Ppe_UseSoap
     Caption: Soap and rubbing help loosen dirt and microorganisms so they can be
       rinsed away.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 127d43e93fdd04c489cd769875060bd1, type: 3}
   - Key: Instruction_Ppe_RubHands
     Caption: Rub your hands together for 20 seconds. Clean palms, backs, between
       fingers and under nails. Keep moving both hands close together.
@@ -50362,48 +50362,48 @@ MonoBehaviour:
     Caption: Scrub for at least 20 seconds. Clean palms, backs of hands, between
       fingers and under nails. The simulation detects relative hand movement, not
       complete real-world washing technique.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: bc0193ad5887a9d4ba71322a6cb02e99, type: 3}
   - Key: Instruction_Ppe_RinseHands
     Caption: Place both hands under the water again to rinse them.
     Clip: {fileID: 8300000, guid: 5b817969619c80b4687a9b326e054485, type: 3}
   - Key: Why_Ppe_RinseHands
     Caption: Rinse away soap and loosened contamination with running water.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: f351db80e71d8ae46be17362a77d7287, type: 3}
   - Key: Instruction_Ppe_TurnOffTap
     Caption: Press the tap handle to turn off the water.
     Clip: {fileID: 8300000, guid: 9d61deee3f8f6aa498ce1542494d21ce, type: 3}
   - Key: Why_Ppe_TurnOffTap
     Caption: Stop the water when finished. In a real lab avoid recontaminating clean
       hands and follow the local tap and hygiene procedure.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 3908d68e376206a4ebd6299c79c3ea9a, type: 3}
   - Key: Instruction_Ppe_DryHands
     Caption: Place both hands beneath the hand dryer.
     Clip: {fileID: 8300000, guid: dca82c1ec8b45284e9edfd95d81eb366, type: 3}
   - Key: Why_Ppe_DryHands
     Caption: Dry hands before putting on gloves. This dryer gesture represents drying;
       follow the drying method specified by your laboratory.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 7bd9545eef8904c46818332978e20da3, type: 3}
   - Key: Instruction_Ppe_WearLeftGlove
     Caption: Pick up the left glove with your left hand.
     Clip: {fileID: 8300000, guid: 966f82088eebe2a489ff6eec3ff7f380, type: 3}
   - Key: Why_Ppe_WearLeftGlove
     Caption: Wear clean, appropriately sized gloves to help prevent contact and contamination.
       Gloves do not replace hand hygiene; change damaged or contaminated gloves.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: a06d9e5c15b90be41abd03167bd786af, type: 3}
   - Key: Instruction_Ppe_WearRightGlove
     Caption: Pick up the right glove with your right hand.
     Clip: {fileID: 8300000, guid: e7844a8a9ab54bc43a17d347693d7694, type: 3}
   - Key: Why_Ppe_WearRightGlove
     Caption: Wear clean, appropriately sized gloves to help prevent contact and contamination.
       Gloves do not replace hand hygiene; change damaged or contaminated gloves.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 99265469f1ca9dc48978f27180f25215, type: 3}
   - Key: Instruction_Ppe_Complete
     Caption: PPE complete. You may continue to the qPCR plate inspection.
     Clip: {fileID: 8300000, guid: 06fd721aa60e98f46a95bb902927f105, type: 3}
   - Key: Why_Ppe_Complete
     Caption: Your coat, handwashing and gloves are complete. These are training checks,
       not a substitute for your laboratory's approved safety procedures.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 1072bf0a7f8cb494c8af5682251c6e3e, type: 3}
   - Key: Instruction_Ppe_Presentation_WearLabCoat
     Caption: Pick up the lab coat and bring it to the wear zone in front of your
       chest.
@@ -50412,7 +50412,7 @@ MonoBehaviour:
     Caption: A lab coat helps protect clothing and skin from splashes. This chest
       gesture represents putting it on; it does not reproduce every real dressing
       movement.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: a4f205ec9eff98247873df683746bb4e, type: 3}
   - Key: Instruction_Ppe_Presentation_TurnOnTap
     Caption: Press the tap handle to turn on the water.
     Clip: {fileID: 8300000, guid: 60e7d1b3250bf1345a762734394bcb9e, type: 3}
@@ -50421,55 +50421,55 @@ MonoBehaviour:
       water. It does not clean or disinfect real hands. Real handwashing requires
       soap, at least twenty seconds of scrubbing, rinsing and drying, following your
       laboratory's approved procedure.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 43a44f9129d661b42ae36c34f0332ea8, type: 3}
   - Key: Instruction_Ppe_Presentation_WetHands
     Caption: Keep both hands beneath the water for one continuous second. If either
       hand leaves, the timer restarts.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 77bdcfd4aa9a5b746ab709c0768e5bc4, type: 3}
   - Key: Why_Ppe_Presentation_WetHands
     Caption: This one-second checkpoint demonstrates placing both hands beneath running
       water. It does not clean or disinfect real hands. Real handwashing requires
       soap, at least twenty seconds of scrubbing, rinsing and drying, following your
       laboratory's approved procedure.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 43a44f9129d661b42ae36c34f0332ea8, type: 3}
   - Key: Instruction_Ppe_Presentation_TurnOffTap
     Caption: Press the tap handle to turn off the water.
     Clip: {fileID: 8300000, guid: 78c511cbc753a5545af8850836c5a82f, type: 3}
   - Key: Why_Ppe_Presentation_TurnOffTap
     Caption: Stop the water when finished. In a real lab avoid recontaminating clean
       hands and follow the local tap and hygiene procedure.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 9423bb446c60074418c4261b06f40cea, type: 3}
   - Key: Instruction_Ppe_Presentation_DryHands
     Caption: Keep both hands beneath the dryer for two seconds before putting on
       gloves.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 5415be368ca2a574799f611df4f6d99d, type: 3}
   - Key: Why_Ppe_Presentation_DryHands
     Caption: Dry hands before putting on gloves. This dryer gesture represents drying;
       follow the drying method specified by your laboratory.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: d3f33ef944c19e94c8ae2e8ba2267a9d, type: 3}
   - Key: Instruction_Ppe_Presentation_WearLeftGlove
     Caption: Pick up the left glove with your left hand.
     Clip: {fileID: 8300000, guid: 7821aa4878465774eb8bd1708592fde8, type: 3}
   - Key: Why_Ppe_Presentation_WearLeftGlove
     Caption: Wear clean, appropriately sized gloves to help prevent contact and contamination.
       Gloves do not replace hand hygiene; change damaged or contaminated gloves.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 5b899573a2bc7c54fbe5278b3366b310, type: 3}
   - Key: Instruction_Ppe_Presentation_WearRightGlove
     Caption: Pick up the right glove with your right hand.
     Clip: {fileID: 8300000, guid: 76025fe9b682ce84a9f93cdcf6e20737, type: 3}
   - Key: Why_Ppe_Presentation_WearRightGlove
     Caption: Wear clean, appropriately sized gloves to help prevent contact and contamination.
       Gloves do not replace hand hygiene; change damaged or contaminated gloves.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: b41cd4c7704266048a4cf7fe5857e309, type: 3}
   - Key: Instruction_Ppe_Presentation_Complete
     Caption: Preparation demonstration complete. Continue to qPCR. This short demonstration
       is not complete handwashing.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: cc47c85deae07b747b206cb9a7f54f27, type: 3}
   - Key: Why_Ppe_Presentation_Complete
     Caption: You demonstrated the coat, water, drying and glove interactions. Soap
       and scrubbing were skipped for this presentation; this must not be treated
       as complete handwashing or a substitute for laboratory safety training.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: e8334956fbea2ff4d9417dd855851f19, type: 3}
   - Key: Parameter_ReactionVolume
     Caption: 'Reaction volume
 
@@ -50565,10 +50565,10 @@ MonoBehaviour:
     Caption: 'Post-run hold
 
 
-      The block holds at 4 degrees C after the programme
+      The block holds at 15 degrees C after the programme
       in this lesson. This is a short post-run hold, not a long-term storage method.
       Keep amplified plates sealed and follow the disposal procedure.'
-    Clip: {fileID: 8300000, guid: 69756cee56bb2cf43aa566c980016cc9, type: 3}
+    Clip: {fileID: 8300000, guid: 751266051f4b7fb4b8e7b42f2b96b96a, type: 3}
   - Key: Parameter_InitialHoldSeconds
     Caption: 'Initial hold time
 
@@ -50604,7 +50604,7 @@ MonoBehaviour:
   - Key: Instruction_Lobby_Welcome
     Caption: Welcome to the T5 XR Genomics Laboratory. Enter a nickname, then select
       Continue.
-    Clip: {fileID: 8300000, guid: 53e530544c73d154e87b1b476cbc7bfe, type: 3}
+    Clip: {fileID: 8300000, guid: 26dbda00cd2999c48b19012a42a303b1, type: 3}
   - Key: Instruction_Lobby_Ready
     Caption: Your laboratory is ready. Select Enter Laboratory. First, prepare safely.
       Then you will load and run Q P C R.

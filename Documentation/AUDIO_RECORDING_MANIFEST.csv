@@ -120,9 +120,9 @@ After amplification, increase temperature from 65 to 95 degrees Celsius in zero 
 "Parameter_TemperatureIncrement.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Temperature increment
 
 After amplification, increase temperature from 65 to 95 degrees Celsius in zero point five degree steps. D N A melting changes sigh-ber fluorescence. A derivative peak shows a melting transition; extra peaks can indicate unwanted products. Dwell time follows the real instrument's method."
-"Parameter_PostRunHold.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Post-run hold
+"Parameter_PostRunHold_15C.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Post-run hold
 
-The block holds at 4 degrees Celsius after the programme in this lesson. This is a short post-run hold, not a long-term storage method. Keep amplified plates sealed and follow the disposal procedure."
+The block holds at 15 degrees Celsius after the programme in this lesson. This is a short post-run hold, not a long-term storage method. Keep amplified plates sealed and follow the disposal procedure."
 "Parameter_InitialHoldSeconds.mp3","6. Protocol fields — optional Read Aloud","Optional Read Aloud","Initial hold time
 
 The initial hold is 95 degrees Celsius for 120 seconds. It separates D N A strands; activation requirements depend on the chosen polymerase. Use the validated reagent protocol."

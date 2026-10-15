@@ -79,7 +79,18 @@ namespace Team5.qPCR.Tests
             Assert.AreEqual(105f, values[QpcrProtocolParameter.LidTemperature]);
             Assert.AreEqual(35f, values[QpcrProtocolParameter.AmplificationCycles]);
             Assert.AreEqual(.5f, values[QpcrProtocolParameter.TemperatureIncrement]);
-            Assert.AreEqual(4f, values[QpcrProtocolParameter.PostRunHold]);
+            Assert.AreEqual(15f, values[QpcrProtocolParameter.PostRunHold]);
+        }
+
+        [Test]
+        public void PostRunHoldAcceptsFifteenAndRejectsPreviousFourDegreeValue()
+        {
+            var validator = owner.AddComponent<QpcrProtocolValidator>();
+
+            Assert.IsTrue(validator.IsCorrect(QpcrProtocolParameter.PostRunHold, 15f));
+            Assert.IsFalse(validator.IsCorrect(QpcrProtocolParameter.PostRunHold, 4f));
+            Assert.That(QpcrTeachingContent.Explain(QpcrProtocolParameter.PostRunHold),
+                Does.Contain("15 degrees C"));
         }
 
         [Test]

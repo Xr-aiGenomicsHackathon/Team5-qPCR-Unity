@@ -130,7 +130,8 @@ namespace Team5.qPCR
             machineAudio?.StopRunLoop();
             if (cycleText != null) cycleText.text = "Run complete · 35 cycles";
             if (stageText != null) stageText.text = "Melt curve analysis complete";
-            if (temperatureText != null) temperatureText.text = "Post-run hold · 4 °C";
+            if (temperatureText != null)
+                temperatureText.text = $"Post-run hold · {QpcrProtocolValidator.ExpectedValue(QpcrProtocolParameter.PostRunHold):0.##} °C";
             if (progressFill != null) progressFill.fillAmount = 1f;
             amplificationGraph?.SetProgress(1f);
             meltCurve?.SetVisible(true);

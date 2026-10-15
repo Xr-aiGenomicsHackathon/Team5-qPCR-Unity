@@ -152,9 +152,11 @@ namespace Team5.qPCR.Editor
             var settings=Ensure<TrainingAudioSettings>(canvas);Set(settings,"narration",narration);Set(settings,"volume",volume);Set(settings,"mute",mute);Set(settings,"simulator",simulator);
             Objects(settings,"simulatorObjects",UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsInactive.Include,FindObjectsSortMode.None).Where(t=>t.gameObject.scene==SceneManager.GetActiveScene()&&t.name=="XR Interaction Simulator").Select(t=>(UnityEngine.Object)t.gameObject).ToArray());
         }
+        private const string AdeolaAudioFolder = "Assets/Team5/Audio/Narration/Adeola";
+
         private static NarrationCue[] BuildCues()
         {
-            Folder("Assets/Team5/Audio/Narration/Adeola");var cues=new List<NarrationCue>();
+            Folder(AdeolaAudioFolder);var cues=new List<NarrationCue>();
             foreach(QpcrLessonState state in Enum.GetValues(typeof(QpcrLessonState)))
             {cues.Add(Cue("Instruction_Qpcr_"+state,QpcrLessonController.GetPresentation(state).Instruction));cues.Add(Cue("Why_Qpcr_"+state,QpcrTeachingContent.Explain(state)));}
             foreach(PPELessonStep state in Enum.GetValues(typeof(PPELessonStep)))
@@ -170,17 +172,108 @@ namespace Team5.qPCR.Editor
         }
         private static NarrationCue Cue(string key,string caption)
         {
-            var clip=AssetDatabase.FindAssets(key+" t:AudioClip",new[]{"Assets/Team5/Audio/Narration/Adeola"}).Select(AssetDatabase.GUIDToAssetPath)
-                .Where(p=>System.IO.Path.GetFileNameWithoutExtension(p)==key).Select(AssetDatabase.LoadAssetAtPath<AudioClip>).FirstOrDefault();
-            return new NarrationCue {Key=key,Caption=caption,Clip=clip};
+            return new NarrationCue {Key=key,Caption=caption,Clip=FindAdeolaClip(key)};
+        }
+        private static AudioClip FindAdeolaClip(string key)
+        {
+            // These two Presentation explanations have identical approved wording.
+            // Prefer an exact recording; otherwise share the wet-hands explanation.
+            // The original post-run recording says 4 C. Only the revised 15 C
+            // recording may serve this cue; keep the original asset untouched.
+            var candidates = key == "Parameter_PostRunHold"
+                ? new[] { "Parameter_PostRunHold_15C" }
+                : key == "Why_Ppe_Presentation_TurnOnTap"
+                    ? new[] { key, "Why_Ppe_Presentation_WetHands" }
+                    : new[] { key };
+            foreach (var candidate in candidates)
+            {
+                var paths = AssetDatabase.FindAssets(candidate + " t:AudioClip", new[] { AdeolaAudioFolder })
+                    .Select(AssetDatabase.GUIDToAssetPath)
+                    .Where(path => string.Equals(System.IO.Path.GetFileNameWithoutExtension(path), candidate,
+                        StringComparison.Ordinal)).OrderBy(path => path, StringComparer.Ordinal).ToArray();
+                if (paths.Length > 1)
+                    throw new InvalidOperationException("Ambiguous Adeola recording for " + candidate + ": " + string.Join(", ", paths));
+                if (paths.Length == 1) return AssetDatabase.LoadAssetAtPath<AudioClip>(paths[0]);
+            }
+            return null;
         }
         [MenuItem("Team 5/Training Flow/Refresh Narration Clip Assignments")]
         public static void RefreshTayo()
         {
-            var narration=UnityEngine.Object.FindFirstObjectByType<NarrationController>(FindObjectsInactive.Include);
-            var serialized=new SerializedObject(narration);var source=serialized.FindProperty("audioSource").objectReferenceValue as AudioSource;
-            narration.Configure(source,Array.Empty<TMP_Text>(),Array.Empty<TMP_Text>(),Array.Empty<Slider>(),Array.Empty<UnityEngine.UI.Toggle>(),Array.Empty<UnityEngine.UI.Button>(),BuildCues());
-            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+            if (EditorApplication.isPlaying || EditorApplication.isCompiling)
+                throw new InvalidOperationException("Refresh narration in Edit Mode after compilation finishes.");
+            var scene = SceneManager.GetActiveScene();
+            if (scene.path != DemoPath && scene.path != LobbyPath)
+                throw new InvalidOperationException("Open LobbyScene or DemoScene before refreshing narration.");
+            var controllers = scene.GetRootGameObjects()
+                .SelectMany(root => root.GetComponentsInChildren<NarrationController>(true)).ToArray();
+            if (controllers.Length != 1)
+                throw new InvalidOperationException("Expected exactly one NarrationController in " + scene.name + ". Found " + controllers.Length + ".");
+
+            // Resolve first, so ambiguity cannot leave a partially refreshed scene.
+            var available = BuildCues();
+            var narration = controllers[0];
+            var serialized = new SerializedObject(narration);
+            var entries = serialized.FindProperty("cues");
+            var indices = new Dictionary<string, int>(StringComparer.Ordinal);
+            for (var index = 0; index < entries.arraySize; index++)
+            {
+                var key = entries.GetArrayElementAtIndex(index).FindPropertyRelative("Key").stringValue;
+                if (string.IsNullOrWhiteSpace(key) || indices.ContainsKey(key))
+                    throw new InvalidOperationException("Blank or duplicate narration cue in " + scene.name + ": " + key);
+                indices.Add(key, index);
+            }
+            var source = serialized.FindProperty("audioSource").objectReferenceValue as AudioSource;
+            if (source == null) throw new InvalidOperationException("Narration AudioSource is missing in " + scene.name + ".");
+            Undo.RecordObjects(new UnityEngine.Object[] { narration, source }, "Refresh Adeola narration only");
+            foreach (var cue in available)
+            {
+                if (!indices.TryGetValue(cue.Key, out var index))
+                {
+                    index = entries.arraySize++;
+                    var added = entries.GetArrayElementAtIndex(index);
+                    added.FindPropertyRelative("Key").stringValue = cue.Key;
+                    added.FindPropertyRelative("Caption").stringValue = cue.Caption;
+                }
+                // Existing captions and all UI/AudioSource bindings stay intact.
+                entries.GetArrayElementAtIndex(index).FindPropertyRelative("Clip").objectReferenceValue = cue.Clip;
+            }
+            serialized.ApplyModifiedProperties();
+            source.playOnAwake = false;
+            source.loop = false;
+            source.spatialBlend = 0f;
+            EditorUtility.SetDirty(source);
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene)) throw new InvalidOperationException("Could not save " + scene.path);
+            var missing = available.Where(cue => cue.Clip == null).Select(cue => cue.Key).ToArray();
+            var message = scene.name + ": assigned " + (available.Length - missing.Length) + "/" + available.Length + " Adeola narration cues.";
+            if (missing.Length == 0) Debug.Log(message);
+            else Debug.LogWarning(message + " Missing recordings (no voice substitution): " + string.Join(", ", missing));
+        }
+        [MenuItem("Team 5/Training Flow/Prepare Adeola Audio For Quest")]
+        public static void PrepareAdeolaAudioForQuest()
+        {
+            if (EditorApplication.isPlaying || EditorApplication.isCompiling)
+                throw new InvalidOperationException("Prepare audio in Edit Mode after compilation finishes.");
+            var count = 0;
+            foreach (var guid in AssetDatabase.FindAssets("t:AudioClip", new[] { AdeolaAudioFolder }))
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var importer = AssetImporter.GetAtPath(path) as AudioImporter;
+                if (importer == null) continue;
+                var settings = importer.defaultSampleSettings;
+                settings.loadType = AudioClipLoadType.CompressedInMemory;
+                settings.compressionFormat = AudioCompressionFormat.Vorbis;
+                settings.quality = .8f;
+                settings.sampleRateSetting = AudioSampleRateSetting.PreserveSampleRate;
+                settings.preloadAudioData = true;
+                importer.defaultSampleSettings = settings;
+                importer.SetOverrideSampleSettings("Android", settings);
+                importer.forceToMono = true;
+                importer.SaveAndReimport();
+                count++;
+            }
+            Debug.Log("Prepared " + count + " Adeola clips for Quest. Source recordings and non-narration sounds were preserved.");
         }
         [MenuItem("Team 5/Training Flow/Export Narration Recording Script")]
         public static void ExportSpeech()

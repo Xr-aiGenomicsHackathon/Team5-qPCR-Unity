@@ -32,7 +32,7 @@ namespace Team5.qPCR
             QpcrProtocolParameter.Extension or QpcrProtocolParameter.ExtensionSeconds => "Extension is 72 degrees C for 30 seconds here. The DNA polymerase extends the primers to make new strands. Required time depends on the enzyme and product length.",
             QpcrProtocolParameter.FluorescenceAcquisition => "Acquire fluorescence at 60 degrees C during annealing in each cycle. Comparing readings at the same stage provides a consistent amplification trace.",
             QpcrProtocolParameter.MeltCurveStart or QpcrProtocolParameter.MeltCurveEnd or QpcrProtocolParameter.TemperatureIncrement => "After amplification, increase temperature from 65 to 95 degrees C in 0.5-degree steps. DNA melting changes SYBR fluorescence. A derivative peak shows a melting transition; extra peaks can indicate unwanted products. Dwell time follows the real instrument's method.",
-            QpcrProtocolParameter.PostRunHold => "The block holds at 4 degrees C after the programme in this lesson. This is a short post-run hold, not a long-term storage method. Keep amplified plates sealed and follow the disposal procedure.",
+            QpcrProtocolParameter.PostRunHold => $"The block holds at {QpcrProtocolValidator.ExpectedValue(p):0.##} degrees C after the programme in this lesson. This is a short post-run hold, not a long-term storage method. Keep amplified plates sealed and follow the disposal procedure.",
             _ => "Use the approved training protocol."
         };
     }

@@ -21,17 +21,11 @@ VR-first educational qPCR simulation. The presentation route is **LobbyScene →
 
 The project is pinned to 6000.3.26f1. Results obtained with another patch version must be reported separately. Initial package installation may require Unity Hub sign-in and internet access; imported lesson audio and video do not require a runtime service connection.
 
-## PC simulation and headset use
+## Headset testing
 
-The PC simulator switch is deliberately hidden from learner UI. Select `Training_Audio_Settings` in each scene and use **TrainingAudioSettings → Use Simulator In Editor**:
+XR Simulator was intentionally removed from the saved presentation scenes. Do not reinstall it or run broad scene installers to add narration. Test input using the configured OpenXR headset/runtime; an APK uses the headset's tracked controllers, not simulated PC controllers.
 
-- Checked: test VR input on the PC in Unity.
-- Unchecked before Play: test with a connected headset.
-- Player builds disable the simulator automatically and require the configured XR input/runtime.
-
-For developer help, enable **Show Simulator Controls In Editor** on that component; the simulator help overlay is hidden by default. Aim at UI and use the UI/trigger action; grab physical objects using grip. Object interactions require the actual controller within 22 cm. A pointing label can be read from farther away without enabling remote grabbing.
-
-There is no new desktop-camera lesson route. Windows builds target the configured VR runtime; a Mac editor clone can use simulation, but native Mac headset support is not implied.
+Aim at UI and use the trigger action; grab physical objects using grip. Object interactions require the actual controller within 22 cm. A pointing label can be read from farther away without enabling remote grabbing. Native Mac headset support is not implied by cloning the project.
 
 ## Learning and identification
 
@@ -48,7 +42,17 @@ The protocol and result interpretation are assay-specific teaching examples. The
 
 ## Narration and optional videos
 
-Approved Adeola recordings belong in `Assets/Team5/Audio/Narration/Adeola/`, with their exact cue key as filename. Use **Team 5 → Training Flow → Export Narration Recording Script**, then **Refresh Narration Clip Assignments** in each saved scene after importing clips. Existing recordings remain intact. New Adeola generation is pending resolution of the ElevenLabs account restriction; missing clips never block the written lesson.
+Adeola recordings are local assets in `Assets/Team5/Audio/Narration/Adeola/`; no runtime ElevenLabs account, credentials or internet connection is required. Keep recordings and their `.meta` files together when committing or cloning. Retain old recordings until their replacements are checked.
+
+To add or replace narration:
+
+1. Use **Team 5 → Training Flow → Export Narration Recording Script** to export the current cue text. Save each recording as an MP3 with its exact cue key as filename, without duplicate suffixes such as `(1)`.
+2. The two deliberate mappings are `Why_Ppe_Presentation_TurnOnTap` → `Why_Ppe_Presentation_WetHands.mp3` (identical explanation) and `Parameter_PostRunHold` → `Parameter_PostRunHold_15C.mp3`. The older 4°C recording is retained but is not used for the revised hold.
+3. Wait for importing and compilation to finish. In Edit Mode choose **Team 5 → Training Flow → Prepare Adeola Audio For Quest**. This applies Compressed In Memory, Vorbis quality 80, preserved 44.1 kHz, mono and preloaded data, including an Android override. MP3 is a lossy source and is re-encoded during import; keep the originals and check voice quality on the headset.
+4. Open DemoScene, choose **Refresh Narration Clip Assignments**, then repeat in LobbyScene. This refresh changes cue assignments without rebuilding the UI, XR rig or lesson. It reports missing or ambiguous recordings rather than selecting another voice. Do not run the installation or navigation-repair menus.
+5. Check the Console for `88/88` assigned cues in each scene. Missing clips never block written instructions. Instructions play automatically; Why and parameter selection stay silent until Read Aloud; Replay Instruction repeats the task; unmuting does not start playback.
+
+Before presenting, test lobby welcome/ready, every active PPE task, qPCR instructions, the 15°C explanation, mute/volume/replay and video sound priority. Test the built Quest application with internet disconnected; Editor playback and MP3 decoding do not prove on-headset sound quality or pronunciation.
 
 Put your own MP4/H.264/AAC teaching clip in `Assets/Team5/Videos/Teaching/`. In DemoScene select `50_LESSON_AND_UI/QPCR_VIDEO_SYSTEM`, expand LessonVideoController → Cues → Element 0, and drag the imported VideoClip into **Clip**. Leave ObserveAmplification and Auto Open selected. The popup starts muted beside the graph; playback controls never pause qPCR. No empty popup is shown before a clip is assigned.
 
