@@ -245,7 +245,7 @@ MonoBehaviour:
     Clip: {fileID: 0}
   - Key: Instruction_Qpcr_PowerOn
     Caption: Press the illuminated power button on the qPCR instrument.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: d7c5043b6d41d674cbc5e28b1ed1f6ea, type: 3}
   - Key: Why_Qpcr_PowerOn
     Caption: 'WHY POWER ON?
 
@@ -253,10 +253,10 @@ MonoBehaviour:
       must be ready before loading. A real instrument may perform startup checks;
       follow its manual. This simulator uses a short startup sound and welcome screen.
       The power button does not start amplification.'
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 097ef55988ca68d48980ab8a7f64c140, type: 3}
   - Key: Instruction_Qpcr_OpenDrawer
     Caption: Press the Drawer Open button and wait until the drawer stops moving.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: bedce57c25da22c48ad0897563f2ba6f, type: 3}
   - Key: Why_Qpcr_OpenDrawer
     Caption: 'WHY OPEN THE COMPARTMENT?
 
@@ -268,7 +268,7 @@ MonoBehaviour:
   - Key: Instruction_Qpcr_LoadPlate
     Caption: Grab the plate, align A1 with the socket marker, place it in the holder,
       then release it.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: fe369dd7419b8a140ace8d0f7eba05e4, type: 3}
   - Key: Why_Qpcr_LoadPlate
     Caption: 'WHY ALIGN AND SEAT?
 
@@ -279,7 +279,7 @@ MonoBehaviour:
     Clip: {fileID: 0}
   - Key: Instruction_Qpcr_CloseDrawer
     Caption: Press Drawer Close after the plate is securely seated.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 6521b0d655f900442b70a8388cc2b96b, type: 3}
   - Key: Why_Qpcr_CloseDrawer
     Caption: 'WHY CLOSE THE COMPARTMENT?
 
@@ -291,7 +291,7 @@ MonoBehaviour:
   - Key: Instruction_Qpcr_ConfigureProtocol
     Caption: Select every field and enter its displayed guided value. Confirm each
       entry before validating the protocol.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: a161d81a585a7e047ad30820196687d6, type: 3}
   - Key: Why_Qpcr_ConfigureProtocol
     Caption: 'WHY PROGRAM THE RUN?
 
@@ -303,7 +303,7 @@ MonoBehaviour:
     Clip: {fileID: 0}
   - Key: Instruction_Qpcr_ValidateProtocol
     Caption: Review every field, then press Validate Protocol.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: e6ba03fadd0a4a44e879116edf3498ba, type: 3}
   - Key: Why_Qpcr_ValidateProtocol
     Caption: 'WHY PROGRAM THE RUN?
 
@@ -315,7 +315,7 @@ MonoBehaviour:
     Clip: {fileID: 0}
   - Key: Instruction_Qpcr_StartRun
     Caption: Press Start Run on the instrument after validation passes.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: dd536132216b88d489474c3405831f59, type: 3}
   - Key: Why_Qpcr_StartRun
     Caption: 'WHY VALIDATE BEFORE START?
 
@@ -328,7 +328,7 @@ MonoBehaviour:
   - Key: Instruction_Qpcr_ObserveAmplification
     Caption: Watch the cycle number, temperature stage and fluorescence curves until
       the run finishes.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 640674f02853597489e1a3fe406bb336, type: 3}
   - Key: Why_Qpcr_ObserveAmplification
     Caption: 'WHAT IS HAPPENING?
 
@@ -340,7 +340,7 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 9711741ad3bf5fc468bb80f4cad05373, type: 3}
   - Key: Instruction_Qpcr_InterpretResults
     Caption: Answer the three screen questions about controls, Cq and the melt curve.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 02a89ce1a650fdd4bb2345630f0ef3fd, type: 3}
   - Key: Why_Qpcr_InterpretResults
     Caption: 'HOW DO WE READ THE RESULT?
 
@@ -353,7 +353,7 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 9419122ded2ecd14dbdcd26255b8b231, type: 3}
   - Key: Instruction_Qpcr_Complete
     Caption: You have inspected, loaded, configured, run and interpreted a qPCR experiment.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 44cdf45483a01784992db87a7cd37571, type: 3}
   - Key: Why_Qpcr_Complete
     Caption: 'WHAT HAVE YOU LEARNED?
 
@@ -464,7 +464,7 @@ MonoBehaviour:
   - Key: Instruction_Ppe_Presentation_WetHands
     Caption: Keep both hands beneath the water for one continuous second. If either
       hand leaves, the timer restarts.
-    Clip: {fileID: 0}
+    Clip: {fileID: 8300000, guid: 01fb4c4a5f78b6c4ba491a42730a21ed, type: 3}
   - Key: Why_Ppe_Presentation_WetHands
     Caption: This one-second checkpoint demonstrates placing both hands beneath running
       water. It does not clean or disinfect real hands. Real handwashing requires
