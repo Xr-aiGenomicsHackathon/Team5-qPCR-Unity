@@ -54,7 +54,17 @@ To add or replace narration:
 
 Before presenting, test lobby welcome/ready, every active PPE task, qPCR instructions, the 15°C explanation, mute/volume/replay and video sound priority. Test the built Quest application with internet disconnected; Editor playback and MP3 decoding do not prove on-headset sound quality or pronunciation.
 
-Put your own MP4/H.264/AAC teaching clip in `Assets/Team5/Videos/Teaching/`. In DemoScene select `50_LESSON_AND_UI/QPCR_VIDEO_SYSTEM`, expand LessonVideoController → Cues → Element 0, and drag the imported VideoClip into **Clip**. Leave ObserveAmplification and Auto Open selected. The popup starts muted beside the graph; playback controls never pause qPCR. No empty popup is shown before a clip is assigned.
+The supplied `Videos/Video.mp4` is preserved. Its playback copy, `Assets/Team5/Videos/Teaching/QpcrProcess_Quest.mp4`, is 720 × 1280 portrait, 30 fps, H.264 Main/AAC, approximately 4 Mbps and 22.2 seconds. The existing 1280 × 720 RenderTexture uses Fit Inside: portrait footage is letterboxed, not stretched or cropped. Keep the MP4 and its `.meta` file in Git LFS when cloning.
+
+To replace the video, import an MP4/H.264/AAC clip into `Assets/Team5/Videos/Teaching/`. In DemoScene select `40_QPCR_STATION/50_LESSON_AND_UI/QPCR_VIDEO_SYSTEM`, expand LessonVideoController → Cues → Element 0, and drag the imported VideoClip into **Clip**. Leave ObserveAmplification and Auto Open selected. The popup starts muted beside the graph; Play/Pause, Replay, Sound and Close never pause the experiment. Results collapse the panel, and Watch Video permits replay. Reset cancels preparation and clears playback. An absent clip hides the popup; a preparation failure shows a message without stopping qPCR. Narration temporarily mutes video sound.
+
+## PPE doorway access
+
+The glass opens automatically after the final PPE checkpoint. It takes 1.2 seconds to slide approximately 1.449 m and stays open until DemoScene is reloaded. `PPE_Doorway_Access_Gate` is a stationary sibling of `PPE_Sliding_Glass_Door`, not a child of the moving glass. Its solid BoxCollider remains enabled until `PpeSlidingGlassDoor.IsOpen` is true. Both the moving panel and the fixed barrier use the existing `LabWorldSolid` layer (9).
+
+On `PPE_Doorway_Access_Gate`, DoorwayAccessGate → Door references the moving door; Blocker references its own BoxCollider. On the laboratory's `Epoxy_Floor`, DoorAwareTeleportationArea retains the original XRI settings and references that gate plus the XR Origin's CharacterController. This checks the body-to-destination path even if the teleport arc passes over the door. Missing references reject teleport requests rather than silently allowing access. The existing HeadBoundaryWarning references the same gate: closed-door head penetration fades the view and asks the learner to return; it never moves or freezes tracked head poses.
+
+For a new video or door adjustment, test joystick movement at the centre and edges, teleporting beyond/above the closed door, opening clearance, passage after opening, and a fresh scene reload. Test the video with graph updates, pause/close/replay, reset during preparation and narration sound priority. Compare Quest frame timing with video enabled/disabled at the headset's actual refresh rate; Editor decoding does not establish headset performance. If the video causes sustained frame-budget misses, prepare a 540 × 960, 24 fps copy and repeat the device test.
 
 ## Development and release
 
