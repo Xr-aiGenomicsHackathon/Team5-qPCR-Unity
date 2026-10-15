@@ -14274,6 +14274,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chair and Bench Export
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a4625ef15481a624a9496122c92a7fd6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2897110614563965693, guid: a4625ef15481a624a9496122c92a7fd6, type: 3}
       propertyPath: m_IsActive
       value: 0
